@@ -1,0 +1,312 @@
+package roma;
+import java.io.*;
+import java.util.*;
+
+import cards.Card;
+
+import actions.PlayerAction;
+
+
+
+public class ControllerConsole implements Controller {
+	
+	Game g;
+	
+	public void runGame(Game g) {
+		this.g = g;
+		g.run();
+		
+	}
+	
+	public String getString(String message) {
+		
+		InputStreamReader converter = new InputStreamReader(System.in);
+		BufferedReader in = new BufferedReader(converter);
+		String s = "";
+		boolean valid = false;
+		
+		while (valid == false) {
+			
+			try {
+				
+				System.out.println(message);
+				s = in.readLine();
+				
+				valid = true;
+				
+			} catch (IOException e) {
+				
+				System.out.println("blah");
+			
+			}
+		
+		}
+		
+		return s;
+		
+	}
+	
+	public int getInt(String message) {
+	
+		InputStreamReader converter = new InputStreamReader(System.in);
+		BufferedReader in = new BufferedReader(converter);
+		String s = "";
+		
+		boolean valid = false;
+		int i = 0;
+		
+		while (valid == false) {
+			
+			try {
+				if (message.length() > 0) {
+					System.out.println(message);
+				}
+				s = in.readLine();
+				i = Integer.parseInt(s);
+				
+				valid = true;
+			
+			} catch (NumberFormatException e) {
+				
+				System.out.println("Please input a number");
+				
+			} catch (IOException e) {
+				
+				System.out.println("blah");
+				
+			}
+			
+		}
+		
+		return i;
+	}
+	
+	public Card getCard(Player p, String message) {
+		
+		int i = 0;
+		boolean valid = false;
+		
+		while(!valid) {
+			
+			i = getInt(message);
+			
+			if (i >= 0 && i < p.getHandSize()) {
+				
+				valid = true;
+				
+			} else {
+				
+				System.out.println("You only have " + p.getHandSize() + " cards");
+				
+			}
+			
+		}
+		
+		return p.getCard(i);
+		
+	}
+	
+	/**
+	 * Show all cards from the specified list, and prompt them to choose one.
+	 * @param cardList List of cards to display
+	 * @return
+	 */
+	public Card getCard(List<Card> cardList, String message) {
+		
+		int i = 0;
+		boolean valid = false;
+		
+		for (Card c : cardList) {
+			
+			System.out.println(i + ": " + c.getName());
+			i ++;
+		}
+		
+		while(!valid) {
+			
+			i = getInt(message);
+			
+			if (i >= 0 && i < cardList.size()) {
+				
+				valid = true;
+				
+			} else {
+				
+				System.out.println("Not a valid card.");
+				
+			}
+			
+		}
+		
+		return cardList.get(i);
+		
+	}
+	
+	public int getCard(Card[][] field, String message) {
+		
+		int i = 0;
+		boolean valid = false;
+		
+		showField(g);
+		
+		while(!valid) {
+			
+			i = getInt(message);
+			
+			if (i >= 0 && i < Game.FIELD_SIZE) {
+				
+				valid = true;
+				
+			} else {
+				
+				System.out.println("Not a valid card.");
+				
+			}
+			
+		}
+		
+		return i;
+		
+	}
+	
+	public boolean getWait (String message) {
+		//System.out.println (message);
+		getString (message);
+		return true;
+	}
+	
+	public boolean getBoolean (String message) {
+		String answer = "";
+		boolean result = false;
+		while (answer.compareTo("Y") != 0 && answer.compareTo("N") != 0) {
+			answer = getString (message + " (enter Y/N)");
+			answer = answer.toUpperCase();				
+		}
+		if (answer.compareTo("Y") == 0) {
+			result = true;
+		}
+		return result;
+	}
+	
+	public void showMessage (String s) {
+		
+		System.out.println(s);
+		
+	}
+	
+	public void showScreen (Player p) {
+
+		showMessage("It is player " + (g.getCurrentPlayer().getPlayerId()+1) + "'s turn.");
+		showMessage("---------- FIELD ----------");
+		showField(g);
+		showMessage("-------- YOUR HAND --------");
+		showHand(p);
+		showMessage("---------------------------");
+		showDiceRolls();
+		int VP = p.getVP();
+		int money = p.getMoney();
+		
+		System.out.println("You have " +VP+ " Victory Points and " +money+ " Sesterii");
+		
+		
+		
+	}
+	
+	public void showField (Game g) {
+		
+		String s = String.format("%-15s | %15s", "Player 1", "Player 2");
+		showMessage(s);
+		
+		Card[][] field = g.getField();
+		
+		for (int i = 0; i < 6; i++) {
+			String cardLeft = "";
+			String cardRight = "";
+			if (field[0][i] != null) {
+				cardLeft = field[0][i].getName();
+			}
+			if (field[1][i] != null) {
+				cardRight = field[1][i].getName();
+			}
+			s = String.format("%-15s %d %15s", cardLeft, i+1, cardRight);
+
+			showMessage(s);
+			
+			
+		}
+		
+		
+	}
+	
+	public void showHand (Player p) {
+		
+		CardVector cv = p.getHand();
+		
+		for (int i = 0; i < p.getHandSize(); i++) {
+			System.out.format("%d: %s\n", i, cv.elementAt(i).getName());
+		}
+		
+		System.out.println();
+		
+	}
+	
+	public void showDiceRolls() {
+		
+		String s = "You rolled ";
+		
+		int[] rolls = g.getDiceRolls();
+		
+		for (int i = 0; i < 3; i++) {
+			
+			if (rolls[i] != 0) {
+				
+				s = s + rolls[i] + " ";
+			
+			}
+			
+		}
+		
+		System.out.println(s);
+		
+	}
+
+
+	public PlayerAction getAction(Player p) {
+		PlayerAction action = null;
+		Vector<PlayerAction> actions = new Vector<PlayerAction>();
+		int selectedAction = -1;
+		for (PlayerAction act : g.generateActions(p)) {
+			actions.add(act);
+		}
+		
+		System.out.println("List of your possible actions:");
+		for (int i = 0; i < actions.size(); i++) {
+			System.out.println(i + ": " + actions.get(i).getDescription());
+		}
+
+		
+		selectedAction = getInt ("Enter next action code:");
+		while (selectedAction < 0 || selectedAction >= actions.size()) {
+			selectedAction = getInt ("Invalid action code, please try again:");
+		}
+		
+		action = actions.get(selectedAction);
+		return action;
+	}
+	
+	public void showCard(Card c) {
+		System.out.println ("-------------------");
+		System.out.println (c.getName().toUpperCase());
+		System.out.println ("-------------------");
+		System.out.println (c.getDescription());
+		System.out.println ("-------------------");
+		System.out.format ("- COST: %2d ---- DEF: %2d -\n", c.getCostToPlay(), c.getDefense());
+		System.out.println ("-------------------");
+		System.out.println();
+		System.out.println();
+		getWait ("-- press any key to continue --");
+		
+	}
+
+
+}
