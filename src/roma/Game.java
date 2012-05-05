@@ -35,7 +35,7 @@ public class Game {
 	}
 	
 	public void run() {
-		// small change
+		// small change 2
 	/* this is f-ing annoying
 		plr1 = getBirthday(1);
 		plr2 = getBirthday(2);
