@@ -57,9 +57,9 @@ public class LayCardAction implements PlayerAction {
 		
 	}
 
-	// only visible if we have something in the hand
+	// never visible
 	public boolean isVisible(GameVisor g) {
-		return g.getPlayer(g.whoseTurn()).getHand().size() > 0;
+		return false;
 	}
 	
 }
