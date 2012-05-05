@@ -1,0 +1,6 @@
+
+bin/cards/CardAesculapinum.class
+*.class
+*.orig
+.classpath
+.classpath

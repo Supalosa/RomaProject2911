@@ -69,7 +69,6 @@ public class TakeCardAction implements PlayerAction {
 			
 			for (Card c : temp) {
 				
-				temp.remove(c);
 				g.discard(c);
 
 			}
