@@ -6,21 +6,22 @@ import roma.*;
 public class TakeMoneyAction implements PlayerAction {
 	
 	int diceRoll;
+	GameVisor game;
 	
-	public boolean isValid(Game g) {
+	public boolean isValid() {
 		
 		boolean isValid = true;
 		
 		if (diceRoll > 6 || diceRoll < 1) {
 			
 			isValid = false;
-			g.getController().showMessage("That Dice Roll is not possible");
+			game.getController().showMessage("That Dice Roll is not possible");
 		
 		}
 		
 		boolean found = false;
 		
-		for (int i : g.getDiceRolls()) {
+		for (int i : game.getDiceRolls()) {
 			
 			if (i == diceRoll) {
 				
@@ -33,7 +34,7 @@ public class TakeMoneyAction implements PlayerAction {
 		if (!found) {
 			
 			isValid = false;
-			g.getController().showMessage("You dont have a Dice Roll of that value");
+			game.getController().showMessage("You dont have a Dice Roll of that value");
 			
 		}
 		
@@ -42,11 +43,12 @@ public class TakeMoneyAction implements PlayerAction {
 	}
 
 	
-	public void execute(Game g) {
+	public void execute(GameVisor g) {
 		
-		query(g);
+		game = g;
+		query();
 		
-		if (isValid(g)) {
+		if (isValid()) {
 			
 			g.useDice(diceRoll);
 			
@@ -65,11 +67,11 @@ public class TakeMoneyAction implements PlayerAction {
 		return "Take Money";
 	}
 	
-	public void query(Game g) {
+	public void query() {
 		
-		g.getController().showDiceRolls();
+		game.getController().showDiceRolls();
 		
-		diceRoll = g.getController().getInt("Choose the Dice Roll you want to use");
+		diceRoll = game.getController().getInt("Choose the Dice Roll you want to use");
 		
 	}
 

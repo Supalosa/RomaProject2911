@@ -7,12 +7,13 @@ public class ActivateCardAction implements PlayerAction {
 	
 	int targetPos;
 	Card targetCard;
+	GameVisor game;
 	
-	public boolean isValid(Game g) {
+	public boolean isValid(GameVisor g) {
 		
 		boolean valid = false;
 		
-		for (int i : g.getDiceRolls()) {
+		for (int i : game.getDiceRolls()) {
 			
 			if (i == targetPos) {
 				
@@ -22,21 +23,27 @@ public class ActivateCardAction implements PlayerAction {
 			
 		}
 		
+		if (targetCard == null) {
+			valid = false;
+		}
+
 		return valid;
 	}
 
-	public void execute(Game g) {
+	public void execute(GameVisor g) {
+		game = g;
+		query();
 		
-		query(g);
-		
-		if(isValid(g)) {
+		if(isValid(game)) {
 			
-			if (targetCard.performEffect(g)) {
+			if (targetCard.performEffect(game)) {
 				
-				g.useDice(targetPos);
+				game.useDice(targetPos);
 				
 			}
 			
+		} else {
+			game.getController().showMessage("Invalid dice roll.");
 		}
 		
 	}
@@ -45,13 +52,15 @@ public class ActivateCardAction implements PlayerAction {
 		return "Activate Card";
 	}
 
-	public void query(Game g) {
+	public void query() {
 		
-		g.getController().showField(g);
+		game.getController().showField();
 		
-		targetPos = g.getController().getInt("Choose the Card you want to activate");
-		
-		targetCard = g.getField()[g.whoseTurn()][targetPos];
+		targetPos = game.getController().getInt("Choose the Dice Disc you want to activate");
+		while (targetPos < 1 || targetPos > 6) {
+			targetPos = game.getController().getInt("Invalid dice disc. Choose the Dice Disc you want to activate");
+		}
+		targetCard = game.getField()[game.whoseTurn()][targetPos-1];
 		
 	}
 

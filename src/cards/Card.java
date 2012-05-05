@@ -1,6 +1,6 @@
 package cards;
 
-import roma.Game;
+import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
 
@@ -52,7 +52,7 @@ public abstract class Card {
 	public abstract int getDefense();
 	public abstract EffectTrigger getEffectTrigger();
 	
-	public abstract boolean performEffect (Game g);
+	public abstract boolean performEffect (GameVisor g);
 	
 	
 }

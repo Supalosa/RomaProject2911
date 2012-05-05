@@ -147,7 +147,7 @@ public class ControllerConsole implements Controller {
 		int i = 0;
 		boolean valid = false;
 		
-		showField(g);
+		showField();
 		
 		while(!valid) {
 			
@@ -198,7 +198,7 @@ public class ControllerConsole implements Controller {
 
 		showMessage("It is player " + (g.getCurrentPlayer().getPlayerId()+1) + "'s turn.");
 		showMessage("---------- FIELD ----------");
-		showField(g);
+		showField();
 		showMessage("-------- YOUR HAND --------");
 		showHand(p);
 		showMessage("---------------------------");
@@ -212,7 +212,7 @@ public class ControllerConsole implements Controller {
 		
 	}
 	
-	public void showField (Game g) {
+	public void showField () {
 		
 		String s = String.format("%-15s | %15s", "Player 1", "Player 2");
 		showMessage(s);

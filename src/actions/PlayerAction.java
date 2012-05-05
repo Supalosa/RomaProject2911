@@ -1,10 +1,10 @@
 package actions;
 
-import roma.Game;
+import roma.*;
 
 public interface PlayerAction {
 	
-	public void execute (Game g);
+	public void execute (GameVisor g);
 	
 	public String getDescription ();
 	

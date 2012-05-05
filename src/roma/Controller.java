@@ -33,7 +33,7 @@ public interface Controller {
 	
 	public void showHand(Player p);
 	
-	public void showField(Game g);
+	public void showField();
 	
 	public PlayerAction getAction (Player p);
 

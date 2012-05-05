@@ -7,13 +7,16 @@ import cards.*;
 public class ViewCardAction implements PlayerAction {
 
 	private Card selectedCard = null;
+	GameVisor game;
 	
-	public void execute(Game g) {
-		query (g);
+	public void execute(GameVisor g) {
+		game = g;
+		
+		query ();
 		if (selectedCard != null) {
-			g.getController().showCard (selectedCard);
+			game.getController().showCard (selectedCard);
 		} else {
-			g.getController().showMessage("Invalid card.");
+			game.getController().showMessage("Invalid card.");
 		}
 	}
 
@@ -21,10 +24,10 @@ public class ViewCardAction implements PlayerAction {
 		return "Inspect Card";
 	}
 	
-	private void query (Game g) {
+	private void query () {
 		List<Card> cardOptions = new ArrayList<Card>();
 		// add all the cards from field
-		Card [][] field = g.getField();
+		Card [][] field = game.getField();
 		for (int i = 0; i < field.length; i++) {
 			for (int j = 0; j < field[i].length; j++) {
 				if (field[i][j] != null) {
@@ -34,11 +37,11 @@ public class ViewCardAction implements PlayerAction {
 		}
 		
 		// add all the cards in my hand
-		for (Card c : g.getCurrentPlayer().getHand()) {
+		for (Card c : game.getCurrentPlayer().getHand()) {
 			cardOptions.add(c);
 		}
 		
-		selectedCard = g.getController().getCard(cardOptions, "Please select a card to inspect:");
+		selectedCard = game.getController().getCard(cardOptions, "Please select a card to inspect:");
 		
 		
 	}

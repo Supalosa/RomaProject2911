@@ -8,8 +8,9 @@ public class LayCardAction implements PlayerAction {
 	
 	Card targetCard;
 	int diceDisc;
-
-	public boolean isValid(Game g) {
+	GameVisor game;
+	 
+	public boolean isValid() {
 		
 		boolean isValid = true;
 		
@@ -17,7 +18,7 @@ public class LayCardAction implements PlayerAction {
 		
 		if (i < 1 || i > Game.FIELD_SIZE) {
 			isValid = false;
-			g.getController().showMessage("That Dice Disc value is not possible");
+			game.getController().showMessage("That Dice Disc value is not possible");
 		}
 		
 		return isValid;
@@ -25,11 +26,11 @@ public class LayCardAction implements PlayerAction {
 	}
 
 	@Override
-	public void execute(Game g) {
+	public void execute(GameVisor g) {
+		game = g;
+		query();
 		
-		query(g);
-		
-		if (isValid(g)) {
+		if (isValid()) {
 
 			g.getCurrentPlayer().getHand().removeElement(targetCard);
 			if (g.getField()[g.whoseTurn()][diceDisc - 1] != null) {
@@ -46,13 +47,13 @@ public class LayCardAction implements PlayerAction {
 		return "Lay Card";
 	}
 	
-	public void query(Game g) {
+	public void query() {
 		
-		g.getController().showHand(g.getCurrentPlayer());
+		game.getController().showHand(game.getCurrentPlayer());
 		
-		targetCard = g.getController().getCard(g.getCurrentPlayer(), "Choose the Card you want to play");
+		targetCard = game.getController().getCard(game.getCurrentPlayer(), "Choose the Card you want to play");
 		
-		diceDisc = g.getController().getInt("And the dice disc you want to place it next to");
+		diceDisc = game.getController().getInt("And the dice disc you want to place it next to");
 		
 	}
 	

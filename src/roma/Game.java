@@ -23,6 +23,8 @@ public class Game {
 	
 	private boolean endTurn;
 	
+	private GameVisor visor;
+	
 	public static final int FIELD_SIZE = 6;
 	public static final int MAX_PLAYERS = 2;
 	public Game(Controller controller) {
@@ -30,6 +32,7 @@ public class Game {
 		generator = new RandomGenerator();
 		this.controller = controller;
 		gameOver = false;
+		visor = new GameVisor(this);
 		initGame();
 		
 	}
@@ -81,7 +84,7 @@ public class Game {
 	
 				System.out.println("Action chosen: " + nextAction.getDescription());
 				
-				nextAction.execute(this);
+				nextAction.execute(visor);
 			
 			}
 			
@@ -160,7 +163,7 @@ public class Game {
 		for (currentPlayer = 0; currentPlayer < MAX_PLAYERS; currentPlayer ++) {
 			p = players[currentPlayer];
 			while (p.getHandSize() != 0) {
-				layCard.execute(this);
+				layCard.execute(visor);
 			}
 		}
 		

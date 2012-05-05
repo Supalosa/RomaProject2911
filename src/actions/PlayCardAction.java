@@ -8,8 +8,8 @@ public class PlayCardAction implements PlayerAction {
 	
 	Card targetCard;
 	int diceDisc;
-	
-	public boolean isValid(Game g) {
+	GameVisor game;
+	public boolean isValid() {
 		
 		boolean isValid = true;
 		
@@ -17,30 +17,30 @@ public class PlayCardAction implements PlayerAction {
 		
 		if (i < 1 || i > Game.FIELD_SIZE) {
 			isValid = false;
-			g.getController().showMessage("That Dice Disc value is not possible");
+			game.getController().showMessage("That Dice Disc value is not possible");
 		}
 		
-		if (g.getCurrentPlayer().getMoney() < targetCard.getCostToPlay()) {
+		if (game.getCurrentPlayer().getMoney() < targetCard.getCostToPlay()) {
 			isValid = false;
-			g.getController().showMessage("You don't have enough Money to play" + targetCard.getName());
+			game.getController().showMessage("You don't have enough Money to play" + targetCard.getName());
 		}
 		
 		return isValid;
 		
 	}
 
-	public void execute(Game g) {
+	public void execute(GameVisor g) {
+		game = g;
+		query();
 		
-		query(g);
-		
-		if (isValid(g)) {
+		if (isValid()) {
 
-			g.getCurrentPlayer().getHand().removeElement(targetCard);
-			if (g.getField()[g.whoseTurn()][diceDisc - 1] != null) {
-				g.discard(g.getField()[g.whoseTurn()][diceDisc - 1]);				
+			game.getCurrentPlayer().getHand().removeElement(targetCard);
+			if (game.getField()[game.whoseTurn()][diceDisc - 1] != null) {
+				game.discard(game.getField()[game.whoseTurn()][diceDisc - 1]);				
 			}
-			g.getField()[g.whoseTurn()][diceDisc - 1] = targetCard;
-			g.getCurrentPlayer().setMoney(g.getCurrentPlayer().getMoney() - targetCard.getCostToPlay());
+			game.getField()[game.whoseTurn()][diceDisc - 1] = targetCard;
+			game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - targetCard.getCostToPlay());
 		
 		}
 		
@@ -51,13 +51,13 @@ public class PlayCardAction implements PlayerAction {
 		return "Lay Card";
 	}
 	
-	public void query(Game g) {
+	public void query() {
 		
-		g.getController().showHand(g.getCurrentPlayer());
+		game.getController().showHand(game.getCurrentPlayer());
 		
-		targetCard = g.getController().getCard(g.getCurrentPlayer(), "Choose the Card you want to play");
+		targetCard = game.getController().getCard(game.getCurrentPlayer(), "Choose the Card you want to play");
 		
-		diceDisc = g.getController().getInt("And the dice disc you want to place it next to");
+		diceDisc = game.getController().getInt("And the dice disc you want to place it next to");
 		
 	}
 	

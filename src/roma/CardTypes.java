@@ -42,6 +42,8 @@ public class CardTypes {
 	}
 	
 	public void InitialiseCards(Pile d) {
+		//addCards(d, CardNames.Legionarius, 20);
+		
 		// Sicarius x1
 		addCards(d, CardNames.Sicarius, 1);
 		// Architectus x2

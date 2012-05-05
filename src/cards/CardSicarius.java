@@ -1,6 +1,6 @@
 package cards;
 
-import roma.Game;
+import roma.GameVisor;
 import enums.*;
 
 public class CardSicarius extends Card {
@@ -39,7 +39,7 @@ public class CardSicarius extends Card {
 		return EffectTrigger.TriggerOnActivate;
 	}
 
-	public boolean performEffect(Game g) {
+	public boolean performEffect(GameVisor g) {
 		return false;
 		// nothing
 	}

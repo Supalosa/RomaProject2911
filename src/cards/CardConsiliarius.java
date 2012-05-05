@@ -1,6 +1,6 @@
 package cards;
 
-import roma.Game;
+import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
 
@@ -40,7 +40,7 @@ public class CardConsiliarius extends Card {
 		return EffectTrigger.TriggerOnActivate;
 	}
 
-	public boolean performEffect(Game g) {
+	public boolean performEffect(GameVisor g) {
 		return false;
 		// TODO Auto-generated method stub
 

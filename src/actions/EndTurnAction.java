@@ -1,10 +1,10 @@
 package actions;
 
-import roma.Game;
+import roma.GameVisor;
 
 public class EndTurnAction implements PlayerAction {
 
-	public void execute(Game g) {
+	public void execute(GameVisor g) {
 		boolean doEndTurn = g.getController().getBoolean("Are you sure you want to end turn?");
 		if (doEndTurn) {
 			g.setTurnEnded(true);

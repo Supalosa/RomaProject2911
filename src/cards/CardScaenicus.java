@@ -1,6 +1,6 @@
 package cards;
 
-import roma.Game;
+import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
 
@@ -49,7 +49,7 @@ public class CardScaenicus extends Card {
 	}
 
 	@Override
-	public boolean performEffect(Game g) {
+	public boolean performEffect(GameVisor g) {
 		return false;
 		// TODO Auto-generated method stub
 
