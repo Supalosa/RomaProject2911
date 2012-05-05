@@ -3,7 +3,6 @@ import java.text.*;
 import java.util.*;
 
 import cards.*;
-import framework.interfaces.*;
 import actions.*;
 
 
@@ -304,11 +303,6 @@ public class Game {
 		
 	}
 	
-	public Pile getDiscardPile () {
-		return discardPile;
-		
-	}
-	
 	public void giveCard(int currentPlayer, int targetPlayer, Card c) {
 		
 		players[targetPlayer].addCard(c);
@@ -316,13 +310,18 @@ public class Game {
 		
 	}
 	
-	/* TODO delegate these to GameVisor */
 	public void setTurnEnded (boolean state) {
 		endTurn = state;
 	}
 	
 	public Player getPlayer (int player) {
 		return players[player];
+	}
+	
+	public Pile getDiscardPile() {
+		
+		return discardPile;
+		
 	}
 	
 	// the stockpile is equal to 36 - total number of consumed VPs

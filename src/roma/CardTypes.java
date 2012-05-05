@@ -38,11 +38,18 @@ public class CardTypes {
 		cardMap.put(CardNames.Onager, "cards.CardOnager");
 		cardMap.put(CardNames.Templum, "cards.CardTemplum");
 		cardMap.put(CardNames.Turris, "cards.CardTurris");
+		cardMap.put(CardNames.Aesculapinum, "cards.CardAesculapinum");
+		cardMap.put(CardNames.Basilica, "cards.CardBasilica");
+		cardMap.put(CardNames.Forum, "cards.CardForum");
+		cardMap.put(CardNames.Machina, "cards.CardMachina");
+		cardMap.put(CardNames.Mercatus, "cards.CardMercatus");
+		cardMap.put(CardNames.Onager, "cards.CardOnager");
+		cardMap.put(CardNames.Templum, "cards.CardTemplum");
+		cardMap.put(CardNames.Turris, "cards.CardTurris");
 
 	}
 	
 	public void InitialiseCards(Pile d) {
-		//addCards(d, CardNames.Legionarius, 20);
 		
 		// Sicarius x1
 		addCards(d, CardNames.Sicarius, 1);
@@ -78,6 +85,25 @@ public class CardTypes {
 		addCards(d, CardNames.Tribunus_Plebis, 2);
 		// Centurio x2
 		addCards(d, CardNames.Centurio, 2);
+		//Aesculapinum x2
+		addCards(d, CardNames.Aesculapinum, 2);
+		//Aesculapinum x2
+		addCards(d, CardNames.Aesculapinum, 2);
+		//Basilica x2
+		addCards(d, CardNames.Basilica, 2);
+		//Forum x6
+		addCards(d, CardNames.Forum, 6);
+		//Machina x2
+		addCards(d, CardNames.Machina, 2);
+		//Mercatus x2
+		addCards(d, CardNames.Mercatus, 2);
+		//Onager x2
+		addCards(d, CardNames.Onager, 2);
+		//Templum x2
+		addCards(d, CardNames.Templum, 2);
+		//Turris x2
+		addCards(d, CardNames.Turris, 2);
+		
 	}
 	
 	private void addCards(Pile d, CardNames t, int count) {

@@ -1,7 +1,10 @@
 package cards;
 
+import java.util.*;
+
 import roma.*;
 import enums.*;
+import actions.*;
 
 public class CardArchitectus extends Card {
 
@@ -39,8 +42,35 @@ public class CardArchitectus extends Card {
 	}
 
 	public boolean performEffect(GameVisor g) {
-		return false;
-		// TODO Auto-generated method stub
+		
+		boolean performed = false;
+		boolean finished = false;
+		
+		List<Card> characters = new ArrayList<Card>();
+		
+		for (Card c : g.getCurrentPlayer().getHand()) {
+			
+			if (!c.isBuilding()) {
+				
+				characters.add(c);
+				g.getCurrentPlayer().getHand().remove(c);
+				
+			}
+			
+		}
+		
+		PlayerAction layCards = new LayCardAction();
+		
+		while ((g.getCurrentPlayer().getHandSize() > 0) && (!finished)) {
+			
+			
+			layCards.execute(g);
+			
+			performed = true;
+			
+		}
+		
+		return performed;
 
 	}
 

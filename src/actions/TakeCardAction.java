@@ -48,6 +48,7 @@ public class TakeCardAction implements PlayerAction {
 	public void execute(GameVisor g) {
 		game = g;
 		List<Card> temp = new ArrayList<Card>();
+		int i = 0;
 		
 		query();
 		
@@ -55,7 +56,7 @@ public class TakeCardAction implements PlayerAction {
 			
 			g.useDice(diceRoll);
 			
-			for (int i = 0; i < diceRoll; i++) {
+			for (i = 0; i < diceRoll; i++) {
 				
 				temp.add(g.drawCard());
 				
@@ -68,8 +69,9 @@ public class TakeCardAction implements PlayerAction {
 			
 			for (Card c : temp) {
 				
+				temp.remove(c);
 				g.discard(c);
-				
+
 			}
 			
 		} else {

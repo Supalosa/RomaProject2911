@@ -27,14 +27,15 @@ public class LayCardAction implements PlayerAction {
 
 	@Override
 	public void execute(GameVisor g) {
+		
 		game = g;
 		query();
 		
 		if (isValid()) {
 
 			g.getCurrentPlayer().getHand().removeElement(targetCard);
-			if (g.getField().getCard(g.whoseTurn(),diceDisc - 1) != null) {
-				g.discard(g.getField().getCard(g.whoseTurn(),diceDisc - 1));				
+			if (g.getField().getCard(g.whoseTurn(), diceDisc - 1) != null) {
+				g.discard(g.getField().getCard(g.whoseTurn(), diceDisc - 1));				
 			}
 			g.getField().setCard(g.whoseTurn(), diceDisc - 1, targetCard);
 
@@ -57,7 +58,7 @@ public class LayCardAction implements PlayerAction {
 		
 	}
 
-	// never visible
+	@Override
 	public boolean isVisible(GameVisor g) {
 		return false;
 	}
