@@ -39,7 +39,7 @@ public class CardBasilica extends Card {
 		return EffectTrigger.TriggerOnPlay;
 	}
 
-	public boolean performEffect(GameVisor g) {
+	public boolean performEffect(GameVisor g, int pos) {
 		g.getController().showMessage("You cannot activate this card");
 		return false;
 	}

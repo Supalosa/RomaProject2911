@@ -41,7 +41,7 @@ public class CardArchitectus extends Card {
 		return EffectTrigger.TriggerOnActivate;
 	}
 
-	public boolean performEffect(GameVisor g) {
+	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;
 		boolean finished = false;
@@ -63,8 +63,7 @@ public class CardArchitectus extends Card {
 		
 		while ((g.getCurrentPlayer().getHandSize() > 0) && (!finished)) {
 			
-			
-			layCards.execute(g);
+			finished = layCards.execute(g);
 			
 			performed = true;
 			

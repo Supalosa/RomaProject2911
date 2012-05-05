@@ -37,7 +37,7 @@ public class ActivateCardAction implements PlayerAction {
 		
 		if(isValid(game)) {
 			
-			if (targetCard.performEffect(game)) {
+			if (targetCard.performEffect(game, targetPos)) {
 				
 				game.useDice(targetPos);
 				

@@ -41,19 +41,34 @@ public class CardAesculapinum extends Card {
 		return EffectTrigger.TriggerOnActivate;
 	}
 
-	public boolean performEffect(GameVisor g) {
+	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;
 		
 		if (!g.getDiscardPile().getStack().isEmpty()) {
 			
-			@SuppressWarnings("unchecked")
-			Card selected = g.getController().getCard((List<Card>) g.getDiscardPile(), "Pick the card you wish to add to your hand");
+			List<Card> characters = new ArrayList<Card>();
 			
-			g.getCurrentPlayer().addCard(selected);
-			g.getDiscardPile().getStack().remove(selected);
+			for (Card c : g.getDiscardPile().getStack()) {
+				
+				if (!c.isBuilding()) {
+					
+					characters.add(c);
+					
+				}
+				
+			}
 			
-			performed = true;
+			if (!characters.isEmpty()) {
+				
+				Card selected = g.getController().getCard(characters, "Pick the card you wish to add to your hand");
+
+				g.getCurrentPlayer().addCard(selected);
+				g.getDiscardPile().getStack().remove(selected);
+
+				performed = true;
+				
+			}
 
 		}
 		

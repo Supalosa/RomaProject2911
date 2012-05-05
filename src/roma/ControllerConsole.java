@@ -74,7 +74,7 @@ public class ControllerConsole implements Controller {
 				
 			} catch (IOException e) {
 				
-				System.out.println("blah");
+				e.printStackTrace();
 				
 			}
 			
@@ -122,6 +122,7 @@ public class ControllerConsole implements Controller {
 			
 			System.out.println(i + ": " + c.getName());
 			i ++;
+		
 		}
 		
 		while(!valid) {

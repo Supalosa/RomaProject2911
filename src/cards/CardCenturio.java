@@ -1,5 +1,6 @@
 package cards;
 
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
@@ -50,9 +51,37 @@ public class CardCenturio extends Card {
 	}
 
 	@Override
-	public boolean performEffect(GameVisor g) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean performEffect(GameVisor g, int pos) {
+		
+		boolean performed = false;
+		
+		if (g.getField().getCard((g.whoseTurn() + 1) % Game.MAX_PLAYERS, pos - 1) != null) {
+			
+			int battleDie = g.rollDice();
+			
+			if (battleDie < g.getField().getCard((g.whoseTurn() + 1) % Game.MAX_PLAYERS, pos - 1).getDefense()) {
+				
+				g.getController().showMessage("The battle die rolled a " + battleDie);
+				
+				g.getController().showDiceRolls();
+				
+				int add = g.getController().getInt("Do you wish to add to the value of the battle die?");
+				
+				if (add != -1) {
+					
+					battleDie += g.getDiceRoll()[add];
+					
+				}
+				
+			}
+			
+		} else {
+			
+			g.getController().showMessage("There is nothing to attack");
+			
+		}
+		
+		return performed;
 	}
 
 }

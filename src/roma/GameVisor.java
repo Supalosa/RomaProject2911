@@ -81,4 +81,10 @@ public class GameVisor {
 		
 	}
 	
+	public int rollDice() {
+		
+		return game.rollDice();
+		
+	}
+	
 }

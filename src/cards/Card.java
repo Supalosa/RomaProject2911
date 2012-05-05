@@ -52,7 +52,7 @@ public abstract class Card {
 	public abstract int getDefense();
 	public abstract EffectTrigger getEffectTrigger();
 	
-	public abstract boolean performEffect (GameVisor g);
+	public abstract boolean performEffect (GameVisor g, int pos);
 	
 	
 }
