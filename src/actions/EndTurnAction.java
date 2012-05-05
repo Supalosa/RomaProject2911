@@ -16,5 +16,10 @@ public class EndTurnAction implements PlayerAction {
 		return "End Turn";
 	}
 
+	// action is always visible
+	public boolean isVisible(GameVisor g) {
+		return true;
+	}
+
 
 }

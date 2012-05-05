@@ -9,7 +9,9 @@ import actions.PlayerAction;
 
 public interface Controller {
 	
-	public void runGame(Game g);
+	public void setGame (Game g);
+	
+	public void runGame();
 	
 	public String getString(String message);
 	

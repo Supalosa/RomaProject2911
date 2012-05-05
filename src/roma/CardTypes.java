@@ -107,4 +107,16 @@ public class CardTypes {
 		
 	}
 	
+	public Card getCardFromString(String cardName) {
+		CardNames c = null;
+		for (CardNames card : CardNames.values()) {
+			if (card.toString().compareTo(cardName) == 0) {
+				c = card;
+			}
+		}
+
+		return getCard (c);
+		
+	}
+	
 }

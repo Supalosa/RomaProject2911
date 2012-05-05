@@ -36,10 +36,10 @@ public class PlayCardAction implements PlayerAction {
 		if (isValid()) {
 
 			game.getCurrentPlayer().getHand().removeElement(targetCard);
-			if (game.getField()[game.whoseTurn()][diceDisc - 1] != null) {
-				game.discard(game.getField()[game.whoseTurn()][diceDisc - 1]);				
+			if (game.getField().getCard(game.whoseTurn(), diceDisc - 1) != null) {
+				game.discard(game.getField().getCard(game.whoseTurn(),diceDisc - 1));				
 			}
-			game.getField()[game.whoseTurn()][diceDisc - 1] = targetCard;
+			game.getField().setCard(game.whoseTurn(), diceDisc - 1, targetCard);
 			game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - targetCard.getCostToPlay());
 		
 		}
@@ -59,6 +59,19 @@ public class PlayCardAction implements PlayerAction {
 		
 		diceDisc = game.getController().getInt("And the dice disc you want to place it next to");
 		
+	}
+
+	// only visible if we have cards in hand and cards to play
+	public boolean isVisible(GameVisor g) {
+		boolean canPlay = false;
+		
+		for (Card cardInHand : g.getPlayer(g.whoseTurn()).getHand()) {
+			if (g.getPlayer(g.whoseTurn()).getMoney() > cardInHand.getCostToPlay()) {
+				canPlay = true;
+			}
+		}
+		
+		return canPlay;
 	}
 	
 }

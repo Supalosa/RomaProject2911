@@ -27,11 +27,11 @@ public class ViewCardAction implements PlayerAction {
 	private void query () {
 		List<Card> cardOptions = new ArrayList<Card>();
 		// add all the cards from field
-		Card [][] field = game.getField();
-		for (int i = 0; i < field.length; i++) {
-			for (int j = 0; j < field[i].length; j++) {
-				if (field[i][j] != null) {
-					cardOptions.add(field[i][j]);
+		Field field = game.getField();
+		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+			for (int j = 0; j < Game.FIELD_SIZE; j++) {
+				if (field.getCard(i, j) != null) {
+					cardOptions.add(field.getCard(i, j));
 				}
 			}
 		}
@@ -44,6 +44,11 @@ public class ViewCardAction implements PlayerAction {
 		selectedCard = game.getController().getCard(cardOptions, "Please select a card to inspect:");
 		
 		
+	}
+
+	// always available
+	public boolean isVisible(GameVisor g) {
+		return true;
 	}
 
 }

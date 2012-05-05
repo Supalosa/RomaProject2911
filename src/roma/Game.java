@@ -3,16 +3,15 @@ import java.text.*;
 import java.util.*;
 
 import cards.*;
-
+import framework.interfaces.*;
 import actions.*;
 
 
 public class Game {
 	
 	private Player[] players; // 2 players
-	private int victoryStockpile = 16; // start with 36, but both players start with 10
 	private Pile deck; // stack of cards
-	private Card[][] field; // 12 cards, 0-5 for p1, 6-11 for p2
+	private Field field; // 12 cards, 0-5 for p1, 6-11 for p2
 	private Pile discardPile; // stack of cards
 	private int[] diceRolls; // 3 dice rolls
 	private int currentPlayer; // id 0..1 of current turn's player
@@ -27,6 +26,7 @@ public class Game {
 	
 	public static final int FIELD_SIZE = 6;
 	public static final int MAX_PLAYERS = 2;
+	public static final int INITIAL_VP = 36;
 	public Game(Controller controller) {
 	
 		generator = new RandomGenerator();
@@ -54,47 +54,55 @@ public class Game {
 		prepare();
 		
 		while (!isGameOver ()) {
-			
-			Player player = players[currentPlayer];			
-			endTurn = false;
-			int deduct = 0;
-			int i = 0;
-			for (i = 0; i < 6; i++) {
-				
-				if (field[currentPlayer][i] == null) {
-					
-					deduct++;
-					
-				}
-				
-			}
-			player.setVP(player.getVP() - deduct);
-			
-			for (i = 0; i < 3; i++) {
-				
-				diceRolls[i] = rollDice();
-				
-			}
-			
-			/* player actions */
-			while (endTurn == false) {
-				controller.showScreen(player);
-				
-				PlayerAction nextAction = controller.getAction(player);
-	
-				System.out.println("Action chosen: " + nextAction.getDescription());
-				
-				nextAction.execute(visor);
-			
-			}
-			
-			currentPlayer = (currentPlayer + 1) % players.length;
+			step ();
 			
 			testGameOver ();
 		}
 		
 		controller.showMessage("GG");
 		
+	}
+	
+	public void step() {
+
+		Player player = players[currentPlayer];			
+		endTurn = false;
+		int deduct = 0;
+		int i = 0;
+		for (i = 0; i < 6; i++) {
+			
+			if (field.getCard(currentPlayer,i) == null) {
+				
+				deduct++;
+				
+			}
+			
+		}
+		player.setVP(player.getVP() - deduct);
+		
+		for (i = 0; i < 3; i++) {
+			
+			diceRolls[i] = rollDice();
+			
+		}
+		
+		/* player actions */
+		while (endTurn == false) {
+			controller.showScreen(player);
+			
+			PlayerAction nextAction = controller.getAction(player);
+
+			System.out.println("Action chosen: " + nextAction.getDescription());
+			
+			nextAction.execute(visor);
+		
+		}
+		
+		nextTurn ();
+	}
+	
+	public void nextTurn () {
+		currentPlayer = (currentPlayer + 1) % players.length;
 	}
 	
 	public void initGame() {
@@ -110,7 +118,7 @@ public class Game {
 		cardTypes.InitialiseCards(deck);
 		deck.shuffle();
 		
-		field = new Card[2][FIELD_SIZE];
+		field = new Field();
 		discardPile = new Pile();
 		
 		diceRolls = new int[3];
@@ -179,7 +187,7 @@ public class Game {
 	 * and store the result in gameOver
 	 */
 	private void testGameOver () {
-		if (victoryStockpile <= 0 || (players[0].getVP() <= 0 || players[1].getVP() <= 0)) {
+		if (getVictoryStockpile() <= 0 || (players[0].getVP() <= 0 || players[1].getVP() <= 0)) {
 			gameOver = true;
 		} else {
 			gameOver = false;
@@ -227,11 +235,17 @@ public class Game {
 	// to facilitate game mechanics.
 	public Card drawCard() {
 		
-		return deck.getStack().pop();
+		return deck.getCard();
 	
 	}
 	
-	public Card[][] getField() {
+	// Get the deck
+	public Pile getDeck () {
+		
+		return deck;
+	}
+	
+	public Field getField() {
 		
 		return field;
 		
@@ -246,6 +260,12 @@ public class Game {
 	public int whoseTurn() {
 		
 		return currentPlayer;
+		
+	}
+	
+	public void setWhoseTurn (int playerId) {
+		
+		currentPlayer = playerId;
 		
 	}
 	
@@ -280,7 +300,12 @@ public class Game {
 	
 	public void discard(Card c) {
 		
-		discardPile.getStack().push(c);
+		discardPile.addCard(c);
+		
+	}
+	
+	public Pile getDiscardPile () {
+		return discardPile;
 		
 	}
 	
@@ -300,30 +325,34 @@ public class Game {
 		return players[player];
 	}
 	
+	// the stockpile is equal to 36 - total number of consumed VPs
+	public int getVictoryStockpile() {
+		int vp = INITIAL_VP;
+		for (int i = 0; i < players.length; i++) {
+			vp -= players[i].getVP();
+		}
+		return vp;
+	}
 	
 	/* Generate a list of possible actions for a player */
-	public ArrayList<PlayerAction> generateActions (Player p) {
-		ArrayList<PlayerAction> actions = new ArrayList<PlayerAction>();
-		PlayerAction action;
+	public List<PlayerAction> generateActions (Player p) {
+		List<PlayerAction> potentialActions = new ArrayList<PlayerAction>();
+		List<PlayerAction> actions = new ArrayList<PlayerAction>();
+		GameVisor g = new GameVisor(this);
 		
-		// This will be subject to contextual filtering later.
-		action =  new TakeMoneyAction ();
-		actions.add(action);
+		potentialActions.add(new TakeMoneyAction());
+		potentialActions.add(new TakeCardAction());
+		potentialActions.add(new PlayCardAction());
+		potentialActions.add(new ActivateCardAction());
+		potentialActions.add(new ViewCardAction());
+		potentialActions.add(new EndTurnAction());
 		
-		action =  new TakeCardAction ();
-		actions.add(action);
 		
-		action = new PlayCardAction ();
-		actions.add(action);
-		
-		action =  new ActivateCardAction ();
-		actions.add(action);
-		
-		action = new ViewCardAction ();
-		actions.add(action);
-				
-		action = new EndTurnAction ();
-		actions.add(action);
+		for (PlayerAction action : potentialActions) {
+			if (action.isVisible(g)) {
+				actions.add(action);
+			}
+		}
 				
 		return actions;
 	}

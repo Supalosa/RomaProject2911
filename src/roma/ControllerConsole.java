@@ -12,10 +12,12 @@ public class ControllerConsole implements Controller {
 	
 	Game g;
 	
-	public void runGame(Game g) {
+	public void setGame (Game g) {
 		this.g = g;
+	}
+	
+	public void runGame() {
 		g.run();
-		
 	}
 	
 	public String getString(String message) {
@@ -217,16 +219,16 @@ public class ControllerConsole implements Controller {
 		String s = String.format("%-15s | %15s", "Player 1", "Player 2");
 		showMessage(s);
 		
-		Card[][] field = g.getField();
+		Field field = g.getField();
 		
 		for (int i = 0; i < 6; i++) {
 			String cardLeft = "";
 			String cardRight = "";
-			if (field[0][i] != null) {
-				cardLeft = field[0][i].getName();
+			if (field.getCard(0,i) != null) {
+				cardLeft = field.getCard(0,i).getName();
 			}
-			if (field[1][i] != null) {
-				cardRight = field[1][i].getName();
+			if (field.getCard(1,i) != null) {
+				cardRight = field.getCard(1,i).getName();
 			}
 			s = String.format("%-15s %d %15s", cardLeft, i+1, cardRight);
 

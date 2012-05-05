@@ -75,4 +75,17 @@ public class TakeMoneyAction implements PlayerAction {
 		
 	}
 
+
+	// only visible if we have dice
+	public boolean isVisible(GameVisor g) {
+		boolean hasDice = false;
+		
+		for (int i = 0; i < g.getDiceRolls().length; i++) {
+			if (g.getDiceRolls()[i] != 0) {
+				hasDice = true;
+			}
+		}
+		return hasDice;
+	}
+
 }
