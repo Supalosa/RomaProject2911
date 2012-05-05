@@ -36,6 +36,7 @@ public class GameVisor {
 	public void useDice (int value) {
 		
 		game.useDice(value);
+	
 	}
 	
 	public Controller getController() {
@@ -57,11 +58,15 @@ public class GameVisor {
 	}
 	
 	public void setTurnEnded (boolean state) {
+		
 		game.setTurnEnded (state);
+	
 	}
 	
 	public Player getPlayer (int player) {
+		
 		return game.getPlayer(player);
+	
 	}
 	
 	public Card drawCard() {
@@ -69,4 +74,11 @@ public class GameVisor {
 		return game.drawCard();
 	
 	}
+	
+	public Pile getDiscardPile() {
+		
+		return game.getDiscardPile();
+		
+	}
+	
 }

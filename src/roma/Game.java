@@ -300,6 +300,12 @@ public class Game {
 		return players[player];
 	}
 	
+	public Pile getDiscardPile() {
+		
+		return discardPile;
+		
+	}
+	
 	
 	/* Generate a list of possible actions for a player */
 	public ArrayList<PlayerAction> generateActions (Player p) {
