@@ -9,7 +9,7 @@ public class GameVisor {
 		game = g;
 	}
 	
-	public Card[][] getField() {
+	public Field getField() {
 		
 		return game.getField();
 		

@@ -8,4 +8,6 @@ public interface PlayerAction {
 	
 	public String getDescription ();
 	
+	public boolean isVisible (GameVisor g);
+	
 }

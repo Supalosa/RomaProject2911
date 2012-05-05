@@ -38,21 +38,18 @@ public class CardTypes {
 		cardMap.put(CardNames.Onager, "cards.CardOnager");
 		cardMap.put(CardNames.Templum, "cards.CardTemplum");
 		cardMap.put(CardNames.Turris, "cards.CardTurris");
-		cardMap.put(CardNames.Aesculapinum, "card.CardAesculapinum");
-		cardMap.put(CardNames.Basilica, "card.CardBasilica");
-		cardMap.put(CardNames.Forum, "card.CardForum");
-		cardMap.put(CardNames.Machina, "card.CardMachina");
-		cardMap.put(CardNames.Mercatus, "card.CardMercatus");
-		cardMap.put(CardNames.Onager, "card.CardOnager");
-		cardMap.put(CardNames.Templum, "card.CardTemplum");
-		cardMap.put(CardNames.Turris, "card.CardTurris");
-
-
+		cardMap.put(CardNames.Aesculapinum, "cards.CardAesculapinum");
+		cardMap.put(CardNames.Basilica, "cards.CardBasilica");
+		cardMap.put(CardNames.Forum, "cards.CardForum");
+		cardMap.put(CardNames.Machina, "cards.CardMachina");
+		cardMap.put(CardNames.Mercatus, "cards.CardMercatus");
+		cardMap.put(CardNames.Onager, "cards.CardOnager");
+		cardMap.put(CardNames.Templum, "cards.CardTemplum");
+		cardMap.put(CardNames.Turris, "cards.CardTurris");
 
 	}
 	
 	public void InitialiseCards(Pile d) {
-		//addCards(d, CardNames.Legionarius, 20);
 		
 		// Sicarius x1
 		addCards(d, CardNames.Sicarius, 1);
@@ -133,6 +130,18 @@ public class CardTypes {
 		}
 
 		return cardInstance;
+		
+	}
+	
+	public Card getCardFromString(String cardName) {
+		CardNames c = null;
+		for (CardNames card : CardNames.values()) {
+			if (card.toString().compareTo(cardName) == 0) {
+				c = card;
+			}
+		}
+
+		return getCard (c);
 		
 	}
 	

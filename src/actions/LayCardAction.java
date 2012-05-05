@@ -27,16 +27,17 @@ public class LayCardAction implements PlayerAction {
 
 	@Override
 	public void execute(GameVisor g) {
+		
 		game = g;
 		query();
 		
 		if (isValid()) {
 
 			g.getCurrentPlayer().getHand().removeElement(targetCard);
-			if (g.getField()[g.whoseTurn()][diceDisc - 1] != null) {
-				g.discard(g.getField()[g.whoseTurn()][diceDisc - 1]);				
+			if (g.getField().getCard(g.whoseTurn(), diceDisc - 1) != null) {
+				g.discard(g.getField().getCard(g.whoseTurn(), diceDisc - 1));				
 			}
-			g.getField()[g.whoseTurn()][diceDisc - 1] = targetCard;
+			g.getField().setCard(g.whoseTurn(), diceDisc - 1, targetCard);
 
 		}
 		
@@ -55,6 +56,11 @@ public class LayCardAction implements PlayerAction {
 		
 		diceDisc = game.getController().getInt("And the dice disc you want to place it next to");
 		
+	}
+
+	@Override
+	public boolean isVisible(GameVisor g) {
+		return false;
 	}
 	
 }

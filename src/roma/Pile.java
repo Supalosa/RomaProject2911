@@ -1,12 +1,12 @@
 package roma;
-import java.util.Stack;
+import java.util.*;
 
 import cards.Card;
 
 
 public class Pile {
 	
-	Stack<Card> s;
+	private Stack<Card> s;
 	
 	public Pile() {
 		
@@ -38,6 +38,19 @@ public class Pile {
 		
 		return s;
 		
+	}
+	
+	public void addCard (Card c) {
+		s.push (c);
+	}
+	
+	public Card getCard () {
+		return s.pop();
+	}
+	
+	public List<Card> asList() {
+		//List<Card> myList;
+		return s;
 	}
 	
 }
