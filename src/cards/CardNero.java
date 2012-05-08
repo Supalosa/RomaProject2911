@@ -1,5 +1,8 @@
 package cards;
 
+import java.util.*;
+
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
@@ -42,8 +45,41 @@ public class CardNero extends Card {
 	}
 
 	public boolean performEffect(GameVisor g, int pos) {
-		return false;
-		// TODO Auto-generated method stub
+		
+		boolean performed = false;
+		
+		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		
+		List<Card> enemyField = g.getField().getSideAsList(enemy);
+		
+		List<Card> buildings = new ArrayList<Card>();
+		
+		for (Card c : enemyField) {
+			
+			if (c.isBuilding()) {
+				
+				buildings.add(c);
+				
+			}
+			
+		}
+		
+		Card destroy = null;
+		
+		while (destroy == null) {
+			
+			destroy = g.getController().getCard(buildings, "Which opposing building card do you wish to destroy?"); 
+		
+		}
+		
+		g.getField().setCard(g.whoseTurn(), pos, null);
+		g.getField().setCard(enemy, enemyField.indexOf(destroy), null);
+		g.discard(destroy);
+		g.discard(this);
+		
+		performed = true;
+		
+		return performed;
 
 	}
 

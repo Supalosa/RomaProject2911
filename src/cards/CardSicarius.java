@@ -1,5 +1,9 @@
 package cards;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import roma.Game;
 import roma.GameVisor;
 import enums.*;
 
@@ -40,8 +44,42 @@ public class CardSicarius extends Card {
 	}
 
 	public boolean performEffect(GameVisor g, int pos) {
-		return false;
-		// nothing
+		
+		boolean performed = false;
+		
+		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		
+		List<Card> enemyField = g.getField().getSideAsList(enemy);
+		
+		List<Card> characters = new ArrayList<Card>();
+		
+		for (Card c : enemyField) {
+			
+			if (!c.isBuilding()) {
+				
+				characters.add(c);
+				
+			}
+			
+		}
+		
+		Card destroy = null;
+		
+		while (destroy == null) {
+			
+			destroy = g.getController().getCard(characters, "Which opposing character card do you wish to eliminate?"); 
+		
+		}
+		
+		g.getField().setCard(g.whoseTurn(), pos, null);
+		g.getField().setCard(enemy, enemyField.indexOf(destroy), null);
+		g.discard(destroy);
+		g.discard(this);
+		
+		performed = true;
+		
+		return performed;
+
 	}
 
 }

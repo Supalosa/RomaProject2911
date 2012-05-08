@@ -1,5 +1,6 @@
 package cards;
 
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
@@ -49,9 +50,47 @@ public class CardMercator extends Card {
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos) {
-		return false;
-		// TODO Auto-generated method stub
-
+		
+		boolean performed = false;
+		
+		int money = 0;
+		
+		boolean valid = false;
+		
+		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		
+		while (!valid) {
+			
+			money = g.getController().getInt("How much sestertii do you want to spend?");
+			
+			if (money <= g.getCurrentPlayer().getMoney()) {
+				
+				if (money / 2 <= g.getPlayer(enemy).getVP()) {
+					
+					valid = true;
+					g.getCurrentPlayer().setMoney(g.getCurrentPlayer().getMoney() - money);
+					g.getCurrentPlayer().setVP(g.getCurrentPlayer().getVP() + money / 2);
+					g.getPlayer(enemy).setVP(g.getPlayer(enemy).getVP() - money / 2);
+					performed = true;
+				
+				} else {
+					
+					g.getController().showMessage("Your opponent doesn't have that many VP"); 
+					
+				}
+				
+			} else {
+				
+				g.getController().showMessage("You don't have that much sestertii");
+			
+			}
+			
+		}
+		
+		
+		
+		return performed;
+		
 	}
 
 }
