@@ -54,8 +54,6 @@ public class TakeCardAction implements PlayerAction {
 		
 		if (isValid()) {
 			
-			g.useDice(diceRoll);
-			
 			for (i = 0; i < diceRoll; i++) {
 				
 				temp.add(g.drawCard());
@@ -63,14 +61,23 @@ public class TakeCardAction implements PlayerAction {
 			}
 			
 			Card selected = g.getController().getCard(temp, "Please select one Card that you want (the rest are discarded)");
-			
-			g.getCurrentPlayer().addCard(selected);
-			temp.remove(selected);
-			
-			for (Card c : temp) {
+			if (selected != null) {
+				g.useDice(diceRoll);
 				
-				g.discard(c);
-
+				g.getCurrentPlayer().addCard(selected);
+				temp.remove(selected);
+				
+				for (Card c : temp) {
+					
+					g.discard(c);
+	
+				}
+			} else {
+				g.getController().showMessage("Invalid card, action cancelled.");
+				// return the cards to the deck
+				for (Card c : temp) {
+					g.getDeck().addCard(c);
+				}
 			}
 			
 		} else {

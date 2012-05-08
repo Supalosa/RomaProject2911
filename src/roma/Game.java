@@ -26,6 +26,8 @@ public class Game {
 	public static final int FIELD_SIZE = 6;
 	public static final int MAX_PLAYERS = 2;
 	public static final int INITIAL_VP = 36;
+	
+	public static final int NUM_SWAP_CARDS = 2; // number of cards to swap at start of game
 	public Game(Controller controller) {
 	
 		generator = new RandomGenerator();
@@ -136,34 +138,34 @@ public class Game {
 		}
 		
 		currentPlayer = 0;
-		controller.showHand(players[currentPlayer]);
-		Card player11 = controller.getCard(players[currentPlayer], 
-					"Please give the index of the 1st card to pass over to your opponent");
-		Card player12 = controller.getCard(players[currentPlayer], 
-					"Please give the index of the 2nd card to pass over to your opponent");
-		while (player11== player12) {
-			System.out.println("You have to select 2 different cards");
-			player12 = controller.getCard(players[currentPlayer], 
-						"Please give the index of the 2nd card to pass over to your opponent");
+		/* RG - rewritten to use getCard (List) */
+		List<Card> [] swappedCards = new List[MAX_PLAYERS];
+		for (int player = 0; player < MAX_PLAYERS; player++) {
+			currentPlayer = player;
+			
+			swappedCards[player] = new ArrayList<Card>();
+			while (swappedCards[player].size() < NUM_SWAP_CARDS) {
+				Card swapped;
+				while ((swapped = controller.getCard(players[currentPlayer].getHand(),
+						"Player " + player + ": Please select a card to pass to your opponent (" + swappedCards[player].size()
+						+ "/" + NUM_SWAP_CARDS + ")")) == null) {
+					controller.showMessage ("Invalid card.");
+				}
+				
+				swappedCards[player].add(swapped);
+				players[currentPlayer].getHand().remove(swapped);
+				
+				
+			}
 		}
 		
-		currentPlayer = (currentPlayer + 1) % players.length;
-		controller.showHand(players[currentPlayer]);
-		Card player21 = controller.getCard(players[currentPlayer], 
-					"Please give the index of the 1st card to pass over to your opponent");
-		Card player22 = controller.getCard(players[currentPlayer], 
-					"Please give the index of the 2nd card to pass over to your opponent");
-		while(player21 == player22) {
-			System.out.println("You have to select 2 different cards");
-			player22 = controller.getCard(players[currentPlayer], 
-					"Please give the index of the 2nd card to pass over to your opponent");
+		for (int player = 0; player < MAX_PLAYERS; player++) {
+			int otherPlayer = (player + 1) % MAX_PLAYERS;
+			controller.showMessage("Player " + (player + 1) + " swapped " + swappedCards[player]);
+			for (Card swappedCard : swappedCards[player]) {
+				giveCard(player, otherPlayer, swappedCard);
+			}
 		}
-		
-		giveCard(0, 1, player11);
-		giveCard(0, 1, player12);
-		giveCard(1, 0, player21);
-		giveCard(1, 0, player22);
-		
 		currentPlayer = 0;
 		Player p;
 		PlayerAction layCard = new LayCardAction();
@@ -345,7 +347,6 @@ public class Game {
 	}
 	
 	public void giveCard(int currentPlayer, int targetPlayer, Card c) {
-		
 		players[targetPlayer].addCard(c);
 		players[currentPlayer].getHand().removeElement(c);
 		

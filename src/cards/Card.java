@@ -27,6 +27,10 @@ public abstract class Card {
 		
 	}
 	
+	public String toString() {
+		return getName();
+	}
+	
 	public int getOwnerID () {
 		return ownerId;
 	}

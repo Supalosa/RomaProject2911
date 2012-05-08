@@ -50,7 +50,7 @@ public class CardTypes {
 	}
 	
 	public void InitialiseCards(Pile d) {
-		addCards(d, CardNames.Centurio, 1000);
+		//addCards(d, CardNames.Centurio, 1000);
 		
 		
 		// Sicarius x1

@@ -70,6 +70,8 @@ public class CardHaruspex extends Card {
 				g.getDeck().getStack().remove(selected);
 				g.getDeck().shuffle();
 				performed = true;
+			} else {
+				g.getController().showMessage("That card was out of range.");
 			}
 
 		} else {

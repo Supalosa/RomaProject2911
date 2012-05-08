@@ -58,10 +58,9 @@ public class ActivateCardAction implements PlayerAction {
 		game.getController().showField();
 		
 		targetPos = game.getController().getInt("Choose the Dice Disc you want to activate");
-		while (targetPos < 1 || targetPos > Game.FIELD_SIZE) {
-			targetPos = game.getController().getInt("Invalid dice disc. Choose the Dice Disc you want to activate");
+		if (targetPos >= 1 && targetPos <= Game.FIELD_SIZE) {
+			targetCard = game.getField().getCard(game.whoseTurn(),targetPos-1);
 		}
-		targetCard = game.getField().getCard(game.whoseTurn(),targetPos-1);
 		
 	}
 

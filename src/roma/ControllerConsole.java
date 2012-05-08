@@ -6,8 +6,6 @@ import cards.Card;
 
 import actions.PlayerAction;
 
-// small change Rg
-
 public class ControllerConsole implements Controller {
 	
 	Game g;
@@ -115,33 +113,24 @@ public class ControllerConsole implements Controller {
 	 */
 	public Card getCard(List<Card> cardList, String message) {
 		
-		int i = 0;
+		int cardIndex = 0;
 		boolean valid = false;
-		
+		Card result = null;
 		for (Card c : cardList) {
 			
-			System.out.println(i + ": " + c.getName());
-			i ++;
+			System.out.println(cardIndex + ": " + c.getName());
+			cardIndex ++;
 		
 		}
 		
-		while(!valid) {
-			
-			i = getInt(message);
-			
-			if (i >= 0 && i < cardList.size()) {
-				
-				valid = true;
-				
-			} else {
-				
-				System.out.println("Not a valid card.");
-				
-			}
-			
+		cardIndex = getInt(message);
+	
+		if (cardIndex >= 0 && cardIndex < cardList.size()) {
+			result = cardList.get(cardIndex);
+		} else {
+			result = null;
 		}
-		
-		return cardList.get(i);
+		return result;
 		
 	}
 	
