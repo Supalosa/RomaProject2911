@@ -31,7 +31,9 @@ public class Field {
 	public List<Card> getSideAsList (int player) {
 		List<Card> side = new ArrayList<Card>();
 		for (Card cardOnSide : fieldData[player]) {
-			side.add(cardOnSide);
+			if (cardOnSide != null) {
+				side.add(cardOnSide);
+			}
 		}
 		return side;
 	}

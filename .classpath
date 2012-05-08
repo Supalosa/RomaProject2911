@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/reflections-0.9.5.jar"/>
 	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/slf4j-api-1.6.1.jar"/>
 	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/slf4j-nop-1.6.1.jar"/>
+	<classpathentry kind="src" path="/Roma"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
