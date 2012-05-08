@@ -1,5 +1,8 @@
 package cards;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import enums.*;
 
 import roma.*;
@@ -40,8 +43,49 @@ public class CardOnager extends Card {
 	}
 
 	public boolean performEffect(GameVisor g, int pos) {
-		return false;
-		// TODO Auto-generated method stub
+		
+		boolean performed = false;
+		
+		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		
+		List<Card> enemyField = g.getField().getSideAsList(enemy);
+		
+		List<Card> buildings = new ArrayList<Card>();
+		
+		for (Card c : enemyField) {
+			
+			if (c.isBuilding()) {
+				
+				buildings.add(c);
+				
+			}
+			
+		}
+		
+		Card target = null;
+		
+		while (target == null) {
+			
+			target = g.getController().getCard(buildings, "Which opposing building card do you wish to attack?"); 
+		
+		}
+		
+		int diceRoll = g.rollDice();
+		g.getController().showMessage("The battle die rolled a " + diceRoll);
+		
+		if (diceRoll >= target.getDefense()) {
+			
+			g.getField().setCard(enemy, enemyField.indexOf(target), null);
+			g.discard(target);
+			g.getController().showMessage("You killed a " + target.getName() + "!");
+			
+		} else {
+			
+			g.getController().showMessage("You're weak...");
+			
+		}
+		
+		return performed;
 
 	}
 

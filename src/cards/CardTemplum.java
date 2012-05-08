@@ -42,9 +42,8 @@ public class CardTemplum extends Card {
 	}
 
 	public boolean performEffect(GameVisor g, int pos) {
+		g.getController().showMessage("You cannot activate this card");
 		return false;
-		// TODO Auto-generated method stub
-
 	}
 
 }

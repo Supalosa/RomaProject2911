@@ -50,21 +50,50 @@ public class CardGladiator extends Card {
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos) {
+		
 		boolean activated = false;
 		int enemyId = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		g.getController().showField();
 		
-		int targetPos = g.getController().getInt("Choose the enemy (dice disc) you want to return:");
-		while (targetPos < 1 || targetPos > Game.FIELD_SIZE) {
-			targetPos = g.getController().getInt("Invalid dice disc. Choose the Dice Disc you want to return");
-		}
-		Card targetCard = g.getField().getCard(enemyId,targetPos-1);
-		if (targetCard != null) {
-			g.getField().setCard(enemyId, targetPos-1, null);
-			g.getPlayer(enemyId).addCard(targetCard);
-			activated = true;
-		}
+		int targetPos = 0;
+		boolean valid = false;
 		
+		while (!valid) {
+			
+			targetPos = g.getController().getInt("Choose the enemy (dice disc) you want to return:");
+
+			if ((targetPos > 0 || targetPos <= Game.FIELD_SIZE)) {
+				
+				Card targetCard = g.getField().getCard(enemyId,targetPos-1);
+				
+				if (targetCard != null) {
+					
+					if (!targetCard.isBuilding()) {
+						
+						valid = true;
+						g.getField().setCard(enemyId, targetPos-1, null);
+						g.getPlayer(enemyId).addCard(targetCard);
+						activated = true;
+						
+					} else {
+						
+						g.getController().showMessage("Not a Character card");
+						
+					}
+				} else {
+					
+					g.getController().showMessage("No card there");
+					
+				}
+				
+			} else {
+				
+				g.getController().showMessage("Invalid dice disc.");
+
+			}
+			
+		}
+
 		return activated;
 
 	}

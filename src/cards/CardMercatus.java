@@ -1,8 +1,9 @@
 package cards;
 
-import roma.GameVisor;
-import enums.CardNames;
-import enums.EffectTrigger;
+import java.util.List;
+
+import roma.*;
+import enums.*;
 
 public class CardMercatus extends Card {
 	
@@ -40,8 +41,31 @@ public class CardMercatus extends Card {
 	}
 
 	public boolean performEffect(GameVisor g, int pos) {
-		return false;
-		// TODO Auto-generated method stub
+		
+		boolean performed = false;
+		
+		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		
+		List<Card> enemyField = g.getField().getSideAsList(enemy);
+		
+		int forums = 0;
+		
+		for (Card c : enemyField) {
+			
+			if (c.getID() == CardNames.Forum) {
+				
+				forums++;
+				
+			}
+			
+		}
+		
+		g.getCurrentPlayer().setVP(g.getCurrentPlayer().getVP() + forums);
+		g.getPlayer(enemy).setVP(g.getPlayer(enemy).getVP() - forums);
+		
+		performed = true;
+		
+		return performed;
 
 	}
 

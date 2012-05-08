@@ -1,5 +1,6 @@
 package cards;
 
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
@@ -48,8 +49,18 @@ public class CardTribunusPlebis extends Card {
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		boolean performed = false;
+		
+		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		
+		g.getCurrentPlayer().setVP(g.getCurrentPlayer().getVP() + 1);
+		g.getPlayer(enemy).setVP(g.getPlayer(enemy).getVP() - 1);
+		
+		performed = true;
+		
+		return performed;
+		
 	}
 
 }
