@@ -41,7 +41,7 @@ public class CardTemplum extends Card {
 		return EffectTrigger.TriggerOnPlay;
 	}
 
-	public boolean performEffect(GameVisor g) {
+	public boolean performEffect(GameVisor g, int pos) {
 		return false;
 		// TODO Auto-generated method stub
 

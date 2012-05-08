@@ -63,7 +63,7 @@ public class CardArchitectus extends Card {
 		
 		while ((g.getCurrentPlayer().getHandSize() > 0) && (!finished)) {
 			
-			finished = layCards.execute(g);
+			/*finished = */layCards.execute(g);
 			
 			performed = true;
 			

@@ -40,7 +40,7 @@ public class CardConsiliarius extends Card {
 		return EffectTrigger.TriggerOnActivate;
 	}
 
-	public boolean performEffect(GameVisor g) {
+	public boolean performEffect(GameVisor g, int pos) {
 		return false;
 		// TODO Auto-generated method stub
 

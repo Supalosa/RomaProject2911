@@ -54,30 +54,46 @@ public class CardCenturio extends Card {
 	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;
-		
-		if (g.getField().getCard((g.whoseTurn() + 1) % Game.MAX_PLAYERS, pos - 1) != null) {
+		int enemyPlayer = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		Card enemyCard = g.getField().getCard(enemyPlayer, pos - 1);
+		if (enemyCard != null) {
 			
 			int battleDie = g.rollDice();
-			
-			if (battleDie < g.getField().getCard((g.whoseTurn() + 1) % Game.MAX_PLAYERS, pos - 1).getDefense()) {
-				
-				g.getController().showMessage("The battle die rolled a " + battleDie);
-				
-				g.getController().showDiceRolls();
-				
-				int add = g.getController().getInt("Do you wish to add to the value of the battle die?");
-				
-				if (add != -1) {
-					
-					battleDie += g.getDiceRoll()[add];
-					
+			g.getController().showMessage("The battle die rolled a " + battleDie);
+			g.useDice(pos);
+
+			if (battleDie < enemyCard.getDefense()) {
+
+				if (g.getController().getBoolean("Do you wish to add the the value of the battle die?")) {
+					int diceValue = 0;
+					while (diceValue == 0) {
+						g.getController().showDiceRolls();
+						int add = g.getController().getInt("Which die do you want to use?");
+						
+						for (int i = 0; i < g.getDiceRolls().length && diceValue == 0; i++) {
+							if (add == g.getDiceRoll(i)) {
+								diceValue = g.getDiceRoll(i);
+							}
+						}
+					}
+					g.useDice(diceValue);
+					battleDie += diceValue;
 				}
 				
 			}
 			
+			// successfully killed the card
+			if (battleDie >= enemyCard.getDefense()) {
+				g.discard(enemyCard);
+				g.getField().setCard(enemyPlayer, pos-1, null);
+				g.getController().showMessage("You killed a " + enemyCard.getName() + "!");
+			}
+			
+			
+			
 		} else {
 			
-			g.getController().showMessage("There is nothing to attack");
+			g.getController().showMessage("There is nothing to attack.");
 			
 		}
 		

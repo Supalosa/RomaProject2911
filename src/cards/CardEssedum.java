@@ -47,8 +47,9 @@ public class CardEssedum extends Card {
 	}
 
 	@Override
-	public boolean performEffect(GameVisor g) {
+	public boolean performEffect(GameVisor g, int pos) {
 		// TODO Auto-generated method stub
+		// To be implemented by RG after SpellAuras implemented
 		return false;
 	}
 

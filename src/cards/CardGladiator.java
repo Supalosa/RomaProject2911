@@ -1,5 +1,6 @@
 package cards;
 
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
@@ -44,13 +45,27 @@ public class CardGladiator extends Card {
 
 	@Override
 	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnPlay;
+		return EffectTrigger.TriggerOnActivate;
 	}
 
 	@Override
-	public boolean performEffect(GameVisor g) {
-		return false;
-		// TODO Auto-generated method stub
+	public boolean performEffect(GameVisor g, int pos) {
+		boolean activated = false;
+		int enemyId = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		g.getController().showField();
+		
+		int targetPos = g.getController().getInt("Choose the enemy (dice disc) you want to return:");
+		while (targetPos < 1 || targetPos > Game.FIELD_SIZE) {
+			targetPos = g.getController().getInt("Invalid dice disc. Choose the Dice Disc you want to return");
+		}
+		Card targetCard = g.getField().getCard(enemyId,targetPos-1);
+		if (targetCard != null) {
+			g.getField().setCard(enemyId, targetPos-1, null);
+			g.getPlayer(enemyId).addCard(targetCard);
+			activated = true;
+		}
+		
+		return activated;
 
 	}
 

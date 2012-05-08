@@ -44,7 +44,7 @@ public class ActivateCardAction implements PlayerAction {
 			}
 			
 		} else {
-			game.getController().showMessage("Invalid dice roll.");
+			game.getController().showMessage("You don't have a card corresponding to the dice [" + targetPos + "]");
 		}
 		
 	}

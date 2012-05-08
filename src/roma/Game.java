@@ -274,6 +274,47 @@ public class Game {
 		
 	}
 	
+	public int getDiceRoll(int i) {
+		int result = 0;
+		if (i >= 0 && i < diceRolls.length) {
+			return diceRolls[i];
+		}
+		
+		return result;
+	}
+	
+	public boolean hasDiceRoll (int roll) {
+		boolean result = false;
+		for (int i = 0; i < diceRolls.length; i++) {
+			if (diceRolls[i] == roll) {
+				result = true;
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	public int getNumDiceRolls() {
+		int numDice = 0;
+		for (int i = 0; i < diceRolls.length; i++) {
+			if (diceRolls[i] != 0) {
+				numDice ++;
+			}
+		}
+		return numDice;
+	}
+	
+	public void setDiceRoll(int oldValue, int newValue) {
+		boolean handled = false;
+		for (int i = 0; i < diceRolls.length && handled == false; i++) {
+			if (diceRolls[i] == oldValue) {
+				handled = true;
+				diceRolls[i] = newValue;
+			}
+		}
+	}
+	
 	public void useDice (int value) {
 		
 		boolean done = false;

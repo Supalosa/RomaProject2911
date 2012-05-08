@@ -206,11 +206,17 @@ public class ControllerConsole implements Controller {
 		showHand(p);
 		showMessage("---------------------------");
 		showDiceRolls();
+		showMessage("---------------------------");
+
 		int VP = p.getVP();
 		int money = p.getMoney();
 		
 		System.out.println("You have " +VP+ " Victory Points and " +money+ " Sesterii");
-		
+		showMessage("---------------------------");
+		System.out.println ("Discard pile: " + g.getDiscardPile().asList().size());
+		System.out.println ("Deck: " + g.getDeck().asList().size());
+		showMessage("---------------------------");
+
 		
 		
 	}

@@ -39,7 +39,7 @@ public class CardSicarius extends Card {
 		return EffectTrigger.TriggerOnActivate;
 	}
 
-	public boolean performEffect(GameVisor g) {
+	public boolean performEffect(GameVisor g, int pos) {
 		return false;
 		// nothing
 	}

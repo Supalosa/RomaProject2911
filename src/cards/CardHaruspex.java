@@ -1,5 +1,8 @@
 package cards;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
@@ -48,8 +51,32 @@ public class CardHaruspex extends Card {
 	}
 
 	@Override
-	public boolean performEffect(GameVisor g) {
-		return false;
+	public boolean performEffect(GameVisor g, int pos) {
+		boolean performed = false;
+		
+		if (!g.getDeck().getStack().isEmpty()) {
+			
+			List<Card> choices = new ArrayList<Card>();
+			
+			for (Card c : g.getDeck().getStack()) {
+				choices.add(c);
+
+			}
+
+
+			Card selected = g.getController().getCard(choices, "Pick the card you wish to add to your hand");
+			if (selected != null) {
+				g.getCurrentPlayer().addCard(selected);
+				g.getDeck().getStack().remove(selected);
+				g.getDeck().shuffle();
+				performed = true;
+			}
+
+		} else {
+			g.getController().showMessage("The deck is empty.");
+		}
+		
+		return performed;
 	}
 
 }

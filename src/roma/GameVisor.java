@@ -39,6 +39,22 @@ public class GameVisor {
 	
 	}
 	
+	public int getDiceRoll(int i) {
+		return game.getDiceRoll(i);
+	}
+	
+	public boolean hasDiceRoll (int roll) {
+		return game.hasDiceRoll(roll);
+	}
+	
+	public int getNumDiceRolls() {
+		return game.getNumDiceRolls();
+	}
+	
+	public void setDiceRoll(int oldValue, int newValue) {
+		game.setDiceRoll(oldValue, newValue);
+	}
+		
 	public Controller getController() {
 		
 		return game.getController();
@@ -79,6 +95,12 @@ public class GameVisor {
 		
 		return game.getDiscardPile();
 		
+	}
+	
+	// Get the deck
+	public Pile getDeck () {
+		
+		return game.getDeck();
 	}
 	
 	public int rollDice() {

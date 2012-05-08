@@ -48,7 +48,7 @@ public class CardVelites extends Card {
 	}
 
 	@Override
-	public boolean performEffect(GameVisor g) {
+	public boolean performEffect(GameVisor g, int pos) {
 		// TODO Auto-generated method stub
 		return false;
 	}

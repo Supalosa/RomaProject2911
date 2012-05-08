@@ -1,5 +1,6 @@
 package cards;
 
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
@@ -39,8 +40,28 @@ public class CardLegat extends Card {
 		return EffectTrigger.TriggerOnActivate;
 	}
 
-	public boolean performEffect(GameVisor g) {
-		return false;
+	public boolean performEffect(GameVisor g, int pos) {
+		
+		boolean performed = false;
+		
+		int enemyId = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		int points = 0;
+		
+		for (int i = 0 ; i < Game.FIELD_SIZE; i++) {
+			
+			if (g.getField().getCard(enemyId, i) == null) {
+				
+				points++;
+				
+			}
+			
+		}
+		
+		g.getCurrentPlayer().setVP(g.getCurrentPlayer().getVP() + points);
+		
+		performed = true;
+		
+		return performed;
 		// TODO Auto-generated method stub
 
 	}

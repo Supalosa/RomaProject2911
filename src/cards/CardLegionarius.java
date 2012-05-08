@@ -1,5 +1,6 @@
 package cards;
 
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
 import enums.EffectTrigger;
@@ -39,9 +40,39 @@ public class CardLegionarius extends Card {
 		return EffectTrigger.TriggerOnActivate;
 	}
 
-	public boolean performEffect(GameVisor g) {
-		System.out.println ("Legionarius - activated");
-		return false;
+	public boolean performEffect(GameVisor g, int pos) {
+		
+		boolean performed = false;
+		int enemyPlayer = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		Card enemyCard = g.getField().getCard(enemyPlayer, pos - 1);
+		if (enemyCard != null) {
+			
+			int battleDie = g.rollDice();
+			g.getController().showMessage("The battle die rolled a " + battleDie);
+
+			// successfully killed the card
+			if (battleDie >= enemyCard.getDefense()) {
+			
+				g.discard(enemyCard);
+				g.getField().setCard(enemyPlayer, pos-1, null);
+				g.getController().showMessage("You killed a " + enemyCard.getName() + "!");
+			
+			} else {
+				
+				g.getController().showMessage("You're too weak...");
+			
+			}
+			
+			performed = true;
+			
+		} else {
+			
+			g.getController().showMessage("There is nothing to attack.");
+			
+		}
+		
+		return performed;
+		
 	}
 
 }

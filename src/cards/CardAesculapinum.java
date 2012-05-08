@@ -29,8 +29,8 @@ public class CardAesculapinum extends Card {
 	}
 
 	public String getDescription() {
-		return "The temple of As- culapius (the God of healing) enables the player to pick" +
-				" up any character card from the dis- card pile and add it to their hand.";
+		return "The temple of Asculapius (the God of healing) enables the player to pick" +
+				" up any character card from the discard pile and add it to their hand.";
 	}
 
 	public int getDefense() {
@@ -70,6 +70,8 @@ public class CardAesculapinum extends Card {
 				
 			}
 
+		} else {
+			g.getController().showMessage("The discard pile is empty.");
 		}
 		
 		return performed;

@@ -50,6 +50,8 @@ public class CardTypes {
 	}
 	
 	public void InitialiseCards(Pile d) {
+		addCards(d, CardNames.Centurio, 1000);
+		
 		
 		// Sicarius x1
 		addCards(d, CardNames.Sicarius, 1);
@@ -85,8 +87,6 @@ public class CardTypes {
 		addCards(d, CardNames.Tribunus_Plebis, 2);
 		// Centurio x2
 		addCards(d, CardNames.Centurio, 2);
-		//Aesculapinum x2
-		addCards(d, CardNames.Aesculapinum, 2);
 		//Aesculapinum x2
 		addCards(d, CardNames.Aesculapinum, 2);
 		//Basilica x2
