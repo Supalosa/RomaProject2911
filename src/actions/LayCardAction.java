@@ -1,5 +1,7 @@
 package actions;
 
+import java.util.List;
+
 import roma.*;
 import cards.*;
 
@@ -10,7 +12,7 @@ public class LayCardAction implements IPlayerAction {
 	int diceDisc;
 	GameVisor game;
 	 
-	public boolean isValid() {
+	public boolean isValid(GameVisor g) {
 		
 		boolean isValid = true;
 		
@@ -19,6 +21,19 @@ public class LayCardAction implements IPlayerAction {
 		if (i < 1 || i > Game.FIELD_SIZE) {
 			isValid = false;
 			game.getController().showMessage("That Dice Disc value is not possible");
+		}
+		
+		List<String> blocks = g.getField().getBlocks();
+		
+		for (String s : blocks) {
+			
+			if (s.charAt(0) == g.whoseTurn() && s.charAt(1) == diceDisc) {
+				
+				isValid = false;
+				g.getController().showMessage("That dice disc is blocked for this turn");
+			
+			}
+			
 		}
 		
 		return isValid;
@@ -31,7 +46,7 @@ public class LayCardAction implements IPlayerAction {
 		game = g;
 		query();
 		
-		if (isValid()) {
+		if (isValid(g)) {
 
 			g.getCurrentPlayer().getHand().removeElement(targetCard);
 			if (g.getField().getCard(g.whoseTurn(), diceDisc - 1) != null) {

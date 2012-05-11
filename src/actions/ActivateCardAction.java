@@ -1,5 +1,7 @@
 package actions;
 
+import java.util.List;
+
 import roma.*;
 import cards.*;
 
@@ -23,14 +25,32 @@ public class ActivateCardAction implements IPlayerAction {
 			
 		}
 		
+		if (!valid) {
+			game.getController().showMessage("You don't have a dice corresponding to the dice [" + targetPos + "]");
+		}
+		
 		if (targetCard == null) {
 			valid = false;
+			game.getController().showMessage("no card?");
+		}
+		
+		List<String> blocks = g.getField().getBlocks();
+		
+		for (String s : blocks) {
+			
+			if (s.charAt(0) == g.whoseTurn() && s.charAt(1) == targetPos) {
+				
+				valid = false;
+				g.getController().showMessage("That dice disc is blocked for this turn");
+			}
+			
 		}
 
 		return valid;
 	}
 
 	public void execute(GameVisor g) {
+		
 		game = g;
 		query();
 		
@@ -42,8 +62,6 @@ public class ActivateCardAction implements IPlayerAction {
 				
 			}
 			
-		} else {
-			game.getController().showMessage("You don't have a dice corresponding to the dice [" + targetPos + "]");
 		}
 		
 	}

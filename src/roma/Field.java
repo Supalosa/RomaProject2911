@@ -2,13 +2,22 @@ package roma;
 
 import java.util.*;
 
+import modifiers.IModifiable;
+import modifiers.IModifier;
+import modifiers.ModifierTarget;
+
 import cards.*;
 
-public class Field {
+public class Field implements IModifiable {
+	
 	private Card[][] fieldData;
+	List<IModifier> modifiers;
+	List<String> block;
 	
 	public Field() {
 		fieldData = new Card[Game.MAX_PLAYERS][Game.FIELD_SIZE];
+		modifiers = new ArrayList<IModifier>();
+		block = new ArrayList<String>();
 	}
 	
 	/**
@@ -93,4 +102,46 @@ public class Field {
 		}
 		return cards;	
 	}
+
+	@Override
+	public void addModifier(IModifier mod) {
+		modifiers.add(mod);
+		mod.setTarget(this);
+		mod.apply();
+	}
+
+	@Override
+	public void removeModifier(IModifier mod) {
+		modifiers.remove(mod);
+		mod.unapply();
+	}
+
+	@Override
+	public List<IModifier> getModifiers() {
+		return modifiers;
+	}
+	
+	@Override
+	public ModifierTarget getModifiableType() {
+		return ModifierTarget.Field;
+	}
+	
+	public void setBlock(String s) {
+	
+		block.add(s);
+	
+	}
+	
+	public void removeBlock(String s) {
+		
+		block.remove(s);
+		
+	}
+	
+	public List<String> getBlocks() {
+		
+		return block;
+		
+	}
+
 }

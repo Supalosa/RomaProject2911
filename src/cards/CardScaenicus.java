@@ -1,7 +1,10 @@
 package cards;
 
-import roma.GameVisor;
-import enums.CardNames;
+import java.util.ArrayList;
+import java.util.List;
+
+import roma.*;
+import enums.*;
 
 public class CardScaenicus extends Card {
 
@@ -44,8 +47,29 @@ public class CardScaenicus extends Card {
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos) {
-		return false;
-		// TODO Auto-generated method stub
+		
+		boolean performed = false;
+		
+		List<Card> characters = new ArrayList<Card>();
+		for (Card c : g.getField().getSideAsList(g.whoseTurn())) {
+			if (!c.isBuilding()) {
+				characters.add(c);
+			}
+		}
+		
+		Card selectedCard = null;
+		selectedCard = g.getController().getCard(characters, "Select a character card to lay.");
+		while (selectedCard == null) {
+			selectedCard = g.getController().getCard(characters, "Invalid card. Select a character card to lay.");
+		}
+		
+		selectedCard.performEffect(g, pos);
+		
+		if (selectedCard.getID() != CardNames.Scaenicus) {
+			performed = true;
+		}
+		
+		return performed;
 
 	}
 

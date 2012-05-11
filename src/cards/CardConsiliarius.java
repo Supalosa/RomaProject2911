@@ -70,7 +70,6 @@ public class CardConsiliarius extends Card {
 				dicePosition = g.getController().getInt("Select a position to lay " + selectedCard.getName() + ":");
 			}
 			characters.remove(selectedCard);
-			g.getCurrentPlayer().removeCard(selectedCard);
 			g.getField().setCard(g.whoseTurn(), dicePosition-1, selectedCard);
 
 		}
