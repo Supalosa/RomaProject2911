@@ -61,7 +61,10 @@ public class MoveMakerAdapter implements MoveMaker {
 	@Override
 	public void activateMoneyDisc(int diceToUse)
 			throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
+		
+		IPlayerAction action = new TakeMoneyAction();
+		mockController.insertInput(Integer.toString(diceToUse));
+		action.execute(game.getGameVisor());
 
 	}
 
