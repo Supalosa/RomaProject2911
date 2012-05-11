@@ -36,16 +36,26 @@ public class MockController implements IController {
 
 	public String getString(String message) {
 		// get the last thing off the mockStdIn
+		String out = null;
 		if (mockStdIn.isEmpty()) {
 			System.err.println ("MockController::getString: queue ran out of messages!");
+		} else {
+			out = mockStdIn.poll();
+			System.out.println (" > Mock: '" + out + "'");
 		}
-		return mockStdIn.poll();
+		return out;
 	}
 
 	public int getInt(String message) {
 		// get the last thing off mock stdin, casted to an int
 		// error (and return 0) if no input
-		String input = mockStdIn.poll();
+		String input = null;
+		if (mockStdIn.isEmpty()) {
+			System.err.println ("MockController::getString: queue ran out of messages!");
+		} else {
+			input = mockStdIn.poll();
+			System.out.println (" > Mock: '" + input + "'");
+		}
 		int result = 0;
 		if (input != null) {
 			try {
@@ -74,7 +84,7 @@ public class MockController implements IController {
 				
 			} else {
 				
-				System.out.println("You only have " + p.getHandSize() + " cards");
+				showMessage("You only have " + p.getHandSize() + " cards");
 				
 			}
 			
@@ -95,7 +105,7 @@ public class MockController implements IController {
 		Card result = null;
 		for (Card c : cardList) {
 			
-			System.out.println(cardIndex + ": " + c.getName());
+			showMessage(cardIndex + ": " + c.getName());
 			cardIndex ++;
 		
 		}

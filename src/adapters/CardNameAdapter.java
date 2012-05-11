@@ -10,7 +10,7 @@ import enums.*;
 public enum CardNameAdapter {
 	Sicarius 		("Sicarius", 		CardNames.Sicarius),
 	Architectus 	("Architectus", 	CardNames.Architectus),
-	Consiliarius 	("Consiliarius", 	CardNames.Consiliarius, "Consiliarus"), // acceptance typo
+	Consiliarius 	("Consiliarius", 	CardNames.Consiliarius),
 	Legat 			("Legat", 			CardNames.Legat),
 	Gladiator 		("Gladiator", 		CardNames.Gladiator),
 	Mercator 		("Mercator", 		CardNames.Mercator),

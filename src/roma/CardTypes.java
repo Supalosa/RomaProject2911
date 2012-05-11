@@ -42,7 +42,7 @@ public class CardTypes {
 	}
 	
 	public void InitialiseCards(Pile d) {
-		addCards(d, CardNames.Consiliarius, 20);
+		addCards(d, CardNames.Sicarius, 20);
 		
 		
 		// Sicarius x1

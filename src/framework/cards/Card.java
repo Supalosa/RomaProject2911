@@ -13,7 +13,7 @@ public enum Card {
    ARCHITECTUS ("Architectus"),
    BASILICA ("Basilica"),
    CENTURIO ("Centurio"),
-   CONSILIARUS ("Consiliarus"),
+   CONSILIARIUS ("Consiliarius"),
    CONSUL ("Consul"),
    ESSEDUM ("Essedum"),
    FORUM ("Forum"),
@@ -34,6 +34,9 @@ public enum Card {
    TRIBUNUSPLEBIS ("Tribunusplebis"),
    TURRIS ("Turris"),
    VELITES ("Velites"),
+   GRIMREAPER ("Grimreaper"),
+   KAT ("Kat"),
+   TELEPHONEBOX ("Telephonebox"),
    NOT_A_CARD ("Not A Card");
 
    // Member to hold the name as a string.

@@ -156,13 +156,18 @@ public interface GameState {
     */
    public int getPlayerVictoryPoints (int playerNum);
 
-   /**
-    * Sets a player's current Victory Points.
+    /**
+    * Gives a player VPs from the stockpile or give the stockpile VPs from a player.
     *
     * <p>
     * The new Victory Points of the specified player are given as an
     * integer. Correct player indexing is discussed in the GameState
     * interface header.
+    * </p>
+    * <p>
+    * If the given amount is more than what the player already has,
+    * then points need to be removed from the stockpile and given
+    * to the player and vice versa.
     * </p>
     *
     * @param playerNum which player's Victory Points to set
@@ -272,4 +277,12 @@ public interface GameState {
     * @return the number of Victory Points not held by any player
     */
    public int getPoolVictoryPoints ();
+   
+   /**
+    * Returns true iff a game has been started AND the game has come to completion
+    * otherwise return false.
+    *
+    * @return whether a game has come to completion
+    */
+   public boolean isGameCompleted();
 }

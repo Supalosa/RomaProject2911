@@ -46,6 +46,7 @@ public class Game {
 	/**
 	 * Initialise the game pointers, etc.
 	 */
+	@SuppressWarnings("unchecked")
 	public void initGame() {
 		
 		currentPlayer = 0;
