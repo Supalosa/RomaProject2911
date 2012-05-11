@@ -1,5 +1,7 @@
 package actions;
 
+import java.util.List;
+
 import roma.*;
 import cards.*;
 
@@ -9,7 +11,7 @@ public class PlayCardAction implements IPlayerAction {
 	Card targetCard;
 	int diceDisc;
 	GameVisor game;
-	public boolean isValid() {
+	public boolean isValid(GameVisor g) {
 		
 		boolean isValid = true;
 		
@@ -25,6 +27,19 @@ public class PlayCardAction implements IPlayerAction {
 			game.getController().showMessage("You don't have enough Money to play " + targetCard.getName());
 		}
 		
+		List<String> blocks = g.getField().getBlocks();
+		
+		for (String s : blocks) {
+			
+			if (s.charAt(0) == g.whoseTurn() && s.charAt(1) == diceDisc) {
+				
+				isValid = false;
+				g.getController().showMessage("That dice disc is blocked for this turn");
+			
+			}
+			
+		}
+		
 		return isValid;
 		
 	}
@@ -33,7 +48,7 @@ public class PlayCardAction implements IPlayerAction {
 		game = g;
 		query();
 		
-		if (isValid()) {
+		if (isValid(g)) {
 
 			game.getCurrentPlayer().getHand().removeElement(targetCard);
 			if (game.getField().getCard(game.whoseTurn(), diceDisc - 1) != null) {

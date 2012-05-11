@@ -57,7 +57,7 @@ public class CardMercator extends Card {
 			
 			money = g.getController().getInt("How much sestertii do you want to spend?");
 			
-			if (money <= g.getCurrentPlayer().getMoney()) {
+			if (money <= 3) { //"This fix comes directly from Stefan Feld, the gameÕs designer."
 				
 				if (money / 2 <= g.getPlayer(enemy).getVP()) {
 					
@@ -69,7 +69,7 @@ public class CardMercator extends Card {
 				
 				} else {
 					
-					g.getController().showMessage("Your opponent doesn't have that many VP"); 
+					g.getController().showMessage("Can be used to purchase a maximum of 3 VPs (for 6 gold) per activation"); 
 					
 				}
 				
