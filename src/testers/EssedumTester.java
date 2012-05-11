@@ -18,7 +18,6 @@ public class EssedumTester implements ITestSuite {
 		Game g;
 		GameVisor gv;
 		IPlayerAction action;
-		boolean hadModifier;
 		
 		controller = new MockController();
 		g = new Game(controller);

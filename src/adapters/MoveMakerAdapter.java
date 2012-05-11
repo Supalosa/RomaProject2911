@@ -1,6 +1,6 @@
 package adapters;
 
-import java.util.List;
+import java.util.*;
 
 import roma.*;
 
@@ -44,7 +44,13 @@ public class MoveMakerAdapter implements MoveMaker {
 		// TODO better switching
 		if (activatedCard != null) {
 			if (activatedCard.getID() == CardNames.Tribunus_Plebis) {
-				activator = new TribunusPlebisActivator(disc, game, activatedCard);
+				activator = new TribunusPlebisAdaptorActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID () == CardNames.Legat){
+				activator = new LegatAdaptorActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID () == CardNames.Sicarius){
+				activator = new SicariusAdaptorActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID () == CardNames.Aesculapinum) {
+				activator = new AesculapinumAdaptorActivator(disc, game, activatedCard);
 			}
 		}
 		
@@ -54,7 +60,30 @@ public class MoveMakerAdapter implements MoveMaker {
 	@Override
 	public void activateCardsDisc(int diceToUse, Card chosen)
 			throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
+		IPlayerAction action;
+		int cardIndex = 0;
+		int tempIndex;
+		// Get the card index (have to guess from the deck before we draw)
+		
+		List<cards.Card> deck = game.getDeck().asList();
+		List<cards.Card> topCards = deck.subList(0, diceToUse);
+		
+		tempIndex = 0;
+		for (cards.Card c : topCards) {
+			
+			CardNameAdapter acceptanceAdapter = CardNameAdapter.getAcceptanceAdapter(c.getName());
+			if (chosen.toString().equals(acceptanceAdapter.getAcceptanceName())) {
+				cardIndex = tempIndex;
+			}
+			tempIndex ++;
+		}
+		
+		action =  new TakeCardAction();
+		mockController.insertInput(Integer.toString(diceToUse));
+		
+		mockController.insertInput(Integer.toString(cardIndex));
+		
+		action.execute(game.getGameVisor());
 
 	}
 

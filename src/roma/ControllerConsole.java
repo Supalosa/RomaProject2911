@@ -70,7 +70,7 @@ public class ControllerConsole implements IController {
 			
 			} catch (NumberFormatException e) {
 				
-				System.out.println("Please input a number");
+				showMessage("Please input a number");
 				
 			} catch (IOException e) {
 				
@@ -98,7 +98,7 @@ public class ControllerConsole implements IController {
 				
 			} else {
 				
-				System.out.println("You only have " + p.getHandSize() + " cards");
+				showMessage("You only have " + p.getHandSize() + " cards");
 				
 			}
 			
@@ -116,11 +116,10 @@ public class ControllerConsole implements IController {
 	public Card getCard(List<Card> cardList, String message) {
 		
 		int cardIndex = 0;
-		boolean valid = false;
 		Card result = null;
 		for (Card c : cardList) {
 			
-			System.out.println(cardIndex + ": " + c.getName());
+			showMessage(cardIndex + ": " + c.getName());
 			cardIndex ++;
 		
 		}

@@ -23,11 +23,13 @@ public class Field {
 		Card replacedCard = fieldData[player][position];	
 		
 		if (replacedCard != null) {
-			replacedCard.setOwnerId(Player.NO_OWNER);
-			/* hook the event for all the other cards */
+		/*	replacedCard.setOwnerId(Player.NO_OWNER);
 			for (Card otherCards : getAllCards()) {
 				otherCards.onLeaveField(this, player, position);
-			}
+			}*/
+			
+			removeCard (replacedCard);
+			
 		}
 		
 		fieldData[player][position] = c;

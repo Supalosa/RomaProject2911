@@ -15,23 +15,23 @@ public class TurrisAura implements IModifier {
 	
 	@Override
 	public String getDescription() {
-		return "+2 defense. Applies until Turris leaves the field.";
+		return "+1 defense. Applies until Turris leaves the field.";
 	}
 	
 	/**
-	 * Applies +2 defense to the card
+	 * Applies +1 defense to the card
 	 */
 	@Override
 	public void apply() {
-		targetCard.setRealDefense(targetCard.getRealDefense() + 2);
+		targetCard.setRealDefense(targetCard.getRealDefense() + 1);
 	}
 
 	/**
-	 * Applies -2 defense to the card
+	 * Applies -1 defense to the card
 	 */
 	@Override
 	public void unapply() {
-		targetCard.setRealDefense(targetCard.getRealDefense() - 2);
+		targetCard.setRealDefense(targetCard.getRealDefense() - 1);
 	}
 
 

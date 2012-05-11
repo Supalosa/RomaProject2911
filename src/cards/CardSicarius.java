@@ -68,10 +68,13 @@ public class CardSicarius extends Card {
 		
 		}
 		
-		g.getField().setCard(g.whoseTurn(), pos, null);
-		g.getField().setCard(enemy, enemyField.indexOf(destroy), null);
-		g.discard(destroy);
+		g.getField().setCard(g.whoseTurn(), pos-1, null);
 		g.discard(this);
+		
+		//g.getField().setCard(enemy, enemyField.indexOf(destroy), null);
+		g.getField().removeCard(destroy);
+		g.discard(destroy);
+		
 		
 		performed = true;
 		

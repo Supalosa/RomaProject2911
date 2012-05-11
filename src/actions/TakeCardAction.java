@@ -65,6 +65,7 @@ public class TakeCardAction implements IPlayerAction {
 				g.useDice(diceRoll);
 				
 				g.getCurrentPlayer().addCard(selected);
+				
 				temp.remove(selected);
 				
 				for (Card c : temp) {
@@ -72,6 +73,7 @@ public class TakeCardAction implements IPlayerAction {
 					g.discard(c);
 	
 				}
+			
 			} else {
 				g.getController().showMessage("Invalid card, action cancelled.");
 				// return the cards to the deck

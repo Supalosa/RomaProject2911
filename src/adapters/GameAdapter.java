@@ -34,25 +34,47 @@ public class GameAdapter implements GameState {
 		myGame.setWhoseTurn(player);
 	}
 
-	@Override
 	/**
-	 * converts our representation of Card to framework's Card
+	 * Convert our deck to Acceptance format (list of enums)
 	 */
+	@Override
 	public List<Card> getDeck() {
+
 		List<cards.Card> oldList = myGame.getDeck().asList();
 		List<framework.cards.Card> newList = new ArrayList<framework.cards.Card>();
+		
 		for (cards.Card c : oldList) {
-			newList.add(framework.cards.Card.valueOf(c.getName()));
+			// convert to acceptance
+			CardNameAdapter acceptanceName = CardNameAdapter.getAcceptanceAdapter(c.getName());
+			if (acceptanceName == null) {
+				System.err.println ("GameAcceptanceAdapter::getDeck: Could not convert " + c.getName() + " to Acceptance equivalent");
+			} else {
+				newList.add(Card.valueOf(acceptanceName.getAcceptanceName().toUpperCase()));
+			}
 		}
+		
 		return newList;
 	}
+	
+	/**
+	 * Convert the provided list to a list of our own cards,
+	 * then empty the discard pile and insert
+	 * 
+	 */
 
 	@Override
-	public void setDeck(List<Card> deck) {
+	public void setDeck(List<Card> discard) {
 		CardTypes cardList = new CardTypes();
-		
-		for (Card c : deck) {
-			myGame.getDeck().addCard(cardList.getCardFromString(c.toString()));
+		myGame.getDeck().emptyPile();
+		for (Card c : discard) {
+			// convert to roma
+			CardNameAdapter romaName = CardNameAdapter.getRomaAdapter(c.toString());
+			if (romaName == null) {
+				System.err.println ("GameAcceptanceAdapter::setDeck: Could not convert " + c.name() + " to Roma equivalent");
+			} else {
+				cards.Card romaCard = cardList.getCard(romaName.getRomaEnum());
+				myGame.getDeck().addCard(romaCard);
+			}
 		}
 	}
 
@@ -88,8 +110,8 @@ public class GameAdapter implements GameState {
 	@Override
 	public void setDiscard(List<Card> discard) {
 		CardTypes cardList = new CardTypes();
-		cards.Card[] field = new cards.Card[Game.FIELD_SIZE];
-		myGame.getDiscardPile().emptyPile();		for (Card c : discard) {
+		myGame.getDiscardPile().emptyPile();
+		for (Card c : discard) {
 			// convert to roma
 			CardNameAdapter romaName = CardNameAdapter.getRomaAdapter(c.toString());
 			if (romaName == null) {
@@ -179,7 +201,10 @@ public class GameAdapter implements GameState {
 				CardNameAdapter acceptanceName = CardNameAdapter.getAcceptanceAdapter(cardInPosition.getName());
 				fieldCards[i] = Card.valueOf(acceptanceName.getAcceptanceName().toUpperCase());
 			}
+			//System.out.println ("getPlayerCardOnDiscs(" + playerNum + ") pos " + i + ": " + fieldCards[i]);
 		}
+		
+	
 		return fieldCards;
 	}
 
@@ -215,6 +240,12 @@ public class GameAdapter implements GameState {
 	@Override
 	public int getPoolVictoryPoints() {
 		return myGame.getVictoryStockpile();
+	}
+
+	@Override
+	public boolean isGameCompleted() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 	

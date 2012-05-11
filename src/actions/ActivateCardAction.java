@@ -2,7 +2,6 @@ package actions;
 
 import roma.*;
 import cards.*;
-import enums.*;
 
 public class ActivateCardAction implements IPlayerAction {
 	

@@ -4,6 +4,7 @@
  */
 package framework.interfaces.activators;
 
+import framework.cards.*;
 /**
  *
  * @author Lasath Fernando (lasath.fernando)
@@ -11,5 +12,7 @@ package framework.interfaces.activators;
  * @author Damon Stacey (damon.stacey)
  */
 public interface SenatorActivator extends CardActivator {
+
+   public void layCard (Card myCard, int whichDiceDisc);
 
 }
