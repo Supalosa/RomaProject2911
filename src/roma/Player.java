@@ -9,6 +9,7 @@ public class Player {
 	private int victoryPoints = 10; // my victory points
 	private int playerId; // possibly redundant, 0..1
 
+	public static final int NO_OWNER = -1;
 	// Constructor for Player
 	public Player(int id) {
 		
@@ -23,9 +24,16 @@ public class Player {
 	
 	// Add a card to our hand
 	public void addCard(Card c) {
-
+		c.onEnterHand(this);
+		c.setOwnerId(playerId);
 		hand.add(c);
 		
+	}
+	
+	public void removeCard(Card c) {
+		c.onLeaveHand(this);
+		c.setOwnerId(NO_OWNER);
+		hand.remove(c);
 	}
 
 	// Get n'th card from my hand

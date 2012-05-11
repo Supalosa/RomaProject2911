@@ -5,7 +5,6 @@ import java.util.*;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardNero extends Card {
 
@@ -37,11 +36,6 @@ public class CardNero extends Card {
 	public int getDefense() {
 		// TODO Auto-generated method stub
 		return 9;
-	}
-
-	public EffectTrigger getEffectTrigger() {
-		// TODO Auto-generated method stub
-		return EffectTrigger.TriggerOnActivate;
 	}
 
 	public boolean performEffect(GameVisor g, int pos) {

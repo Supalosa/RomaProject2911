@@ -3,7 +3,7 @@ package actions;
 import roma.*;
 
 
-public class TakeMoneyAction implements PlayerAction {
+public class TakeMoneyAction implements IPlayerAction {
 	
 	int diceRoll;
 	GameVisor game;

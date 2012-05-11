@@ -4,7 +4,7 @@ import java.util.*;
 import cards.Card;
 
 
-public class Pile {
+public abstract class Pile {
 	
 	private Stack<Card> s;
 	
@@ -34,7 +34,7 @@ public class Pile {
 		}
 	}
 	
-	public Stack<Card> getStack() {
+	private Stack<Card> getStack() {
 		
 		return s;
 		
@@ -42,6 +42,10 @@ public class Pile {
 	
 	public void addCard (Card c) {
 		s.push (c);
+	}
+	
+	public void removeCard (Card c) {
+		s.remove(c);
 	}
 	
 	public Card getCard () {
@@ -53,4 +57,12 @@ public class Pile {
 		return s;
 	}
 	
+	public boolean isEmpty() {
+		return s.isEmpty();
+	}
+	
+	
+	public void emptyPile() {
+		s.clear();
+	}
 }

@@ -4,7 +4,7 @@ import java.util.*;
 import roma.*;
 import cards.*;
 
-public class ViewCardAction implements PlayerAction {
+public class ViewCardAction implements IPlayerAction {
 
 	private Card selectedCard = null;
 	GameVisor game;

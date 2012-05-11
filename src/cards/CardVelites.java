@@ -6,7 +6,6 @@ import java.util.List;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardVelites extends Card {
 
@@ -45,12 +44,6 @@ public class CardVelites extends Card {
 	public int getDefense() {
 		return 3;
 	}
-
-	@Override
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
 	@Override
 	public boolean performEffect(GameVisor g, int pos) {
 		

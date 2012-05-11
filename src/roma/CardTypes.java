@@ -38,19 +38,11 @@ public class CardTypes {
 		cardMap.put(CardNames.Onager, "cards.CardOnager");
 		cardMap.put(CardNames.Templum, "cards.CardTemplum");
 		cardMap.put(CardNames.Turris, "cards.CardTurris");
-		cardMap.put(CardNames.Aesculapinum, "cards.CardAesculapinum");
-		cardMap.put(CardNames.Basilica, "cards.CardBasilica");
-		cardMap.put(CardNames.Forum, "cards.CardForum");
-		cardMap.put(CardNames.Machina, "cards.CardMachina");
-		cardMap.put(CardNames.Mercatus, "cards.CardMercatus");
-		cardMap.put(CardNames.Onager, "cards.CardOnager");
-		cardMap.put(CardNames.Templum, "cards.CardTemplum");
-		cardMap.put(CardNames.Turris, "cards.CardTurris");
 
 	}
 	
 	public void InitialiseCards(Pile d) {
-		//addCards(d, CardNames.Centurio, 1000);
+		addCards(d, CardNames.Consiliarius, 20);
 		
 		
 		// Sicarius x1
@@ -109,7 +101,7 @@ public class CardTypes {
 	private void addCards(Pile d, CardNames t, int count) {
 		for(int i = 0; i < count; i++) {
 			Card c = getCard(t);
-			d.getStack().push(c);
+			d.addCard(c); // potential issue because of hooked events
 		}
 	}
 	
@@ -118,6 +110,9 @@ public class CardTypes {
 		Card cardInstance = null;
 		try {
 			cardInstance = (Card)Class.forName(cardClassName).newInstance();
+		} catch (NullPointerException e) {
+			System.err.println ("CardTypes: No class with name " + cardClassName);
+			e.printStackTrace();
 		} catch (InstantiationException e) {
 			System.err.println ("CardTypes: Could not instantiate class " + cardClassName);
 			e.printStackTrace();
@@ -139,6 +134,10 @@ public class CardTypes {
 			if (card.toString().compareTo(cardName) == 0) {
 				c = card;
 			}
+		}
+		
+		if (c == null) {
+			System.err.println ("CardNames::getCardFromString: no card " + cardName);
 		}
 
 		return getCard (c);

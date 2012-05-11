@@ -36,10 +36,6 @@ public class CardMercatus extends Card {
 		return 3;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
 	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;

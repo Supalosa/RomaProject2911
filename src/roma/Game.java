@@ -16,19 +16,24 @@ public class Game {
 	private int currentPlayer; // id 0..1 of current turn's player
 	private RandomGenerator generator;
 	private CardTypes cardTypes;
-	private Controller controller;
+	private IController controller;
 	private boolean gameOver;
+	List<Card> [] swappedCards;
 	
-	private boolean endTurn;
+	private int turnNumber;
+	
 	
 	private GameVisor visor;
 	
-	public static final int FIELD_SIZE = 6;
+	public static final int FIELD_SIZE = 7;
 	public static final int MAX_PLAYERS = 2;
 	public static final int INITIAL_VP = 36;
+	public static final int NUM_DIE = 3;
 	
+	public static final int INITIAL_CARDS = 5; 
 	public static final int NUM_SWAP_CARDS = 2; // number of cards to swap at start of game
-	public Game(Controller controller) {
+	
+	public Game(IController controller) {
 	
 		generator = new RandomGenerator();
 		this.controller = controller;
@@ -38,6 +43,37 @@ public class Game {
 		
 	}
 	
+	/**
+	 * Initialise the game pointers, etc.
+	 */
+	public void initGame() {
+		
+		currentPlayer = 0;
+		cardTypes = new CardTypes();
+
+		players = new Player[MAX_PLAYERS];
+		for (int i = 0; i < MAX_PLAYERS; i++) {
+			players[i] = new Player(i);
+		}
+			
+		deck = new Deck();
+
+		
+		field = new Field();
+		discardPile = new DiscardPile();
+		
+		diceRolls = new int[NUM_DIE];
+		
+		swappedCards = new List[MAX_PLAYERS];
+		
+		turnNumber = 0;
+		
+	}
+	
+	/**
+	 * Automated loop that runs the game.
+	 * Is only used when playing, NOT when testing.
+	 */
 	public void run() {
 		// small change 2
 	/* this is f-ing annoying
@@ -52,25 +88,36 @@ public class Game {
 			currentPlayer = 1;
 		}
 		*/
+		
+		// Prepare the game - draw cards and ask for swapped cards.
 		prepare();
 		
+		// Start an initial turn.
+		startTurn ();
+		
+		// While the game is still running, keep query current player for action.
 		while (!isGameOver ()) {
-			step ();
 			
+			queryForAction();
+
 			testGameOver ();
+			
 		}
 		
 		controller.showMessage("GG");
 		
 	}
 	
-	public void step() {
-
+	/**
+	 * Deduct appropriate number points from whoever's turn it is.
+	 * Roll three dice.
+	 * Call all cards Start Turn event
+	 */
+	public void startTurn() {
 		Player player = players[currentPlayer];			
-		endTurn = false;
 		int deduct = 0;
 		int i = 0;
-		for (i = 0; i < 6; i++) {
+		for (i = 0; i < FIELD_SIZE; i++) {
 			
 			if (field.getCard(currentPlayer,i) == null) {
 				
@@ -81,56 +128,61 @@ public class Game {
 		}
 		player.setVP(player.getVP() - deduct);
 		
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < NUM_DIE; i++) {
 			
 			diceRolls[i] = rollDice();
 			
 		}
-		
-		/* player actions */
-		while (endTurn == false) {
-			controller.showScreen(player);
-			
-			PlayerAction nextAction = controller.getAction(player);
-
-			System.out.println("Action chosen: " + nextAction.getDescription());
-			
-			nextAction.execute(visor);
-		
+		for (Card c : field.getAllCards()) {
+			c.onTurnStart(visor, currentPlayer);
 		}
-		
-		nextTurn ();
+	
 	}
 	
+	/**
+	 * Perform all end-of-turn actions for all cards.
+	 * Increment the current turn number, and swap the current player.
+	 */
 	public void nextTurn () {
+		for (Card c : field.getAllCards()) {
+			c.onTurnEnd(visor, currentPlayer);
+		}
 		currentPlayer = (currentPlayer + 1) % players.length;
+		turnNumber ++;
 	}
 	
-	public void initGame() {
+	public int getTurnNumber () {
+		return turnNumber;
+	}
+	
+	/**
+	 * Query the current player for a single action.
+	 */
+	private void queryForAction() {
+		/* player actions */
+	
+		Player player = players[currentPlayer];		
 		
-		currentPlayer = 0;
-		cardTypes = new CardTypes();
+		controller.showScreen(player);
+		
+		IPlayerAction nextAction = controller.getAction(player);
+		System.out.println("Action chosen: " + nextAction.getDescription());
+		nextAction.execute(visor);
 
-		players = new Player[2];
-		players[0] = new Player(0);
-		players[1] = new Player(1);
+	}
+
+
+	/**
+	 * Prepare the player's initial state of the game (using controller for input)
+	 */
+	public void prepare () {
 		
-		deck = new Pile();
+		// Initialise the deck.
 		cardTypes.InitialiseCards(deck);
 		deck.shuffle();
 		
-		field = new Field();
-		discardPile = new Pile();
-		
-		diceRolls = new int[3];
-		
-		
-	}
-	
-	public void prepare () {
-		
-		
-		for (int i = 0; i < 4; i++) {
+		// Draw four cards for each player.
+		for (int i = 0; i < INITIAL_CARDS; i++) {
 			
 			players[0].addCard(drawCard());
 			players[1].addCard(drawCard());
@@ -138,8 +190,8 @@ public class Game {
 		}
 		
 		currentPlayer = 0;
-		/* RG - rewritten to use getCard (List) */
-		List<Card> [] swappedCards = new List[MAX_PLAYERS];
+		
+		// For all players, query them for the cards they want to swap.
 		for (int player = 0; player < MAX_PLAYERS; player++) {
 			currentPlayer = player;
 			
@@ -152,23 +204,19 @@ public class Game {
 					controller.showMessage ("Invalid card.");
 				}
 				
-				swappedCards[player].add(swapped);
-				players[currentPlayer].getHand().remove(swapped);
 				
+				addSwappedCard(player, swapped);
 				
 			}
 		}
 		
-		for (int player = 0; player < MAX_PLAYERS; player++) {
-			int otherPlayer = (player + 1) % MAX_PLAYERS;
-			controller.showMessage("Player " + (player + 1) + " swapped " + swappedCards[player]);
-			for (Card swappedCard : swappedCards[player]) {
-				giveCard(player, otherPlayer, swappedCard);
-			}
-		}
+		// Perform the actual swap.
+		swapAllCards();
+		
+		// For all players, query them for where to lay their initial cards.
 		currentPlayer = 0;
 		Player p;
-		PlayerAction layCard = new LayCardAction();
+		IPlayerAction layCard = new LayCardAction();
 		for (currentPlayer = 0; currentPlayer < MAX_PLAYERS; currentPlayer ++) {
 			p = players[currentPlayer];
 			while (p.getHandSize() != 0) {
@@ -178,6 +226,43 @@ public class Game {
 		
 		currentPlayer = 0;
 	}
+	
+	/**
+	 * get this game's visor
+	 */
+	
+	public GameVisor getGameVisor() {
+		return visor;
+	}
+	
+	/**
+	 * For player, add 'c' to the list of cards that have been swapped
+	 * and remove it from their hand.
+	 * @param player player that swapped
+	 * @param c card to swap
+	 */
+	public void addSwappedCard (int player, Card c) {
+		swappedCards[player].add(c);
+		players[currentPlayer].getHand().remove(c);
+	}
+	
+	/**
+	 * Swap all the cards in the list of swapped cards.
+	 */
+	public void swapAllCards() {
+		for (int player = 0; player < MAX_PLAYERS; player++) {
+			
+			int otherPlayer = (player + 1) % MAX_PLAYERS;
+			
+			controller.showMessage("Player " + (player + 1) + " swapped " + swappedCards[player]);
+			
+			for (Card swappedCard : swappedCards[player]) {
+				giveCard(player, otherPlayer, swappedCard);
+			}
+			
+		}
+	}
+	
 	
 	public boolean isGameOver () {
 		return gameOver;
@@ -275,7 +360,11 @@ public class Game {
 		return diceRolls;
 		
 	}
-	
+	public void setDiceRolls (int[] rolls) {
+		
+		diceRolls = rolls;
+		
+	}
 	public int getDiceRoll(int i) {
 		int result = 0;
 		if (i >= 0 && i < diceRolls.length) {
@@ -321,7 +410,7 @@ public class Game {
 		
 		boolean done = false;
 		
-		for (int i = 0; i < 3 && !done; i++) {
+		for (int i = 0; i < NUM_DIE && !done; i++) {
 			
 			if (diceRolls[i] == value) {
 				
@@ -334,7 +423,7 @@ public class Game {
 		
 	}
 	
-	public Controller getController() {
+	public IController getController() {
 		
 		return controller;
 		
@@ -342,20 +431,18 @@ public class Game {
 	
 	public void discard(Card c) {
 		
+		// doesn't need handler: discardPile calls it
 		discardPile.addCard(c);
 		
 	}
+	
 	
 	public void giveCard(int currentPlayer, int targetPlayer, Card c) {
 		players[targetPlayer].addCard(c);
 		players[currentPlayer].getHand().removeElement(c);
 		
 	}
-	
-	public void setTurnEnded (boolean state) {
-		endTurn = state;
-	}
-	
+
 	public Player getPlayer (int player) {
 		return players[player];
 	}
@@ -376,9 +463,9 @@ public class Game {
 	}
 	
 	/* Generate a list of possible actions for a player */
-	public List<PlayerAction> generateActions (Player p) {
-		List<PlayerAction> potentialActions = new ArrayList<PlayerAction>();
-		List<PlayerAction> actions = new ArrayList<PlayerAction>();
+	public List<IPlayerAction> generateActions (Player p) {
+		List<IPlayerAction> potentialActions = new ArrayList<IPlayerAction>();
+		List<IPlayerAction> actions = new ArrayList<IPlayerAction>();
 		GameVisor g = new GameVisor(this);
 		
 		potentialActions.add(new TakeMoneyAction());
@@ -389,7 +476,7 @@ public class Game {
 		potentialActions.add(new EndTurnAction());
 		
 		
-		for (PlayerAction action : potentialActions) {
+		for (IPlayerAction action : potentialActions) {
 			if (action.isVisible(g)) {
 				actions.add(action);
 			}

@@ -3,7 +3,6 @@ package cards;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardLegionarius extends Card {
 
@@ -36,10 +35,6 @@ public class CardLegionarius extends Card {
 		return 5;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
 	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;
@@ -51,7 +46,7 @@ public class CardLegionarius extends Card {
 			g.getController().showMessage("The battle die rolled a " + battleDie);
 
 			// successfully killed the card
-			if (battleDie >= enemyCard.getDefense()) {
+			if (battleDie >= enemyCard.getRealDefense()) {
 			
 				g.discard(enemyCard);
 				g.getField().setCard(enemyPlayer, pos-1, null);

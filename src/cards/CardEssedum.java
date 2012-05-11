@@ -1,8 +1,11 @@
 package cards;
 
-import roma.GameVisor;
-import enums.CardNames;
-import enums.EffectTrigger;
+import java.util.ArrayList;
+import java.util.List;
+
+import modifiers.*;
+import roma.*;
+import enums.*;
 
 public class CardEssedum extends Card {
 
@@ -41,16 +44,80 @@ public class CardEssedum extends Card {
 		return 3;
 	}
 
-	@Override
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
+	/**
+	 * Put the effect on all enemy cards.
+	 */
 	@Override
 	public boolean performEffect(GameVisor g, int pos) {
-		// TODO Auto-generated method stub
-		// To be implemented by RG after SpellAuras implemented
-		return false;
+		int enemySide = (getOwnerID() + 1) % Game.MAX_PLAYERS;
+
+		for (Card myCard : g.getField().getSideAsList(enemySide)) {
+			if (myCard != this) {
+				IModifier essedumAura = new EssedumAura();
+				castModifier(myCard, essedumAura);
+			}
+		} 
+		return true;
 	}
 
+	/**
+	 * 
+	 * When THIS card leaves the field, remove all modifiers casted by us.
+	 */
+	@Override
+	public void onLeaveField(Field f, int ownerId, int position) {
+		int enemyId = (ownerId + 1) % Game.MAX_PLAYERS;
+		Card c = f.getCard(ownerId, position);
+		
+		if (c == this) { // unapply all
+			// need this because you cannot iterate over modifier while removing
+			List<IModifier> modsToRemove = new ArrayList<IModifier>();
+			for (Card myCard : f.getSideAsList(enemyId)) {
+
+				if (myCard != this) {
+					for (IModifier modifier : myCard.getModifiers()) {
+						if (modifier.getCaster() == this) {
+							modsToRemove.add(modifier);
+						}
+					}
+				}
+			}
+			
+			for (IModifier mod : modsToRemove) {
+				mod.getTarget().removeModifier(mod);
+			}
+		}
+		
+		super.onLeaveField(f, ownerId, position);
+	}
+	
+	/**
+	 * On end of turn, remove all modifiers casted by us.
+	 */
+	@Override
+	public void onTurnEnd(GameVisor gv, int playerId) {
+		int enemyId = (playerId + 1) % Game.MAX_PLAYERS;
+
+		
+		// need this because you cannot iterate over modifier while removing
+		List<IModifier> modsToRemove = new ArrayList<IModifier>();
+		for (Card myCard : gv.getField().getSideAsList(enemyId)) {
+
+			if (myCard != this) {
+				for (IModifier modifier : myCard.getModifiers()) {
+					if (modifier.getCaster() == this) {
+						modsToRemove.add(modifier);
+					}
+				}
+			}
+		}
+
+		for (IModifier mod : modsToRemove) {
+			mod.getTarget().removeModifier(mod);
+		}
+
+		super.onTurnEnd(gv, playerId);
+	}
+	
+	
 }

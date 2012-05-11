@@ -2,7 +2,6 @@ package cards;
 
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardTemplum extends Card {
 	
@@ -35,10 +34,6 @@ public class CardTemplum extends Card {
 
 	public int getDefense() {
 		return 2;
-	}
-
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnPlay;
 	}
 
 	public boolean performEffect(GameVisor g, int pos) {

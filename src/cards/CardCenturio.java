@@ -3,7 +3,6 @@ package cards;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardCenturio extends Card {
 
@@ -46,11 +45,6 @@ public class CardCenturio extends Card {
 	}
 
 	@Override
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
-	@Override
 	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;
@@ -62,7 +56,7 @@ public class CardCenturio extends Card {
 			g.getController().showMessage("The battle die rolled a " + battleDie);
 			g.useDice(pos);
 
-			if (battleDie < enemyCard.getDefense()) {
+			if (battleDie < enemyCard.getRealDefense()) {
 
 				if (g.getController().getBoolean("Do you wish to add the the value of the battle die?")) {
 					int diceValue = 0;
@@ -83,7 +77,7 @@ public class CardCenturio extends Card {
 			}
 			
 			// successfully killed the card
-			if (battleDie >= enemyCard.getDefense()) {
+			if (battleDie >= enemyCard.getRealDefense()) {
 				g.discard(enemyCard);
 				g.getField().setCard(enemyPlayer, pos-1, null);
 				g.getController().showMessage("You killed a " + enemyCard.getName() + "!");

@@ -4,7 +4,7 @@ import roma.*;
 import cards.*;
 
 
-public class PlayCardAction implements PlayerAction {
+public class PlayCardAction implements IPlayerAction {
 	
 	Card targetCard;
 	int diceDisc;
@@ -22,7 +22,7 @@ public class PlayCardAction implements PlayerAction {
 		
 		if (game.getCurrentPlayer().getMoney() < targetCard.getCostToPlay()) {
 			isValid = false;
-			game.getController().showMessage("You don't have enough Money to play" + targetCard.getName());
+			game.getController().showMessage("You don't have enough Money to play " + targetCard.getName());
 		}
 		
 		return isValid;

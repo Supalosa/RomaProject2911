@@ -2,18 +2,20 @@ package roma;
 import java.io.*;
 import java.util.*;
 
+import modifiers.IModifier;
+
 import cards.Card;
 
-import actions.PlayerAction;
+import actions.IPlayerAction;
 
-public class ControllerConsole implements Controller {
+public class ControllerConsole implements IController {
 	
 	Game g;
 	
 	public void setGame (Game g) {
 		this.g = g;
 	}
-	
+
 	public void runGame() {
 		g.run();
 	}
@@ -189,13 +191,13 @@ public class ControllerConsole implements Controller {
 	public void showScreen (Player p) {
 
 		showMessage("It is player " + (g.getCurrentPlayer().getPlayerId()+1) + "'s turn.");
-		showMessage("---------- FIELD ----------");
+		showMessage("------------------------ FIELD --------------------");
 		showField();
-		showMessage("-------- YOUR HAND --------");
+		showMessage("---------------------- YOUR HAND ------------------");
 		showHand(p);
-		showMessage("---------------------------");
+		showMessage("---------------------------------------------------");
 		showDiceRolls();
-		showMessage("---------------------------");
+		showMessage("---------------------------------------------------");
 
 		int VP = p.getVP();
 		int money = p.getMoney();
@@ -212,21 +214,27 @@ public class ControllerConsole implements Controller {
 	
 	public void showField () {
 		
-		String s = String.format("%-15s | %15s", "Player 1", "Player 2");
+		String s = String.format("%-25s | %25s", "Player 1", "Player 2");
 		showMessage(s);
 		
 		Field field = g.getField();
 		
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < Game.FIELD_SIZE; i++) {
 			String cardLeft = "";
 			String cardRight = "";
 			if (field.getCard(0,i) != null) {
 				cardLeft = field.getCard(0,i).getName();
+				if (field.getCard(0, i).getModifiers().size() > 0) {
+					cardLeft += "*";
+				}
 			}
 			if (field.getCard(1,i) != null) {
 				cardRight = field.getCard(1,i).getName();
+				if (field.getCard(1, i).getModifiers().size() > 0) {
+					cardRight += "*";
+				}
 			}
-			s = String.format("%-15s %d %15s", cardLeft, i+1, cardRight);
+			s = String.format("%-25s %d %25s", cardLeft, i+1, cardRight);
 
 			showMessage(s);
 			
@@ -250,7 +258,7 @@ public class ControllerConsole implements Controller {
 	
 	public void showDiceRolls() {
 		
-		String s = "You rolled ";
+		String s = "Available dice rolls: ";
 		
 		int[] rolls = g.getDiceRolls();
 		
@@ -269,11 +277,11 @@ public class ControllerConsole implements Controller {
 	}
 
 
-	public PlayerAction getAction(Player p) {
-		PlayerAction action = null;
-		Vector<PlayerAction> actions = new Vector<PlayerAction>();
+	public IPlayerAction getAction(Player p) {
+		IPlayerAction action = null;
+		Vector<IPlayerAction> actions = new Vector<IPlayerAction>();
 		int selectedAction = -1;
-		for (PlayerAction act : g.generateActions(p)) {
+		for (IPlayerAction act : g.generateActions(p)) {
 			actions.add(act);
 		}
 		
@@ -298,10 +306,21 @@ public class ControllerConsole implements Controller {
 		System.out.println ("-------------------");
 		System.out.println (c.getDescription());
 		System.out.println ("-------------------");
-		System.out.format ("- COST: %2d ---- DEF: %2d -\n", c.getCostToPlay(), c.getDefense());
+		System.out.format ("- COST: %2d ---- DEF: %2d [%+2d] -\n", c.getCostToPlay(), c.getDefense(), (c.getRealDefense() - c.getDefense()));
 		System.out.println ("-------------------");
+		// show active effects
+		if (c.getModifiers().size() > 0) {
+			System.out.println ("- Active Effects: -");
+			System.out.println ("-------------------");
+			for (IModifier mod : c.getModifiers()) {
+				System.out.println (mod.getName() + ": " + mod.getDescription());
+			}
+			System.out.println ("-------------------");
+		}
+		
 		System.out.println();
 		System.out.println();
+		
 		getWait ("-- press any key to continue --");
 		
 	}

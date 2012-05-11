@@ -4,7 +4,7 @@ import roma.*;
 import cards.*;
 
 
-public class LayCardAction implements PlayerAction {
+public class LayCardAction implements IPlayerAction {
 	
 	Card targetCard;
 	int diceDisc;

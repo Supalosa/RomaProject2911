@@ -2,7 +2,6 @@ package cards;
 
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardPraetorianus extends Card {
 
@@ -32,10 +31,6 @@ public class CardPraetorianus extends Card {
 
 	public int getDefense() {
 		return 4;
-	}
-
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
 	}
 
 	@Override

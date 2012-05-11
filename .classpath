@@ -2,12 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/guava-10.0.jar"/>
-	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/javassist.jar"/>
-	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/reflections-0.9.5.jar"/>
-	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/slf4j-api-1.6.1.jar"/>
-	<classpathentry kind="lib" path="E:/COMP2911/workspace/RomaAcceptance/lib/slf4j-nop-1.6.1.jar"/>
-	<classpathentry kind="src" path="/Roma"/>
+	<classpathentry kind="lib" path="lib/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/guava-10.0.jar"/>
+	<classpathentry kind="lib" path="lib/javassist.jar"/>
+	<classpathentry kind="lib" path="lib/reflections-0.9.5.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-nop-1.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

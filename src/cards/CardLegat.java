@@ -3,7 +3,6 @@ package cards;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardLegat extends Card {
 
@@ -36,9 +35,6 @@ public class CardLegat extends Card {
 		return 2;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
 
 	public boolean performEffect(GameVisor g, int pos) {
 		

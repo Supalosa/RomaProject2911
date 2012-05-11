@@ -1,8 +1,11 @@
 package cards;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardConsiliarius extends Card {
 
@@ -36,13 +39,43 @@ public class CardConsiliarius extends Card {
 		return 4;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
 	public boolean performEffect(GameVisor g, int pos) {
-		return false;
-		// TODO Auto-generated method stub
+		
+		boolean performed = true;
+		
+		List<Card> characters = new ArrayList<Card>();
+		for (Card c : g.getField().getSideAsList(g.whoseTurn())) {
+			if (!c.isBuilding()) {
+				characters.add(c);
+			}
+		}
+		
+		// remove the cards from the field
+		for (Card c : characters) {
+			g.getField().removeCard(c);
+		}
+		
+		// replace them
+		Card selectedCard = null;
+		while (characters.size() > 0) {
+			int dicePosition = -1;
+			selectedCard = g.getController().getCard(characters, "Select a character card to lay.");
+			while (selectedCard == null) {
+				selectedCard = g.getController().getCard(characters, "Invalid card. Select a character card to lay.");
+			}
+			
+			g.getController().showField();
+			
+			while (dicePosition < 1 || dicePosition > Game.FIELD_SIZE) {
+				dicePosition = g.getController().getInt("Select a position to lay " + selectedCard.getName() + ":");
+			}
+			characters.remove(selectedCard);
+			g.getCurrentPlayer().removeCard(selectedCard);
+			g.getField().setCard(g.whoseTurn(), dicePosition-1, selectedCard);
+
+		}
+		
+		return performed;
 
 	}
 

@@ -2,7 +2,6 @@ package cards;
 
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardBasilica extends Card {
 	
@@ -27,7 +26,7 @@ public class CardBasilica extends Card {
 	}
 
 	public String getDescription() {
-		return "If a Forum is acti- vated (it must lie directly next to the basilica), the" +
+		return "If a Forum is activated (it must lie directly next to the basilica), the" +
 				" player gets 2 more victory points. The Basilica itself is not activia- ted.";
 	}
 
@@ -35,12 +34,8 @@ public class CardBasilica extends Card {
 		return 5;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnPlay;
-	}
-
 	public boolean performEffect(GameVisor g, int pos) {
-		g.getController().showMessage("You cannot activate this card");
+		g.getController().showMessage("You cannot activate this card.");
 		return false;
 	}
 

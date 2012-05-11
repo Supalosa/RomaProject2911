@@ -4,7 +4,6 @@ import java.util.*;
 
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardAesculapinum extends Card {
 	
@@ -37,19 +36,16 @@ public class CardAesculapinum extends Card {
 		return 2;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
 
 	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;
 		
-		if (!g.getDiscardPile().getStack().isEmpty()) {
+		if (!g.isDiscardPileEmpty()) {
 			
 			List<Card> characters = new ArrayList<Card>();
 			
-			for (Card c : g.getDiscardPile().getStack()) {
+			for (Card c : g.getDiscardPile().asList()) {
 				
 				if (!c.isBuilding()) {
 					
@@ -62,12 +58,16 @@ public class CardAesculapinum extends Card {
 			if (!characters.isEmpty()) {
 				
 				Card selected = g.getController().getCard(characters, "Pick the card you wish to add to your hand");
-
-				g.getCurrentPlayer().addCard(selected);
-				g.getDiscardPile().getStack().remove(selected);
-
-				performed = true;
-				
+				// Also trigger events
+				if (selected != null) {
+					
+					g.getDiscardPile().removeCard(selected);
+					
+					g.getCurrentPlayer().addCard(selected);
+					
+	
+					performed = true;
+				}
 			}
 
 		} else {

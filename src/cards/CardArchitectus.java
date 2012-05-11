@@ -4,7 +4,6 @@ import java.util.*;
 
 import roma.*;
 import enums.*;
-import actions.*;
 
 public class CardArchitectus extends Card {
 
@@ -37,37 +36,34 @@ public class CardArchitectus extends Card {
 		return 4;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
 	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;
-		boolean finished = false;
+		boolean stop = false;
 		
-		List<Card> characters = new ArrayList<Card>();
-		
+		List<Card> buildings = new ArrayList<Card>();
 		for (Card c : g.getCurrentPlayer().getHand()) {
-			
-			if (!c.isBuilding()) {
-				
-				characters.add(c);
-				g.getCurrentPlayer().getHand().remove(c);
-				
+			if (c.isBuilding()) {
+				buildings.add(c);
 			}
-			
 		}
 		
-		PlayerAction layCards = new LayCardAction();
-		
-		while ((g.getCurrentPlayer().getHandSize() > 0) && (!finished)) {
-			
-			/*finished = */layCards.execute(g);
-			
-			performed = true;
-			
+		Card selectedCard = null;
+		while (stop == false) {
+			int dicePosition = -1;
+			selectedCard = g.getController().getCard(buildings, "Select a building to lay. Enter negative to quit.");
+			if (selectedCard == null) {
+				stop = true;
+			} else {
+				performed = true;
+				while (dicePosition < 1 || dicePosition > Game.FIELD_SIZE) {
+					dicePosition = g.getController().getInt("Select a position to lay " + selectedCard.getName() + ":");
+				}
+				g.getCurrentPlayer().removeCard(selectedCard);
+				g.getField().setCard(g.whoseTurn(), dicePosition-1, selectedCard);
+			}
 		}
+		
 		
 		return performed;
 

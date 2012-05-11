@@ -1,8 +1,11 @@
 package cards;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardSenator extends Card {
 
@@ -43,14 +46,34 @@ public class CardSenator extends Card {
 	}
 
 	@Override
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
-	@Override
 	public boolean performEffect(GameVisor g, int pos) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean performed = false;
+		boolean stop = false;
+		
+		List<Card> characters = new ArrayList<Card>();
+		for (Card c : g.getCurrentPlayer().getHand()) {
+			if (!c.isBuilding()) {
+				characters.add(c);
+			}
+		}
+		
+		Card selectedCard = null;
+		while (stop == false) {
+			int dicePosition = -1;
+			selectedCard = g.getController().getCard(characters, "Select a character card to lay. Enter negative to quit.");
+			if (selectedCard == null) {
+				stop = true;
+			} else {
+				performed = true;
+				while (dicePosition < 1 || dicePosition > Game.FIELD_SIZE) {
+					dicePosition = g.getController().getInt("Select a position to lay " + selectedCard.getName() + ":");
+				}
+				g.getCurrentPlayer().removeCard(selectedCard);
+				g.getField().setCard(g.whoseTurn(), dicePosition-1, selectedCard);
+			}
+		}
+		
+		return performed;
 	}
 
 }

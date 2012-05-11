@@ -2,7 +2,6 @@ package cards;
 
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardScaenicus extends Card {
 
@@ -41,11 +40,6 @@ public class CardScaenicus extends Card {
 	@Override
 	public int getDefense() {
 		return 3;
-	}
-
-	@Override
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
 	}
 
 	@Override

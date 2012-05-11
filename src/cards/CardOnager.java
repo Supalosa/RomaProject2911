@@ -38,10 +38,6 @@ public class CardOnager extends Card {
 		return 4;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
-
 	public boolean performEffect(GameVisor g, int pos) {
 		
 		boolean performed = false;

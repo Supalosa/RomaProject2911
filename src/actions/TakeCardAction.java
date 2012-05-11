@@ -7,7 +7,7 @@ import roma.*;
 import cards.*;
 
 
-public class TakeCardAction implements PlayerAction {
+public class TakeCardAction implements IPlayerAction {
 	
 	int diceRoll;
 	GameVisor game;

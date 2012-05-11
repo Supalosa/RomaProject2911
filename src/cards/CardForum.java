@@ -1,12 +1,8 @@
 package cards;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import roma.Game;
-import roma.GameVisor;
-import enums.CardNames;
-import enums.EffectTrigger;
+import java.util.*;
+import roma.*;
+import enums.*;
 
 public class CardForum extends Card {
 	
@@ -39,9 +35,6 @@ public class CardForum extends Card {
 		return 5;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
 
 	public boolean performEffect(GameVisor g, int pos) {
 		boolean activated = false;

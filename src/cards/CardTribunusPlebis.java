@@ -3,7 +3,6 @@ package cards;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardTribunusPlebis extends Card {
 
@@ -40,11 +39,6 @@ public class CardTribunusPlebis extends Card {
 	@Override
 	public int getDefense() {
 		return 5;
-	}
-
-	@Override
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package cards;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardMercator extends Card {
 
@@ -41,11 +40,6 @@ public class CardMercator extends Card {
 	@Override
 	public int getDefense() {
 		return 2;
-	}
-
-	@Override
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerNone;
 	}
 
 	@Override

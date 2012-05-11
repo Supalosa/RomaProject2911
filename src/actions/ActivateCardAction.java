@@ -4,7 +4,7 @@ import roma.*;
 import cards.*;
 import enums.*;
 
-public class ActivateCardAction implements PlayerAction {
+public class ActivateCardAction implements IPlayerAction {
 	
 	int targetPos;
 	Card targetCard;
@@ -44,7 +44,7 @@ public class ActivateCardAction implements PlayerAction {
 			}
 			
 		} else {
-			game.getController().showMessage("You don't have a card corresponding to the dice [" + targetPos + "]");
+			game.getController().showMessage("You don't have a dice corresponding to the dice [" + targetPos + "]");
 		}
 		
 	}
@@ -64,12 +64,12 @@ public class ActivateCardAction implements PlayerAction {
 		
 	}
 
-	// THis action is only visible if we have a card on the field that has trigger EffectTrigger.TriggerOnActivate
+	// This action is only visible if we have a card on the field that has trigger EffectTrigger.TriggerOnActivate
 	// and we have dice
 	public boolean isVisible(GameVisor g) {
 		boolean show = false;
 		for (Card cardOnField : g.getField().getSideAsList(g.whoseTurn())) {
-			if (cardOnField != null && cardOnField.getEffectTrigger() == EffectTrigger.TriggerOnActivate) {
+			if (cardOnField != null) {
 				show = true;
 			}
 		}

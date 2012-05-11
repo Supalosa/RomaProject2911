@@ -1,7 +1,6 @@
 package cards;
 
 import enums.CardNames;
-import enums.EffectTrigger;
 
 import roma.*;
 
@@ -37,9 +36,6 @@ public class CardMachina extends Card {
 		return 4;
 	}
 
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
 
 	public boolean performEffect(GameVisor g, int pos) {
 		return false;

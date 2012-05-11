@@ -55,7 +55,7 @@ public class GameVisor {
 		game.setDiceRoll(oldValue, newValue);
 	}
 		
-	public Controller getController() {
+	public IController getController() {
 		
 		return game.getController();
 		
@@ -67,16 +67,19 @@ public class GameVisor {
 		
 	}
 	
+	public void addCard(int targetPlayer, Card c) {
+		game.getPlayer(targetPlayer).addCard(c);
+	}
+	
 	public void giveCard(int currentPlayer, int targetPlayer, Card c) {
 		
 		game.giveCard(currentPlayer, targetPlayer, c);
 		
 	}
 	
-	public void setTurnEnded (boolean state) {
-		
-		game.setTurnEnded (state);
-	
+	public void onEndTurn () {
+		game.nextTurn(); // Increment current player
+		game.startTurn(); // Perform start of turn actions.
 	}
 	
 	public Player getPlayer (int player) {
@@ -107,6 +110,12 @@ public class GameVisor {
 		
 		return game.rollDice();
 		
+	}
+	
+
+	// Used by: Aescilapinum
+	public boolean isDiscardPileEmpty() {
+		return game.getDiscardPile().isEmpty();
 	}
 	
 }

@@ -4,7 +4,6 @@ import java.util.*;
 
 import roma.GameVisor;
 import enums.CardNames;
-import enums.EffectTrigger;
 
 public class CardConsul extends Card {
 
@@ -44,10 +43,6 @@ public class CardConsul extends Card {
 		return 3;
 	}
 
-	@Override
-	public EffectTrigger getEffectTrigger() {
-		return EffectTrigger.TriggerOnActivate;
-	}
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos) {
