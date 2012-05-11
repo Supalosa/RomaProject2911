@@ -100,7 +100,7 @@ public class Game {
 			
 			queryForAction();
 
-			testGameOver ();
+			gameOver = testGameOver ();
 			
 		}
 		
@@ -272,12 +272,14 @@ public class Game {
 	 * Test if the game is over,
 	 * and store the result in gameOver
 	 */
-	private void testGameOver () {
+	public boolean testGameOver () {
+		boolean gg;
 		if (getVictoryStockpile() <= 0 || (players[0].getVP() <= 0 || players[1].getVP() <= 0)) {
-			gameOver = true;
+			gg = true;
 		} else {
-			gameOver = false;
+			gg = false;
 		}
+		return gg;
 	}
 	
 	public Date getBirthday(int playerNum) {
@@ -321,6 +323,13 @@ public class Game {
 	// to facilitate game mechanics.
 	public Card drawCard() {
 		
+		if (deck.isEmpty()) {
+			
+			deck = discardPile;
+			deck.shuffle();
+			discardPile = new DiscardPile();
+			
+		}
 		return deck.getCard();
 	
 	}
