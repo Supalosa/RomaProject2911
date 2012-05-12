@@ -19,7 +19,7 @@ public class PlayCardAction implements IPlayerAction {
 		
 		if (i < 1 || i > Game.FIELD_SIZE) {
 			isValid = false;
-			game.getController().showMessage("That Dice Disc value is not possible");
+			game.getController().showMessage("Cannot play that card, that disc value is not possible");
 		}
 		
 		if (game.getCurrentPlayer().getMoney() < targetCard.getCostToPlay()) {
@@ -27,17 +27,9 @@ public class PlayCardAction implements IPlayerAction {
 			game.getController().showMessage("You don't have enough Money to play " + targetCard.getName());
 		}
 		
-		List<String> blocks = g.getField().getBlocks();
-		
-		for (String s : blocks) {
-			
-			if (s.charAt(0) == g.whoseTurn() && s.charAt(1) == diceDisc) {
-				
-				isValid = false;
-				g.getController().showMessage("That dice disc is blocked for this turn");
-			
-			}
-			
+		if (g.getField().isBlocked(g.whoseTurn(), diceDisc-1)) {
+			game.getController().showMessage("Cannot play that card, that disc is blocked!");
+			isValid = false;
 		}
 		
 		return isValid;

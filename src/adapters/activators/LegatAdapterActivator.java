@@ -6,17 +6,17 @@ import cards.Card;
 import framework.interfaces.activators.*;
 
 /**
- * Adapter to activate the TribunusPlebis.
+ * Adapter to activate the Legat.
  * @author Supalosa
  *
  */
-public class TribunusPlebisAdaptorActivator implements TribunusPlebisActivator {
+public class LegatAdapterActivator implements LegatActivator {
 
 	Card theCard;
 	int fieldPosition;
 	Game game;
 	
-	public TribunusPlebisAdaptorActivator(int fieldPosition, Game game, Card theCard) {
+	public LegatAdapterActivator(int fieldPosition, Game game, Card theCard) {
 		this.theCard = theCard;
 		this.fieldPosition = fieldPosition;
 		this.game = game;
@@ -26,10 +26,12 @@ public class TribunusPlebisAdaptorActivator implements TribunusPlebisActivator {
 	
 	@Override
 	public void complete() {
+		
 		IPlayerAction action = new ActivateCardAction();
 		MockController controller = (MockController)game.getController();
 		controller.insertInput(Integer.toString(fieldPosition));
 		action.execute(game.getGameVisor());
+		
 	}
 
 }

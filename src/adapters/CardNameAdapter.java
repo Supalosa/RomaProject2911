@@ -32,7 +32,10 @@ public enum CardNameAdapter {
 	Mercatus 		("Mercatus", 		CardNames.Mercatus),
 	Onager 			("Onager", 			CardNames.Onager),
 	Templum 		("Templum", 		CardNames.Templum),
-	Turris 			("Turris", 			CardNames.Turris);
+	Turris 			("Turris", 			CardNames.Turris),
+	Kat 			("Kat", 			CardNames.Kat),
+	GrimReaper		("Grim Reaper", 	CardNames.GrimReaper, "Grimreaper"),
+	TelephoneBox	("Telephone Box",	CardNames.TelephoneBox, "Telephonebox");
 
 	// The name in Roma format (the actual card name
 	private String romaName;

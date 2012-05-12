@@ -53,8 +53,8 @@ public class CardPraetorianus extends Card {
 			diceDisc = g.getController().getInt("Invalid dice disc. Which dice disc do you wish to block?");
 		}
 		
-		String block = Integer.toString(enemy) + Integer.toString(diceDisc);
-		IModifier praetorAura = new PraetorAura(block);
+		// Cast the aura onto the field.
+		IModifier praetorAura = new PraetorAura(enemy, diceDisc-1);
 		castModifier(g.getField(), praetorAura);
 		
 		return performed;

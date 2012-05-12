@@ -2,6 +2,7 @@ package cards;
 
 import java.util.*;
 
+import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
 
@@ -47,15 +48,20 @@ public class CardConsul extends Card {
 	@Override
 	public boolean performEffect(GameVisor g, int pos) {
 		boolean activated = false;
+		
 		if (g.getNumDiceRolls() > 1) {
-			// dice rolls that exclude the one that activated this card.
+			// Build a list of dice rolls that exclude the one that activated this card.
 			List<Integer> diceRolls = new ArrayList<Integer>();
 			boolean removedActivator = false;
-			for (int i = 0; i < g.getNumDiceRolls(); i++) {
-				if (g.getDiceRoll(i) != pos || removedActivator == true) {
-					diceRolls.add(g.getDiceRoll(i));
-				} else {
-					removedActivator = true;
+			int roll;
+			for (int i = 0; i < Game.NUM_DIE; i++) {
+				roll = g.getDiceRoll(i);
+				if (roll > 0) { // dice was not used
+					if (removedActivator || roll != pos) {
+						diceRolls.add(roll);
+					} else {
+						removedActivator = true;
+					}
 				}
 			}
 			g.getController().showMessage("Available dice: " + diceRolls.toString());

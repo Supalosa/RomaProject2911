@@ -79,7 +79,7 @@ public class TurrisTester implements ITestSuite {
 		assert (hadModifier);
 		
 		System.out.println ("> Testing friendly card received buff to defense");
-		assert (testLegionariusOwn.getRealDefense() == 7);
+		assert (testLegionariusOwn.getRealDefense() == 6);
 		
 		System.out.println ("> Laying another Legionarius, checking buff");
 		
@@ -92,7 +92,7 @@ public class TurrisTester implements ITestSuite {
 		controller.insertInput ("4"); // pls select dice disc		
 		action.execute(gv);
 		
-		assert (testLegionariusOwn2.getRealDefense() == 7);
+		assert (testLegionariusOwn2.getRealDefense() == 6);
 		
 		System.out.println ("> Removing Legionarius, checking buff removed from legionarius");
 		gv.getField().setCard(0, 3, null);

@@ -26,6 +26,8 @@ public enum CardNames {
 	Mercatus,
 	Onager,
 	Templum,
-	Turris
-
+	Turris,
+	Kat,
+	TelephoneBox,
+	GrimReaper
 }

@@ -10,14 +10,21 @@ import cards.*;
 
 public class Field implements IModifiable {
 	
+	//TODO: make FieldPosition a class
 	private Card[][] fieldData;
 	List<IModifier> modifiers;
-	List<String> block;
+	private boolean[][] fieldBlocked;
 	
 	public Field() {
 		fieldData = new Card[Game.MAX_PLAYERS][Game.FIELD_SIZE];
 		modifiers = new ArrayList<IModifier>();
-		block = new ArrayList<String>();
+		fieldBlocked = new boolean[Game.MAX_PLAYERS][Game.FIELD_SIZE];
+		
+		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+			for (int j = 0; j < Game.FIELD_SIZE; j++) {
+				fieldBlocked[i][j] = false;
+			}
+		}
 	}
 	
 	/**
@@ -126,22 +133,26 @@ public class Field implements IModifiable {
 		return ModifierTarget.Field;
 	}
 	
-	public void setBlock(String s) {
+	/**
+	 * Sets the specified field position as unusable.
+	 */
+	public void setBlock(int blockedPlayer, int blockedPosition) {
 	
-		block.add(s);
+		//System.err.println ("setBlocked: " + blockedPlayer + ", " + blockedPosition);
+		fieldBlocked[blockedPlayer][blockedPosition] = true;
 	
 	}
 	
-	public void removeBlock(String s) {
+	public void removeBlock(int blockedPlayer, int blockedPosition) {
 		
-		block.remove(s);
+		//System.err.println ("removeBlocked: " + blockedPlayer + ", " + blockedPosition);
+		fieldBlocked[blockedPlayer][blockedPosition] = false;
 		
 	}
 	
-	public List<String> getBlocks() {
-		
-		return block;
-		
+	public boolean isBlocked (int player, int position) {
+		//System.err.println ("isBlocked: " + player + ", " + position + " = " + (fieldBlocked[player][position] == true));
+		return (fieldBlocked[player][position] == true);
 	}
 
 }

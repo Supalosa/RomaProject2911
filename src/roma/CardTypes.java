@@ -38,6 +38,10 @@ public class CardTypes {
 		cardMap.put(CardNames.Onager, "cards.CardOnager");
 		cardMap.put(CardNames.Templum, "cards.CardTemplum");
 		cardMap.put(CardNames.Turris, "cards.CardTurris");
+		cardMap.put(CardNames.Kat, "cards.CardKat");
+		cardMap.put(CardNames.GrimReaper, "cards.CardGrimReaper");
+		cardMap.put(CardNames.TelephoneBox, "cards.CardTelephoneBox");
+		
 
 	}
 	
@@ -111,7 +115,7 @@ public class CardTypes {
 		try {
 			cardInstance = (Card)Class.forName(cardClassName).newInstance();
 		} catch (NullPointerException e) {
-			System.err.println ("CardTypes: No class with name " + cardClassName);
+			System.err.println ("CardTypes: No class with name " + cardClassName + " (recieved " + c + ")");
 			e.printStackTrace();
 		} catch (InstantiationException e) {
 			System.err.println ("CardTypes: Could not instantiate class " + cardClassName);

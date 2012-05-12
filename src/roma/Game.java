@@ -26,6 +26,7 @@ public class Game {
 	private GameVisor visor;
 	
 	public static final int FIELD_SIZE = 7;
+	public static final int BRIBE_DISC = 7; // field position of bribe disc
 	public static final int MAX_PLAYERS = 2;
 	public static final int INITIAL_VP = 36;
 	public static final int NUM_DIE = 3;
@@ -408,7 +409,7 @@ public class Game {
 	
 	public void setDiceRoll(int oldValue, int newValue) {
 		boolean handled = false;
-		for (int i = 0; i < diceRolls.length && handled == false; i++) {
+		for (int i = 0; i < Game.NUM_DIE && handled == false; i++) {
 			if (diceRolls[i] == oldValue) {
 				handled = true;
 				diceRolls[i] = newValue;

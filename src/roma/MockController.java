@@ -37,6 +37,7 @@ public class MockController implements IController {
 	public String getString(String message) {
 		// get the last thing off the mockStdIn
 		String out = null;
+		showMessage(message);
 		if (mockStdIn.isEmpty()) {
 			System.err.println ("MockController::getString: queue ran out of messages!");
 		} else {
@@ -50,6 +51,7 @@ public class MockController implements IController {
 		// get the last thing off mock stdin, casted to an int
 		// error (and return 0) if no input
 		String input = null;
+		showMessage(message);
 		if (mockStdIn.isEmpty()) {
 			System.err.println ("MockController::getString: queue ran out of messages!");
 		} else {

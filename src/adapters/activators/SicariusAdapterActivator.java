@@ -10,14 +10,14 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class AesculapinumAdaptorActivator implements AesculapinumActivator {
+public class SicariusAdapterActivator implements SicariusActivator {
 
 	Card theCard;
 	int fieldPosition;
 	Game game;
 	MockController controller;
 	
-	public AesculapinumAdaptorActivator(int fieldPosition, Game game, Card theCard) {
+	public SicariusAdapterActivator(int fieldPosition, Game game, Card theCard) {
 		this.theCard = theCard;
 		this.fieldPosition = fieldPosition;
 		this.game = game;
@@ -43,25 +43,24 @@ public class AesculapinumAdaptorActivator implements AesculapinumActivator {
 	 * skips building cards.
 	 */
 	@Override
-	public void chooseCardFromPile(int indexOfCard) {
+    public void chooseDiceDisc(int diceDisc) {
+		int otherPlayer = (game.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		Card targetedCard = game.getField().getCard(otherPlayer, diceDisc-1);
 		int modifiedPosition = 0; // modified position in a list of character cards only
 		int temp = 0;
-		int realPos = 0;
-		for (Card c : game.getDiscardPile().asList()) {
+		for (Card c : game.getField().getSideAsList(otherPlayer)) {
 			if (!c.isBuilding()) {
-				if (indexOfCard == realPos) { // match!
+				if (c == targetedCard) { // match!
 					modifiedPosition = temp;
 				}
 				temp ++;
 			}
-			realPos ++;
 		}
 		System.out.println ("ModifiedPosition = " + modifiedPosition);
 		
 		// Enter the target for sicarius...
-		System.out.println ("chooseCardFromPile: " + game.getDiscardPile().asList());
-    	
-		controller.insertInput (Integer.toString(modifiedPosition));
-	}
+    	controller.insertInput (Integer.toString(modifiedPosition));
+    }
+    
 
 }

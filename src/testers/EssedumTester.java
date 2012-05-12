@@ -111,8 +111,8 @@ public class EssedumTester implements ITestSuite {
 		controller.insertInput ("2"); // pls select dice disc		
 		action.execute(gv);
 		
-		assert (testLegionariusOwn2.getRealDefense() == 7);
-		assert (testLegionariusOwn.getRealDefense() == 7);
+		assert (testLegionariusOwn2.getRealDefense() == 6);
+		assert (testLegionariusOwn.getRealDefense() == 6);
 		assert (testTurris.getRealDefense() == 6);
 		assert (testEssedumEnemy.getRealDefense() == 3);
 		
@@ -121,8 +121,8 @@ public class EssedumTester implements ITestSuite {
 		action = new EndTurnAction();
 		action.execute(gv);
 		
-		assert (testLegionariusOwn2.getRealDefense() == 7);
-		assert (testLegionariusOwn.getRealDefense() == 7);
+		assert (testLegionariusOwn2.getRealDefense() == 6);
+		assert (testLegionariusOwn.getRealDefense() == 6);
 		assert (testTurris.getRealDefense() == 6);
 		assert (testEssedumEnemy.getRealDefense() == 3);
 		
@@ -146,8 +146,8 @@ public class EssedumTester implements ITestSuite {
 		assert (testEssedumEnemy.getModifiers().size() == 0);
 		
 		System.out.println ("> Checking defense values");
-		assert (testLegionariusOwn2.getRealDefense() == 3);
-		assert (testLegionariusOwn.getRealDefense() == 3);
+		assert (testLegionariusOwn2.getRealDefense() == 2);
+		assert (testLegionariusOwn.getRealDefense() == 2);
 		assert (testTurris.getRealDefense() == 2);
 		assert (testEssedumEnemy.getRealDefense() == 3);
 		
@@ -155,8 +155,8 @@ public class EssedumTester implements ITestSuite {
 		gv.getField().setCard(1, 1, null);
 		
 		System.out.println ("> Checking defense values");
-		assert (testLegionariusOwn2.getRealDefense() == 7);
-		assert (testLegionariusOwn.getRealDefense() == 7);
+		assert (testLegionariusOwn2.getRealDefense() == 6);
+		assert (testLegionariusOwn.getRealDefense() == 6);
 		assert (testTurris.getRealDefense() == 6);
 		assert (testEssedumEnemy.getRealDefense() == 3);
 		

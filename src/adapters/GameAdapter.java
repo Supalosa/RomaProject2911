@@ -225,9 +225,26 @@ public class GameAdapter implements GameState {
 		
 	}
 
+	/**
+	 * Return the number of die that have not been used
+	 */
 	@Override
 	public int[] getActionDice() {
-		return myGame.getDiceRolls();
+		int numDie = 0;
+		List<Integer> rolls = new ArrayList<Integer>();
+		int [] result;
+		
+		for (int i = 0; i < Game.NUM_DIE; i++) {
+			if (myGame.getDiceRoll(i) > 0) {
+				rolls.add(myGame.getDiceRoll(i));
+			}
+		}
+		result = new int[rolls.size()];
+		
+		for (Integer a : rolls) {
+			result[numDie++] = a.intValue();
+		}
+		return result;
 	}
 
 	@Override

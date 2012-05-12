@@ -44,13 +44,15 @@ public class MoveMakerAdapter implements MoveMaker {
 		// TODO better switching
 		if (activatedCard != null) {
 			if (activatedCard.getID() == CardNames.Tribunus_Plebis) {
-				activator = new TribunusPlebisAdaptorActivator(disc, game, activatedCard);
+				activator = new TribunusPlebisAdapterActivator(disc, game, activatedCard);
 			} else if (activatedCard.getID () == CardNames.Legat){
-				activator = new LegatAdaptorActivator(disc, game, activatedCard);
+				activator = new LegatAdapterActivator(disc, game, activatedCard);
 			} else if (activatedCard.getID () == CardNames.Sicarius){
-				activator = new SicariusAdaptorActivator(disc, game, activatedCard);
+				activator = new SicariusAdapterActivator(disc, game, activatedCard);
 			} else if (activatedCard.getID () == CardNames.Aesculapinum) {
-				activator = new AesculapinumAdaptorActivator(disc, game, activatedCard);
+				activator = new AesculapinumAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Consul) {
+				activator = new ConsulAdapterActivator(disc, game, activatedCard);
 			}
 		}
 		
