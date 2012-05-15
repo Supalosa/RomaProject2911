@@ -56,7 +56,7 @@ public class SicariusAdapterActivator implements SicariusActivator {
 				temp ++;
 			}
 		}
-		System.out.println ("ModifiedPosition = " + modifiedPosition);
+		//System.out.println ("ModifiedPosition = " + modifiedPosition);
 		
 		// Enter the target for sicarius...
     	controller.insertInput (Integer.toString(modifiedPosition));

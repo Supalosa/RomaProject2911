@@ -47,9 +47,7 @@ public class ActivateCardAction implements IPlayerAction {
 			game.getController().showMessage("You don't have a dice corresponding to the dice [" + targetPos + "]");
 			valid = false;
 		
-		} 
-		
-		if (g.getField().isBlocked(g.whoseTurn(), targetPos-1)) {
+		} else if (g.getField().isBlocked(g.whoseTurn(), targetPos-1)) {
 		
 			game.getController().showMessage("That disc is blocked!");
 			valid = false;

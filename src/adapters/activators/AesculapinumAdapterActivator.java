@@ -56,10 +56,10 @@ public class AesculapinumAdapterActivator implements AesculapinumActivator {
 			}
 			realPos ++;
 		}
-		System.out.println ("ModifiedPosition = " + modifiedPosition);
+		//System.out.println ("ModifiedPosition = " + modifiedPosition);
 		
 		// Enter the target for sicarius...
-		System.out.println ("chooseCardFromPile: " + game.getDiscardPile().asList());
+		//System.out.println ("chooseCardFromPile: " + game.getDiscardPile().asList());
     	
 		controller.insertInput (Integer.toString(modifiedPosition));
 	}

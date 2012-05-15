@@ -21,9 +21,7 @@ public class LayCardAction implements IPlayerAction {
 		if (i < 1 || i > Game.FIELD_SIZE) {
 			isValid = false;
 			game.getController().showMessage("Cannot lay that card, that disc value is not possible");
-		}
-		
-		if (g.getField().isBlocked(g.whoseTurn(), diceDisc-1)) {
+		} else if (g.getField().isBlocked(g.whoseTurn(), diceDisc-1)) {
 			game.getController().showMessage("Cannot lay that card, that disc is blocked!");
 			isValid = false;
 		}

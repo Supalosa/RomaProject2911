@@ -46,8 +46,6 @@ public class CardTypes {
 	}
 	
 	public void InitialiseCards(Pile d) {
-		addCards(d, CardNames.Sicarius, 20);
-		
 		
 		// Sicarius x1
 		addCards(d, CardNames.Sicarius, 1);

@@ -53,6 +53,12 @@ public class MoveMakerAdapter implements MoveMaker {
 				activator = new AesculapinumAdapterActivator(disc, game, activatedCard);
 			} else if (activatedCard.getID() == CardNames.Consul) {
 				activator = new ConsulAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Senator) {
+				activator = new ConsulAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Forum) {
+				activator = new ForumAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Consiliarius) {
+				activator = new ConsiliariusAdapterActivator(disc, game, activatedCard);
 			}
 		}
 		

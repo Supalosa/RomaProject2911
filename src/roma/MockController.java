@@ -42,7 +42,7 @@ public class MockController implements IController {
 			System.err.println ("MockController::getString: queue ran out of messages!");
 		} else {
 			out = mockStdIn.poll();
-			System.out.println (" > Mock: '" + out + "'");
+			//System.out.println (" > Mock: '" + out + "'");
 		}
 		return out;
 	}
@@ -56,7 +56,7 @@ public class MockController implements IController {
 			System.err.println ("MockController::getString: queue ran out of messages!");
 		} else {
 			input = mockStdIn.poll();
-			System.out.println (" > Mock: '" + input + "'");
+			//System.out.println (" > Mock: '" + input + "'");
 		}
 		int result = 0;
 		if (input != null) {
@@ -171,7 +171,7 @@ public class MockController implements IController {
 	
 	public void showMessage (String s) {
 		// Mock: doesn't show anythign (suppress output)
-		System.out.println(s);
+		//System.out.println(s);
 		
 	}
 	
