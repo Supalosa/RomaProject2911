@@ -6,7 +6,7 @@ import cards.Card;
 import framework.interfaces.activators.*;
 
 /**
- * Adapter to activate the Legat.
+ * Adapter to activate the Aesculapinum.
  * @author Supalosa
  *
  */
