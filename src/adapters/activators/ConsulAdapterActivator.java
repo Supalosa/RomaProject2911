@@ -28,6 +28,7 @@ public class ConsulAdapterActivator implements ConsulActivator {
 	
 	@Override
 	public void complete() {
+		
 		IPlayerAction action = new ActivateCardAction();
 		MockController controller = (MockController)game.getController();
 		
@@ -41,8 +42,8 @@ public class ConsulAdapterActivator implements ConsulActivator {
 			controller.insertInput("N");
 		}
 		
-		
 		action.execute(game.getGameVisor());
+	
 	}
 
 
