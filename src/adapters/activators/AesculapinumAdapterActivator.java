@@ -32,7 +32,7 @@ public class AesculapinumAdapterActivator implements AesculapinumActivator {
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction();	
+		PlayerAction action = new ActivateCardAction();	
 		action.execute(game.getGameVisor());
 		
 	}

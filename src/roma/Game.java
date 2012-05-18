@@ -4,6 +4,7 @@ import java.util.*;
 
 import cards.*;
 import actions.*;
+import actiontargets.*;
 
 
 public class Game {
@@ -167,9 +168,24 @@ public class Game {
 		
 		controller.showScreen(player);
 		
-		IPlayerAction nextAction = controller.getAction(player);
+		PlayerAction nextAction = controller.getAction(player);
+		nextAction.setVisor(getGameVisor());
+		
+		nextAction.initialise();
+		
+		for (Map.Entry<Integer, ActionTarget<?>> entry : nextAction.getParameters().entrySet()) {
+			ActionTarget<?> thisParameter = entry.getValue();
+			thisParameter.queryController(getGameVisor(), getController());
+			
+			if (thisParameter.isDefined()) {
+				nextAction.onParameterSet(entry.getKey(), thisParameter);
+			}
+			
+		}
+		
 		System.out.println("Action chosen: " + nextAction.getDescription());
-		nextAction.execute(visor);
+		
+		nextAction.execute();
 
 	}
 
@@ -199,15 +215,13 @@ public class Game {
 			
 			swappedCards[player] = new ArrayList<Card>();
 			while (swappedCards[player].size() < NUM_SWAP_CARDS) {
-				Card swapped;
-				while ((swapped = controller.getCard(players[currentPlayer].getHand(),
-						"Player " + player + ": Please select a card to pass to your opponent (" + swappedCards[player].size()
-						+ "/" + NUM_SWAP_CARDS + ")")) == null) {
-					controller.showMessage ("Invalid card.");
-				}
+
+				ActionTarget<Card> tgt = new CardInHandActionTarget("Player " + (player+1) + ", please select a card to pass to your opponent.");
+				
+				while (!tgt.queryController(getGameVisor(), getController()));
 				
 				
-				addSwappedCard(player, swapped);
+				addSwappedCard(player, tgt.getValue());
 				
 			}
 		}
@@ -218,7 +232,7 @@ public class Game {
 		// For all players, query them for where to lay their initial cards.
 		currentPlayer = 0;
 		Player p;
-		IPlayerAction layCard = new LayCardAction();
+		PlayerAction layCard = new LayCardAction();
 		for (currentPlayer = 0; currentPlayer < MAX_PLAYERS; currentPlayer ++) {
 			p = players[currentPlayer];
 			while (p.getHandSize() != 0) {
@@ -474,9 +488,9 @@ public class Game {
 	}
 	
 	/* Generate a list of possible actions for a player */
-	public List<IPlayerAction> generateActions (Player p) {
-		List<IPlayerAction> potentialActions = new ArrayList<IPlayerAction>();
-		List<IPlayerAction> actions = new ArrayList<IPlayerAction>();
+	public List<PlayerAction> generateActions (Player p) {
+		List<PlayerAction> potentialActions = new ArrayList<PlayerAction>();
+		List<PlayerAction> actions = new ArrayList<PlayerAction>();
 		GameVisor g = new GameVisor(this);
 		
 		potentialActions.add(new TakeMoneyAction());
@@ -487,7 +501,7 @@ public class Game {
 		potentialActions.add(new EndTurnAction());
 		
 		
-		for (IPlayerAction action : potentialActions) {
+		for (PlayerAction action : potentialActions) {
 			if (action.isVisible(g)) {
 				actions.add(action);
 			}

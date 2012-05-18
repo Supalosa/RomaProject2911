@@ -6,12 +6,13 @@ import roma.*;
 import cards.*;
 
 
-public class PlayCardAction implements IPlayerAction {
+public class PlayCardAction extends PlayerAction {
 	
 	Card targetCard;
 	int diceDisc;
-	GameVisor game;
-	public boolean isValid(GameVisor g) {
+
+	
+	public boolean isValid() {
 		
 		boolean isValid = true;
 		
@@ -36,11 +37,11 @@ public class PlayCardAction implements IPlayerAction {
 		
 	}
 
-	public void execute(GameVisor g) {
+	public void execute() {
 		game = g;
 		query();
 		
-		if (isValid(g)) {
+		if (isValid()) {
 
 			game.getCurrentPlayer().getHand().removeElement(targetCard);
 			if (game.getField().getCard(game.whoseTurn(), diceDisc - 1) != null) {
@@ -69,7 +70,7 @@ public class PlayCardAction implements IPlayerAction {
 	}
 
 	// only visible if we have cards in hand and cards to play
-	public boolean isVisible(GameVisor g) {
+	public boolean isVisible() {
 		boolean canPlay = false;
 		
 		for (Card cardInHand : g.getPlayer(g.whoseTurn()).getHand()) {

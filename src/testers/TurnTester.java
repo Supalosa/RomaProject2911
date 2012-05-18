@@ -16,7 +16,7 @@ public class TurnTester implements ITestSuite {
 		
 		System.out.println ("> Player 1 sends End of Turn. Testing turn = 1");
 		controller.insertInput("Y");
-		IPlayerAction endTurnAction;
+		PlayerAction endTurnAction;
 		endTurnAction = new EndTurnAction();
 		endTurnAction.execute(gv);
 		

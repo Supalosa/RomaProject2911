@@ -68,7 +68,7 @@ public class MoveMakerAdapter implements MoveMaker {
 	@Override
 	public void activateCardsDisc(int diceToUse, Card chosen)
 			throws UnsupportedOperationException {
-		IPlayerAction action;
+		PlayerAction action;
 		int cardIndex = 0;
 		int tempIndex;
 		// Get the card index (have to guess from the deck before we draw)
@@ -99,7 +99,7 @@ public class MoveMakerAdapter implements MoveMaker {
 	public void activateMoneyDisc(int diceToUse)
 			throws UnsupportedOperationException {
 		
-		IPlayerAction action = new TakeMoneyAction();
+		PlayerAction action = new TakeMoneyAction();
 		mockController.insertInput(Integer.toString(diceToUse));
 		action.execute(game.getGameVisor());
 
@@ -117,7 +117,7 @@ public class MoveMakerAdapter implements MoveMaker {
 	 */
 	@Override
 	public void endTurn() throws UnsupportedOperationException {
-		IPlayerAction action = new EndTurnAction();
+		PlayerAction action = new EndTurnAction();
 		mockController.insertInput("Y");
 		action.execute(game.getGameVisor());
 		
@@ -130,7 +130,7 @@ public class MoveMakerAdapter implements MoveMaker {
 	public void placeCard(Card toPlace, int discToPlaceOn)
 			throws UnsupportedOperationException {
 		
-		IPlayerAction action = new PlayCardAction();
+		PlayerAction action = new PlayCardAction();
 		
 		// Have to determine which card corresponds to toPlace
 		int handIndex = -1;

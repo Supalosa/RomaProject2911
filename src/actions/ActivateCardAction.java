@@ -1,26 +1,51 @@
 package actions;
 
-import java.util.List;
-
+import java.util.*;
+import actiontargets.*;
 import roma.*;
 import cards.*;
 
-public class ActivateCardAction implements IPlayerAction {
+public class ActivateCardAction extends PlayerAction  {
 	
 	int targetPos;
 	Card targetCard;
-	GameVisor game;
 	int bribeDice;
-	boolean confirmBribe;
 	
+	public static final int ACTIVATED_CARD = 0;
+	public static final int BRIBE_DICE = 1;
 	
-	public boolean isValid(GameVisor g) {
+
+	public void initialise () {
+		addParameter(ACTIVATED_CARD, new CardOnFieldActionTarget("Select a card to activate:", true));
+		
+	}
+	
+	public void onParameterSet (int paramIndex, ActionTarget<?> param) {
+		
+		if (paramIndex == ACTIVATED_CARD) {
+			
+			targetCard = (Card)param.getValue();
+			targetPos = getVisor().getField().getPosition(targetCard);
+			
+			// bribe disc?
+			if (targetPos == Game.BRIBE_DISC) {
+				addParameter(BRIBE_DICE, new DiceRollActionTarget("Select the die to use on the Dice Disc"));
+			}
+			
+		} else if (paramIndex == BRIBE_DICE) {
+			
+			bribeDice = (Integer)param.getValue();
+			
+		}
+	}
+
+	public boolean isValid() {
 		
 		boolean valid = true;
 		
 		boolean hasDice = false;
 		boolean hasBribe = false;
-		for (int i : game.getDiceRolls()) {
+		for (int i : getVisor().getDiceRolls()) {
 			
 			if (i == targetPos) {
 				
@@ -35,21 +60,21 @@ public class ActivateCardAction implements IPlayerAction {
 		}
 		if (targetPos == Game.BRIBE_DISC) {
 			if (hasBribe == false) {
-				game.getController().showMessage("You don't have the dice you chose to bribe with.");
+				getVisor().getController().showMessage("You don't have the dice you chose to bribe with.");
 				valid = false;
-			} else if (g.getPlayer(g.whoseTurn()).getMoney() < bribeDice) {
-				game.getController().showMessage("You don't have enough sestertii to activate the Bribe Disc!");
+			} else if (getVisor().getCurrentPlayer().getMoney() < bribeDice) {
+				getVisor().getController().showMessage("You don't have enough sestertii to activate the Bribe Disc!");
 				valid = false;
 			}
 		
 		} else if (!hasDice) { // not bribe disc, and dont have dice
 			
-			game.getController().showMessage("You don't have a dice corresponding to the dice [" + targetPos + "]");
+			getVisor().getController().showMessage("You don't have a dice corresponding to the dice [" + targetPos + "]");
 			valid = false;
 		
-		} else if (g.getField().isBlocked(g.whoseTurn(), targetPos-1)) {
+		} else if (getVisor().getField().isBlocked(getVisor().whoseTurn(), targetPos-1)) {
 		
-			game.getController().showMessage("That disc is blocked!");
+			getVisor().getController().showMessage("That disc is blocked!");
 			valid = false;
 		
 		}
@@ -57,40 +82,34 @@ public class ActivateCardAction implements IPlayerAction {
 		if (targetCard == null) { // no card selected
 			
 			valid = false;
-			game.getController().showMessage("You don't have a card at that dice disc.");
+			getVisor().getController().showMessage("You don't have a card at that dice disc.");
 		
 		}
 		return valid;
 	}
 
-	public void execute(GameVisor g) {
-		
-		game = g;
-		query();
-		
-		if(isValid(game)) {
+	public void execute() {
+
+		if(isValid()) {
 			
 			if (targetPos == Game.BRIBE_DISC) {
 				
-				if (confirmBribe == false) {
+				if (targetCard.performEffect(getVisor(), targetPos)) {
 					
-					game.getController().showMessage("Action cancelled.");
-					
-				} else if (targetCard.performEffect(game, targetPos)) {
-					
-					game.getPlayer(g.whoseTurn()).setVP(game.getPlayer(g.whoseTurn()).getVP() - bribeDice);
-					game.useDice(bribeDice);
+					getVisor().getCurrentPlayer().setVP(getVisor().getCurrentPlayer().getVP() - bribeDice);
+					getVisor().useDice(bribeDice);
+					// TODO what about the targetPos dice?
 					
 				}
 				
-			} else if (targetCard.performEffect(game, targetPos)) {
+			} else if (targetCard.performEffect(getVisor(), targetPos)) {
 				
-				game.useDice(targetPos);
+				getVisor().useDice(targetPos);
 				
 			}
 			
 		} else {
-			game.getController().showMessage("Activation failed.");
+			getVisor().getController().showMessage("Activation failed.");
 		}
 		
 	}
@@ -99,41 +118,25 @@ public class ActivateCardAction implements IPlayerAction {
 		return "Activate Card";
 	}
 
-	public void query() {
-		
-		game.getController().showField();
-		
-		targetPos = game.getController().getInt("Choose the Dice Disc you want to activate");
-		if (targetPos >= 1 && targetPos <= Game.FIELD_SIZE) {
-			targetCard = game.getField().getCard(game.whoseTurn(),targetPos-1);
-		}
-		
-		if (targetPos == Game.BRIBE_DISC) {
-			bribeDice = game.getController().getInt("Choose the Dice you want to use to activate the bribe disc.");
-			confirmBribe = game.getController().getBoolean("Are you sure you want to activate that disc? Doing so will cost extra Sestertii.");
-		} else {
-			confirmBribe = true;
-		}
-		
-	}
 
 	// This action is only visible if we have a card on the field that has trigger EffectTrigger.TriggerOnActivate
 	// and we have dice
-	public boolean isVisible(GameVisor g) {
+	public boolean isVisible() {
 		boolean show = false;
-		for (Card cardOnField : g.getField().getSideAsList(g.whoseTurn())) {
+		for (Card cardOnField : getVisor().getField().getSideAsList(getVisor().whoseTurn())) {
 			if (cardOnField != null) {
 				show = true;
 			}
 		}
 		boolean hasDice = false;
 		
-		for (int i = 0; i < g.getDiceRolls().length; i++) {
-			if (g.getDiceRolls()[i] != 0) {
+		for (int i = 0; i < getVisor().getDiceRolls().length; i++) {
+			if (getVisor().getDiceRolls()[i] != 0) {
 				hasDice = true;
 			}
 		}
 		return show && hasDice;	
 	}
+
 
 }

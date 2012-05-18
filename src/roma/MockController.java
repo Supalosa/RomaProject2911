@@ -5,7 +5,8 @@ package roma;
 
 import java.util.*;
 
-import actions.IPlayerAction;
+import actions.PlayerAction;
+import actiontargets.IActionTargetHolder;
 import cards.Card;
 
 /**
@@ -192,7 +193,7 @@ public class MockController implements IController {
 	}
 
 
-	public IPlayerAction getAction(Player p) {
+	public PlayerAction getAction(Player p) {
 		// Mock: doesn't do anything (i.e. Game.run() should NEVER be called from tester)
 		return null;
 	}
@@ -201,5 +202,4 @@ public class MockController implements IController {
 		// Mock: doesn't do anything
 		
 	}
-
 }

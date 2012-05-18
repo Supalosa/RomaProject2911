@@ -32,7 +32,7 @@ public class ConsiliariusAdapterActivator implements ConsiliariusActivator {
 	
 	@Override
 	public void complete() {
-		IPlayerAction action = new ActivateCardAction();
+		PlayerAction action = new ActivateCardAction();
 		MockController controller = (MockController)game.getController();
 		
 		controller.insertInput(Integer.toString(fieldPosition));

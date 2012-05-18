@@ -32,7 +32,7 @@ public class ForumAdapterActivator implements ForumActivator {
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction();	
+		PlayerAction action = new ActivateCardAction();	
 		action.execute(game.getGameVisor());
 		
 	}

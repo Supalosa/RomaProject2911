@@ -27,7 +27,7 @@ public class LegatAdapterActivator implements LegatActivator {
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction();
+		PlayerAction action = new ActivateCardAction();
 		MockController controller = (MockController)game.getController();
 		controller.insertInput(Integer.toString(fieldPosition));
 		action.execute(game.getGameVisor());

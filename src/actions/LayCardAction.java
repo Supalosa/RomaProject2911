@@ -1,18 +1,51 @@
 package actions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import actiontargets.*;
 
 import roma.*;
 import cards.*;
 
 
-public class LayCardAction implements IPlayerAction {
+public class LayCardAction extends PlayerAction {
 	
 	Card targetCard;
 	int diceDisc;
-	GameVisor game;
+	Map<Integer, ActionTarget<?>> myTargets;
+	
+	public static final int TARGET_CARD = 0;
+	public static final int DICE_DISC = 1;
 	 
-	public boolean isValid(GameVisor g) {
+	public LayCardAction() {
+		myTargets = new HashMap<Integer, ActionTarget<?>>();
+	}
+	
+	
+	@Override
+	public void initialise() {
+		myTargets.put(TARGET_CARD, new CardInHandActionTarget("Please select the Card you want to lay"));
+		myTargets.put(DICE_DISC, new DiceDiscActionTarget("And the dice disc you want to place it next to"));
+		
+
+	}
+		
+	public void onParameterSet (int paramIndex, ActionTarget<?> param) {
+		
+		if (paramIndex == TARGET_CARD) {
+			
+			targetCard = (Card)param.getValue();
+			
+		} else if (paramIndex == DICE_DISC) {
+			
+			diceDisc = (Integer)param.getValue();
+			
+		}
+	}
+		
+	public boolean isValid() {
 		
 		boolean isValid = true;
 		
@@ -20,9 +53,9 @@ public class LayCardAction implements IPlayerAction {
 		
 		if (i < 1 || i > Game.FIELD_SIZE) {
 			isValid = false;
-			game.getController().showMessage("Cannot lay that card, that disc value is not possible");
+			g.getController().showMessage("Cannot lay that card, that disc value is not possible");
 		} else if (g.getField().isBlocked(g.whoseTurn(), diceDisc-1)) {
-			game.getController().showMessage("Cannot lay that card, that disc is blocked!");
+			g.getController().showMessage("Cannot lay that card, that disc is blocked!");
 			isValid = false;
 		}
 		
@@ -32,12 +65,9 @@ public class LayCardAction implements IPlayerAction {
 	}
 
 	@Override
-	public void execute(GameVisor g) {
+	public void execute() {
 		
-		game = g;
-		query();
-		
-		if (isValid(g)) {
+		if (isValid()) {
 
 			g.getCurrentPlayer().getHand().removeElement(targetCard);
 			if (g.getField().getCard(g.whoseTurn(), diceDisc - 1) != null) {
@@ -53,20 +83,18 @@ public class LayCardAction implements IPlayerAction {
 	public String getDescription() {
 		return "Lay Card";
 	}
-	
-	public void query() {
-		
-		game.getController().showHand(game.getCurrentPlayer());
-		
-		targetCard = game.getController().getCard(game.getCurrentPlayer(), "Choose the Card you want to play");
-		
-		diceDisc = game.getController().getInt("And the dice disc you want to place it next to");
-		
+
+	// Action is never visible
+	@Override
+	public boolean isVisible() {
+		return false;
 	}
 
+
+
 	@Override
-	public boolean isVisible(GameVisor g) {
-		return false;
+	public Map<Integer, ActionTarget<?>> getParameters() {
+		return myTargets;
 	}
 	
 }

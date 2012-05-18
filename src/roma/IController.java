@@ -4,7 +4,8 @@ import java.util.*;
 
 import cards.*;
 
-import actions.IPlayerAction;
+import actions.*;
+import actiontargets.*;
 
 
 public interface IController {
@@ -37,8 +38,8 @@ public interface IController {
 	
 	public void showField();
 	
-	public IPlayerAction getAction (Player p);
+	public PlayerAction getAction (Player p);
 
 	public void showCard(Card c);
-	
+
 }

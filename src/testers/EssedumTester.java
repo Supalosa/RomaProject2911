@@ -17,7 +17,7 @@ public class EssedumTester implements ITestSuite {
 		MockController controller;
 		Game g;
 		GameVisor gv;
-		IPlayerAction action;
+		PlayerAction action;
 		
 		controller = new MockController();
 		g = new Game(controller);

@@ -10,10 +10,11 @@ import cards.*;
 
 public class Field implements IModifiable {
 	
-	//TODO: make FieldPosition a class
 	private Card[][] fieldData;
 	List<IModifier> modifiers;
 	private boolean[][] fieldBlocked;
+	
+	static public final int NOT_ON_FIELD = -1;
 	
 	public Field() {
 		fieldData = new Card[Game.MAX_PLAYERS][Game.FIELD_SIZE];
@@ -110,6 +111,23 @@ public class Field implements IModifiable {
 		return cards;	
 	}
 
+	/**
+	 * Returns the FIELD position of the specified card
+	 * @param c
+	 * @return Position on the FIELD (i.e. +1)
+	 */
+	public int getPosition(Card c) {
+		int position = NOT_ON_FIELD;
+		for (int i = 0 ; i < Game.MAX_PLAYERS; i++) {
+			for (int j = 0; j < Game.FIELD_SIZE; j++) {
+				if (fieldData[i][j] == c) {
+					position = j+1;
+				}
+			}
+		}
+		return position;
+	}
+	
 	@Override
 	public void addModifier(IModifier mod) {
 		modifiers.add(mod);

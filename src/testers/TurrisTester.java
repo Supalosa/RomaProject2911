@@ -17,7 +17,7 @@ public class TurrisTester implements ITestSuite {
 		MockController controller;
 		Game g;
 		GameVisor gv;
-		IPlayerAction action;
+		PlayerAction action;
 		boolean hadModifier;
 		
 		controller = new MockController();

@@ -6,7 +6,8 @@ import modifiers.IModifier;
 
 import cards.Card;
 
-import actions.IPlayerAction;
+import actions.PlayerAction;
+import actiontargets.IActionTargetHolder;
 
 public class ControllerConsole implements IController {
 	
@@ -276,11 +277,11 @@ public class ControllerConsole implements IController {
 	}
 
 
-	public IPlayerAction getAction(Player p) {
-		IPlayerAction action = null;
-		Vector<IPlayerAction> actions = new Vector<IPlayerAction>();
+	public PlayerAction getAction(Player p) {
+		PlayerAction action = null;
+		Vector<PlayerAction> actions = new Vector<PlayerAction>();
 		int selectedAction = -1;
-		for (IPlayerAction act : g.generateActions(p)) {
+		for (PlayerAction act : g.generateActions(p)) {
 			actions.add(act);
 		}
 		
@@ -323,6 +324,7 @@ public class ControllerConsole implements IController {
 		getWait ("-- press any key to continue --");
 		
 	}
+
 
 
 }

@@ -30,7 +30,7 @@ public class PlayCardActionTester implements ITestSuite {
 		assert (g.getPlayer(0).getHandSize() == 2);
 		
 		System.out.println ("> Laying Legionarius card onto dice 6");
-		IPlayerAction l = new LayCardAction();
+		PlayerAction l = new LayCardAction();
 		controller.insertInput ("0"); // pls select card
 		controller.insertInput ("6"); // pls select dice disc
 		
@@ -42,7 +42,7 @@ public class PlayCardActionTester implements ITestSuite {
 		assert (g.getPlayer(0).getMoney() == 100);
 		
 		System.out.println ("> Playing Scaenicus card onto dice 3");
-		IPlayerAction p = new PlayCardAction();
+		PlayerAction p = new PlayCardAction();
 		controller.insertInput ("0"); // pls select card
 		controller.insertInput ("3"); // pls select dice disc
 		
