@@ -1,6 +1,7 @@
 package adapters;
 
 import enums.*;
+import framework.cards.*;
 
 /**
  * Converts our internal representation of card names -> Acceptance tester names
@@ -8,34 +9,34 @@ import enums.*;
  *
  */
 public enum CardNameAdapter {
-	Sicarius 		("Sicarius", 		CardNames.Sicarius),
-	Architectus 	("Architectus", 	CardNames.Architectus),
-	Consiliarius 	("Consiliarius", 	CardNames.Consiliarius),
-	Legat 			("Legat", 			CardNames.Legat),
-	Gladiator 		("Gladiator", 		CardNames.Gladiator),
-	Mercator 		("Mercator", 		CardNames.Mercator),
-	Consul 			("Consul", 			CardNames.Consul),
-	Legionarius 	("Legionarius", 	CardNames.Legionarius),
-	Nero			("Nero", 			CardNames.Nero),
-	Praetorianus 	("Praetorianus",	CardNames.Praetorianus),
-	Scaenicus 		("Scaenicus", 		CardNames.Scaenicus),
-	Haruspex 		("Haruspex", 		CardNames.Haruspex),
-	Senator 		("Senator", 		CardNames.Senator),
-	Velites 		("Velites", 		CardNames.Velites),
-	Essedum 		("Essedum", 		CardNames.Essedum),
-	Tribunus_Plebis ("Tribunus Plebis", CardNames.Tribunus_Plebis, "Tribunusplebis"),
-	Centurio 		("Centurio", 		CardNames.Centurio),
-	Aesculapinum 	("Aesculapinum", 	CardNames.Aesculapinum),
-	Basilica 		("Basilica", 		CardNames.Basilica),
-	Machina 		("Machina", 		CardNames.Machina),
-	Forum 			("Forum", 			CardNames.Forum),
-	Mercatus 		("Mercatus", 		CardNames.Mercatus),
-	Onager 			("Onager", 			CardNames.Onager),
-	Templum 		("Templum", 		CardNames.Templum),
-	Turris 			("Turris", 			CardNames.Turris),
-	Kat 			("Kat", 			CardNames.Kat),
-	GrimReaper		("Grim Reaper", 	CardNames.GrimReaper, "Grimreaper"),
-	TelephoneBox	("Telephone Box",	CardNames.TelephoneBox, "Telephonebox");
+	Sicarius 		("Sicarius", 		CardNames.Sicarius, Card.SICARIUS),
+	Architectus 	("Architectus", 	CardNames.Architectus, Card.ARCHITECTUS),
+	Consiliarius 	("Consiliarius", 	CardNames.Consiliarius, Card.CONSILIARIUS),
+	Legat 			("Legat", 			CardNames.Legat, Card.LEGAT),
+	Gladiator 		("Gladiator", 		CardNames.Gladiator, Card.GLADIATOR),
+	Mercator 		("Mercator", 		CardNames.Mercator, Card.MERCATOR),
+	Consul 			("Consul", 			CardNames.Consul, Card.CONSUL),
+	Legionarius 	("Legionarius", 	CardNames.Legionarius, Card.LEGIONARIUS),
+	Nero			("Nero", 			CardNames.Nero, Card.NERO),
+	Praetorianus 	("Praetorianus",	CardNames.Praetorianus, Card.PRAETORIANUS),
+	Scaenicus 		("Scaenicus", 		CardNames.Scaenicus, Card.SCAENICUS),
+	Haruspex 		("Haruspex", 		CardNames.Haruspex, Card.HARUSPEX),
+	Senator 		("Senator", 		CardNames.Senator, Card.SENATOR),
+	Velites 		("Velites", 		CardNames.Velites, Card.VELITES),
+	Essedum 		("Essedum", 		CardNames.Essedum, Card.ESSEDUM),
+	Tribunus_Plebis ("Tribunus Plebis", CardNames.Tribunus_Plebis, Card.TRIBUNUSPLEBIS),
+	Centurio 		("Centurio", 		CardNames.Centurio, Card.CENTURIO),
+	Aesculapinum 	("Aesculapinum", 	CardNames.Aesculapinum, Card.AESCULAPINUM),
+	Basilica 		("Basilica", 		CardNames.Basilica, Card.BASILICA),
+	Machina 		("Machina", 		CardNames.Machina, Card.MACHINA),
+	Forum 			("Forum", 			CardNames.Forum, Card.FORUM),
+	Mercatus 		("Mercatus", 		CardNames.Mercatus, Card.MERCATUS),
+	Onager 			("Onager", 			CardNames.Onager, Card.ONAGER),
+	Templum 		("Templum", 		CardNames.Templum, Card.TEMPLUM),
+	Turris 			("Turris", 			CardNames.Turris, Card.TURRIS),
+	Kat 			("Kat", 			CardNames.Kat, Card.KAT),
+	GrimReaper		("Grim Reaper", 	CardNames.GrimReaper, Card.GRIMREAPER),
+	TelephoneBox	("Telephone Box",	CardNames.TelephoneBox, Card.TELEPHONEBOX);
 
 	// The name in Roma format (the actual card name
 	private String romaName;
@@ -44,11 +45,11 @@ public enum CardNameAdapter {
 	private CardNames romaEnum;
 	
 	// The name in Acceptance Test format
-	private String acceptanceName;
+	private Card acceptanceName;
 	
 
 	// Mapping
-	private CardNameAdapter (String romaName, CardNames romaEnum, String acceptanceName) {
+	private CardNameAdapter (String romaName, CardNames romaEnum, Card acceptanceName) {
 		this.romaName = romaName;
 		this.romaEnum = romaEnum;
 		this.acceptanceName = acceptanceName;
@@ -58,11 +59,15 @@ public enum CardNameAdapter {
 	private CardNameAdapter (String name, CardNames romaEnum) {
 		this.romaName = name;
 		this.romaEnum = romaEnum;
-		this.acceptanceName = name;
+		this.acceptanceName = Card.valueOf(name.toUpperCase());
 	}
 
 
 	public String getAcceptanceName() {
+		return this.acceptanceName.toString();
+	}
+	
+	public Card getAcceptanceCard() {
 		return this.acceptanceName;
 	}
 	
@@ -102,5 +107,20 @@ public enum CardNameAdapter {
 		}
 		return adapter;
 	}
+	
+	public static String getRomaName(String acceptanceName) {
+		return getRomaAdapter(acceptanceName).getRomaName();
+	}
+	
+	public static String getAcceptanceName(String romaName) {
+		return getAcceptanceAdapter(romaName).getAcceptanceName();
+	}
+	
+	public static Card getAcceptanceCard(String romaName) {
+		return getAcceptanceAdapter(romaName).getAcceptanceCard();
+	}
+	
+	
+	
 		
 }

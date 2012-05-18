@@ -1,6 +1,8 @@
 package cards;
 
 import java.util.*;
+
+import cards.activators.*;
 import roma.*;
 import enums.*;
 import modifiers.*;
@@ -167,7 +169,8 @@ public abstract class Card implements IModifiable {
 	public abstract String getDescription();
 	public abstract int getDefense();
 
-	public abstract boolean performEffect (GameVisor g, int pos);
+	public abstract CardParams getParams();	
+	public abstract boolean performEffect (GameVisor g, int pos, CardParams a);
 	
 	
 }

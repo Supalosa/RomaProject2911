@@ -261,8 +261,8 @@ public class GameAdapter implements GameState {
 
 	@Override
 	public boolean isGameCompleted() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return myGame.testGameOver();
 	}
 	
 	

@@ -3,6 +3,9 @@ package cards;
 import java.util.ArrayList;
 import java.util.List;
 
+import cards.activators.CardParams;
+import cards.activators.EssedumParams;
+
 import modifiers.*;
 import roma.*;
 import enums.*;
@@ -42,22 +45,6 @@ public class CardEssedum extends Card {
 	@Override
 	public int getDefense() {
 		return 3;
-	}
-
-	/**
-	 * Put the effect on all enemy cards.
-	 */
-	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		int enemySide = (getOwnerID() + 1) % Game.MAX_PLAYERS;
-
-		for (Card myCard : g.getField().getSideAsList(enemySide)) {
-			if (myCard != this) {
-				IModifier essedumAura = new EssedumAura();
-				castModifier(myCard, essedumAura);
-			}
-		} 
-		return true;
 	}
 
 	/**
@@ -117,6 +104,25 @@ public class CardEssedum extends Card {
 		}
 
 		super.onTurnEnd(gv, playerId);
+	}
+
+	@Override
+	public CardParams getParams() {
+		return new EssedumParams();
+	}
+
+	/* Put the effect on all enemy cards */
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		int enemySide = (getOwnerID() + 1) % Game.MAX_PLAYERS;
+
+		for (Card myCard : g.getField().getSideAsList(enemySide)) {
+			if (myCard != this) {
+				IModifier essedumAura = new EssedumAura();
+				castModifier(myCard, essedumAura);
+			}
+		} 
+		return true;
 	}
 	
 	

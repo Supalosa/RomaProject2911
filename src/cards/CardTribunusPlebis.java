@@ -1,5 +1,7 @@
 package cards;
 
+import cards.activators.CardParams;
+import cards.activators.TribunusPlebisParams;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
@@ -42,8 +44,13 @@ public class CardTribunusPlebis extends Card {
 	}
 
 	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		
+	public CardParams getParams() {
+		// TODO Auto-generated method stub
+		return new TribunusPlebisParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		boolean performed = false;
 		
 		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
@@ -54,7 +61,6 @@ public class CardTribunusPlebis extends Card {
 		performed = true;
 		
 		return performed;
-		
 	}
 
 }

@@ -18,7 +18,7 @@ public class Game {
 	private CardTypes cardTypes;
 	private IController controller;
 	private boolean gameOver;
-	List<Card> [] swappedCards;
+	private List<Card> [] swappedCards;
 	
 	private int turnNumber;
 	
@@ -482,7 +482,7 @@ public class Game {
 		potentialActions.add(new TakeMoneyAction());
 		potentialActions.add(new TakeCardAction());
 		potentialActions.add(new PlayCardAction());
-		potentialActions.add(new ActivateCardAction());
+		potentialActions.add(new ActivateCardAction(null));
 		potentialActions.add(new ViewCardAction());
 		potentialActions.add(new EndTurnAction());
 		

@@ -1,5 +1,7 @@
 package cards;
 
+import cards.activators.CardParams;
+import cards.activators.CenturioParams;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
@@ -45,50 +47,32 @@ public class CardCenturio extends Card {
 	}
 
 	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		
+	public CardParams getParams() {
+		return new CenturioParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		CenturioParams myParams = (CenturioParams)a;
 		boolean performed = false;
 		int enemyPlayer = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
-		Card enemyCard = g.getField().getCard(enemyPlayer, pos - 1);
-		if (enemyCard != null) {
-			
-			int battleDie = g.rollDice();
-			g.getController().showMessage("The battle die rolled a " + battleDie);
-			g.useDice(pos);
-
-			if (battleDie < enemyCard.getRealDefense()) {
-
-				if (g.getController().getBoolean("Do you wish to add the the value of the battle die?")) {
-					int diceValue = 0;
-					while (diceValue == 0) {
-						g.getController().showDiceRolls();
-						int add = g.getController().getInt("Which die do you want to use?");
-						
-						for (int i = 0; i < g.getDiceRolls().length && diceValue == 0; i++) {
-							if (add == g.getDiceRoll(i)) {
-								diceValue = g.getDiceRoll(i);
-							}
-						}
-					}
-					g.useDice(diceValue);
-					battleDie += diceValue;
-				}
-				
+		Card enemyCard = g.getField().getCard(enemyPlayer, pos-1);
+		// determine time paradox here
+		
+		if (enemyCard == null) {
+			// time paradox
+		} else {
+			// successfully killed the card?
+			performed = true;
+			if (myParams.isUseExtraDice()) {
+				g.useDice(myParams.getExtraDieValue());
 			}
 			
-			// successfully killed the card
-			if (battleDie >= enemyCard.getRealDefense()) {
+			if (myParams.getBattleDie() >= enemyCard.getRealDefense()) {
 				g.discard(enemyCard);
 				g.getField().setCard(enemyPlayer, pos-1, null);
 				g.getController().showMessage("You killed a " + enemyCard.getName() + "!");
 			}
-			
-			
-			
-		} else {
-			
-			g.getController().showMessage("There is nothing to attack.");
-			
 		}
 		
 		return performed;

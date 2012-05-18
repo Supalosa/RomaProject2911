@@ -3,6 +3,9 @@ package cards;
 import java.util.ArrayList;
 import java.util.List;
 
+import cards.activators.CardParams;
+import cards.activators.SicariusParams;
+
 import roma.Game;
 import roma.GameVisor;
 import enums.*;
@@ -31,7 +34,7 @@ public class CardSicarius extends Card {
 
 
 	public String getDescription() {
-		return "eliminates an opposing, face-up character card. " +
+		return "Eliminates an opposing, face-up character card. " +
 				"The opposing card and the Sicarius are both discarded";
 	}
 
@@ -39,47 +42,32 @@ public class CardSicarius extends Card {
 		return 2;
 	}
 
+	@Override
+	public CardParams getParams() {
+		return new SicariusParams();
+	}
 
-	public boolean performEffect(GameVisor g, int pos) {
-		
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		boolean performed = false;
+		SicariusParams myParams = (SicariusParams) a;
+		int enemyPos = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		Card targetCard = g.getField().getCard(enemyPos, myParams.getTargetPos());
 		
-		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
-		
-		List<Card> enemyField = g.getField().getSideAsList(enemy);
-		
-		List<Card> characters = new ArrayList<Card>();
-		
-		for (Card c : enemyField) {
+		if (targetCard != null) {
+			performed = true;
+			g.getField().setCard(g.whoseTurn(), pos-1, null);
+			g.discard(this);
 			
-			if (!c.isBuilding()) {
-				
-				characters.add(c);
-				
-			}
+			g.getField().removeCard(targetCard);
+			g.discard(targetCard);
+			
+			
+		} else {
 			
 		}
-		
-		Card destroy = null;
-		
-		while (destroy == null) {
-			
-			destroy = g.getController().getCard(characters, "Which opposing character card do you wish to eliminate?"); 
-		
-		}
-		
-		g.getField().setCard(g.whoseTurn(), pos-1, null);
-		g.discard(this);
-		
-		//g.getField().setCard(enemy, enemyField.indexOf(destroy), null);
-		g.getField().removeCard(destroy);
-		g.discard(destroy);
-		
-		
-		performed = true;
 		
 		return performed;
-
 	}
 
 }

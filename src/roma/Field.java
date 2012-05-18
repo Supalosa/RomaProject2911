@@ -154,5 +154,25 @@ public class Field implements IModifiable {
 		//System.err.println ("isBlocked: " + player + ", " + position + " = " + (fieldBlocked[player][position] == true));
 		return (fieldBlocked[player][position] == true);
 	}
+	
+	/**
+	 * Find the specified card in the field (position)
+	 * Disregards side
+	 * @param c The card
+	 * @return Field position of the card. -1 if not found.
+	 */
+	public int findCardPosition(Card c) {
+		int pos = -1;
+		for (int j = 0; j < Game.MAX_PLAYERS; j++) {
+			for (int i = 0; i < Game.FIELD_SIZE; i++) {
+				if (fieldData[j][i] == c) {
+					pos = i;
+				}
+			}
+		}
+		
+		return pos;
+		
+	}
 
 }

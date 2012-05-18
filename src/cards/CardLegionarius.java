@@ -1,5 +1,8 @@
 package cards;
 
+import cards.activators.CardParams;
+import cards.activators.CenturioParams;
+import cards.activators.LegionariusParams;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
@@ -68,6 +71,36 @@ public class CardLegionarius extends Card {
 		
 		return performed;
 		
+	}
+
+	@Override
+	public CardParams getParams() {
+		return new LegionariusParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		LegionariusParams myParams = (LegionariusParams)a;
+		
+		boolean performed = false;
+		
+		int enemyPlayer = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		Card enemyCard = g.getField().getCard(enemyPlayer, pos-1);
+		// determine time paradox here
+		
+		if (enemyCard == null) {
+			// time paradox
+		} else {
+			// successfully killed the card?
+			performed = true;
+
+			if (myParams.getBattleDie() >= enemyCard.getRealDefense()) {
+				g.discard(enemyCard);
+				g.getField().setCard(enemyPlayer, pos-1, null);
+				g.getController().showMessage("You killed a " + enemyCard.getName() + "!");
+			}
+		}
+		return performed;
 	}
 
 }

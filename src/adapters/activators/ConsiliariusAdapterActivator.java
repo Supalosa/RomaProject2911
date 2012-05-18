@@ -3,8 +3,10 @@ package adapters.activators;
 import java.util.*;
 
 import actions.*;
+import adapters.CardNameAdapter;
 import roma.*;
 import cards.Card;
+import cards.activators.ConsiliariusParams;
 import framework.interfaces.activators.*;
 
 /**
@@ -17,68 +19,52 @@ public class ConsiliariusAdapterActivator implements ConsiliariusActivator {
 	Card theCard;
 	int fieldPosition;
 	Game game;
-	boolean increase;
-	int changedDice;
-	List<DiceCardPair> laidCards;
+
+	ConsiliariusParams params;
 	
 	public ConsiliariusAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		this.theCard = theCard;
 		this.fieldPosition = fieldPosition;
 		this.game = game;
-		this.laidCards = new ArrayList<DiceCardPair>();
+		this.params = (ConsiliariusParams) theCard.getParams();
+		
 	}
 	
 	
 	
 	@Override
 	public void complete() {
-		IPlayerAction action = new ActivateCardAction();
+		IPlayerAction action = new ActivateCardAction(params);
 		MockController controller = (MockController)game.getController();
-		
+
 		controller.insertInput(Integer.toString(fieldPosition));
 		
-		// For all the characters on the field
-		List<DiceCardPair> fieldCharacters = new ArrayList<DiceCardPair>();
-		
-		for (Card c : game.getField().getSideAsList(game.whoseTurn())) {
-			
-			if (!c.isBuilding()) {
-				
-				//fieldCharacters.add()
-				
-			}
-		}
-		
-		
+
 		action.execute(game.getGameVisor());
 	}
 
 
 
 	/**
-	 * 
+	 * Get the card on the field named 'card', and declare its new position
 	 */
 	@Override
 	public void placeCard(framework.cards.Card card, int diceDisc) {
-		laidCards.add(new DiceCardPair(card, diceDisc));
-	}
-	
-	private class DiceCardPair {
-		private framework.cards.Card card;
-		private int diceDisc;
 		
-		public DiceCardPair (framework.cards.Card card, int diceDisc) {
-			this.diceDisc = diceDisc;
-			this.card = card;
+		for (int pos = 0; pos < Game.FIELD_SIZE; pos++) {
+			// Get the card in that position
+			Card romaCard = game.getField().getCard(game.whoseTurn(), pos);
+			if (romaCard != null) {
+				// Get its acceptance name name
+				framework.cards.Card acceptanceName = CardNameAdapter.getAcceptanceCard(romaCard.getName());
+				
+				/* This will NOT work for doubled up cards!!! */
+				if (acceptanceName == card) {
+					params.addPosition(pos, diceDisc-1); 
+				}
+			}
 		}
-		
-		public int getDiceDisc() {
-			return diceDisc;
-		}
-		public void setDiceDisc(int diceDisc) {
-			this.diceDisc = diceDisc;
-		}
-
 		
 	}
 

@@ -40,6 +40,13 @@ public class MockController implements IController {
 		showMessage(message);
 		if (mockStdIn.isEmpty()) {
 			System.err.println ("MockController::getString: queue ran out of messages!");
+			try {
+				throw new Exception ("FAIL, see above");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
 		} else {
 			out = mockStdIn.poll();
 			//System.out.println (" > Mock: '" + out + "'");
@@ -67,6 +74,13 @@ public class MockController implements IController {
 			}
 		} else {
 			System.err.println ("MockController::getInt: queue ran out of messages!");
+			try {
+				throw new Exception ("FAIL, see above");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
 		}
 		return result;
 	}

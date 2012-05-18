@@ -47,6 +47,8 @@ public class CardTypes {
 	
 	public void InitialiseCards(Pile d) {
 		
+		addCards (d, CardNames.Aesculapinum, 100);
+		/*
 		// Sicarius x1
 		addCards(d, CardNames.Sicarius, 1);
 		// Architectus x2
@@ -97,7 +99,7 @@ public class CardTypes {
 		addCards(d, CardNames.Templum, 2);
 		//Turris x2
 		addCards(d, CardNames.Turris, 2);
-		
+		*/
 	}
 	
 	private void addCards(Pile d, CardNames t, int count) {

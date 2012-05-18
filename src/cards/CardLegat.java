@@ -1,5 +1,7 @@
 package cards;
 
+import cards.activators.CardParams;
+import cards.activators.LegatParams;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
@@ -36,8 +38,13 @@ public class CardLegat extends Card {
 	}
 
 
-	public boolean performEffect(GameVisor g, int pos) {
-		
+	@Override
+	public CardParams getParams() {
+		return new LegatParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		boolean performed = false;
 		
 		int enemyId = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
@@ -58,8 +65,6 @@ public class CardLegat extends Card {
 		performed = true;
 		
 		return performed;
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -3,6 +3,7 @@ package adapters.activators;
 import actions.*;
 import roma.*;
 import cards.Card;
+import cards.activators.*;
 import framework.interfaces.activators.*;
 
 /**
@@ -16,14 +17,14 @@ public class AesculapinumAdapterActivator implements AesculapinumActivator {
 	int fieldPosition;
 	Game game;
 	MockController controller;
+	AesculapinumParams params;
 	
 	public AesculapinumAdapterActivator(int fieldPosition, Game game, Card theCard) {
 		this.theCard = theCard;
 		this.fieldPosition = fieldPosition;
 		this.game = game;
 		this.controller = (MockController)game.getController();
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
+		this.params = (AesculapinumParams) theCard.getParams();
 		
 	}
 	
@@ -32,7 +33,12 @@ public class AesculapinumAdapterActivator implements AesculapinumActivator {
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction();	
+		IPlayerAction action = new ActivateCardAction(params);	
+		
+		// Enter the dice disc you want to activate...
+		controller.insertInput(Integer.toString(fieldPosition));
+				
+				
 		action.execute(game.getGameVisor());
 		
 	}
@@ -44,24 +50,8 @@ public class AesculapinumAdapterActivator implements AesculapinumActivator {
 	 */
 	@Override
 	public void chooseCardFromPile(int indexOfCard) {
-		int modifiedPosition = 0; // modified position in a list of character cards only
-		int temp = 0;
-		int realPos = 0;
-		for (Card c : game.getDiscardPile().asList()) {
-			if (!c.isBuilding()) {
-				if (indexOfCard == realPos) { // match!
-					modifiedPosition = temp;
-				}
-				temp ++;
-			}
-			realPos ++;
-		}
-		//System.out.println ("ModifiedPosition = " + modifiedPosition);
-		
-		// Enter the target for sicarius...
-		//System.out.println ("chooseCardFromPile: " + game.getDiscardPile().asList());
-    	
-		controller.insertInput (Integer.toString(modifiedPosition));
+
+		params.setPickedUpCard(indexOfCard);
 	}
 
 }

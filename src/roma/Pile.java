@@ -6,7 +6,7 @@ import cards.Card;
 
 public abstract class Pile {
 	
-	private Queue<Card> s;
+	private List<Card> s;
 	
 	public Pile() {
 		
@@ -46,6 +46,7 @@ public abstract class Pile {
 	
 	public void addCard (Card c) {
 		//s.add(0, c);
+		//System.out.println ("AddCard: " + c.getName());
 		s.add(c);
 	}
 	
@@ -54,7 +55,7 @@ public abstract class Pile {
 	}
 	
 	public Card getCard () {
-		Card result = s.poll();
+		Card result = s.get(0);
 		removeCard(result);
 		return result;
 	}
@@ -75,5 +76,9 @@ public abstract class Pile {
 	
 	public void emptyPile() {
 		s.clear();
+	}
+	
+	public Card getIndex (int index) {
+		return s.get(index);
 	}
 }

@@ -1,5 +1,7 @@
 package cards;
 
+import cards.activators.CardParams;
+import cards.activators.MercatorParams;
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
@@ -41,50 +43,33 @@ public class CardMercator extends Card {
 	public int getDefense() {
 		return 2;
 	}
+	
+	@Override
+	public CardParams getParams() {
+		return new MercatorParams();
+	}
 
 	@Override
-	public boolean performEffect(GameVisor g, int pos) {
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		
-		boolean performed = false;
-		
-		int money = 0;
-		
-		boolean valid = false;
-		
+		MercatorParams myParams = (MercatorParams)a;
+		boolean performed = true;
+		int money = myParams.getMoneyToSpend();
 		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		
-		while (!valid) {
-			
-			money = g.getController().getInt("How much sestertii do you want to spend?");
-			
-			if (money <= 3) { //"This fix comes directly from Stefan Feld, the gameÕs designer."
-				
-				if (money / 2 <= g.getPlayer(enemy).getVP()) {
-					
-					valid = true;
-					g.getCurrentPlayer().setMoney(g.getCurrentPlayer().getMoney() - money);
-					g.getCurrentPlayer().setVP(g.getCurrentPlayer().getVP() + money / 2);
-					g.getPlayer(enemy).setVP(g.getPlayer(enemy).getVP() - money / 2);
-					performed = true;
-				
-				} else {
-					
-					g.getController().showMessage("Can be used to purchase a maximum of 3 VPs (for 6 gold) per activation"); 
-					
-				}
-				
-			} else {
-				
-				g.getController().showMessage("You don't have that much sestertii");
-			
-			}
-			
-		}
+		// Note: according to acceptance, negative sestertii not possible.
+		if ((money / 2) > g.getPlayer(enemy).getVP()) {
+			money = g.getPlayer(enemy).getVP() * 2;
+		}	
 		
+		g.getCurrentPlayer().setMoney(g.getCurrentPlayer().getMoney() - money);
+		g.getPlayer(enemy).setMoney(g.getPlayer(enemy).getMoney() + money);
+			
+		g.getCurrentPlayer().setVP(g.getCurrentPlayer().getVP() + money / 2);
+		g.getPlayer(enemy).setVP(g.getPlayer(enemy).getVP() - money / 2);
 		
 		
 		return performed;
-		
 	}
 
 }

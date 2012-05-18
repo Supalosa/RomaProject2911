@@ -130,11 +130,11 @@ public class EssedumTester implements ITestSuite {
 		int[] diceRolls2 = {2, 2, 2};
 		g.setDiceRolls(diceRolls2);
 		
-		action = new ActivateCardAction();
+		action = new ActivateCardAction(null);
 		controller.insertInput("2"); // essedum on dice 2
 		action.execute(gv);
 		
-		action = new ActivateCardAction();
+		action = new ActivateCardAction(null);
 		controller.insertInput("2"); // essedum on dice 2
 		action.execute(gv);
 		

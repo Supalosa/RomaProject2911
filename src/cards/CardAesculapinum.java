@@ -1,7 +1,6 @@
 package cards;
 
-import java.util.*;
-
+import cards.activators.*;
 import roma.GameVisor;
 import enums.CardNames;
 
@@ -36,43 +35,21 @@ public class CardAesculapinum extends Card {
 		return 2;
 	}
 
+	public CardParams getParams () {
+		return new AesculapinumParams ();
+	}
 
-	public boolean performEffect(GameVisor g, int pos) {
-		
-		boolean performed = false;
-		
-		if (!g.isDiscardPileEmpty()) {
-			
-			List<Card> characters = new ArrayList<Card>();
-			
-			for (Card c : g.getDiscardPile().asList()) {
-				
-				if (!c.isBuilding()) {
-					
-					characters.add(c);
-					
-				}
-				
-			}
-			
-			if (!characters.isEmpty()) {
-				
-				Card selected = g.getController().getCard(characters, "Pick the card you wish to add to your hand");
-				// Also trigger events
-				if (selected != null) {
-					
-					g.getDiscardPile().removeCard(selected);
-					
-					g.getCurrentPlayer().addCard(selected);
-					
 	
-					performed = true;
-				}
-			}
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		
+		AesculapinumParams myParams = (AesculapinumParams) a;
+		boolean performed = true;
+		
+		Card revivedCard = g.getDiscardPile().getIndex(myParams.getPickedUpCard());
+		
+		g.getDiscardPile().removeCard(revivedCard);			
+		g.getCurrentPlayer().addCard(revivedCard);
 
-		} else {
-			g.getController().showMessage("The discard pile is empty.");
-		}
 		
 		return performed;
 

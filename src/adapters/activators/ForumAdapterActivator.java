@@ -3,6 +3,7 @@ package adapters.activators;
 import actions.*;
 import roma.*;
 import cards.Card;
+import cards.activators.ForumParams;
 import framework.interfaces.activators.*;
 
 /**
@@ -16,12 +17,15 @@ public class ForumAdapterActivator implements ForumActivator {
 	int fieldPosition;
 	Game game;
 	MockController controller;
+	ForumParams params;
+	
 	
 	public ForumAdapterActivator(int fieldPosition, Game game, Card theCard) {
 		this.theCard = theCard;
 		this.fieldPosition = fieldPosition;
 		this.game = game;
 		this.controller = (MockController)game.getController();
+		this.params = new ForumParams();
 		// Enter the dice disc you want to activate...
 		controller.insertInput(Integer.toString(fieldPosition));
 		
@@ -32,7 +36,7 @@ public class ForumAdapterActivator implements ForumActivator {
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction();	
+		IPlayerAction action = new ActivateCardAction(params);	
 		action.execute(game.getGameVisor());
 		
 	}
@@ -41,27 +45,21 @@ public class ForumAdapterActivator implements ForumActivator {
 
 	@Override
 	public void chooseActionDice(int actionDiceValue) {
-		controller.insertInput(Integer.toString(actionDiceValue));
-		
+		params.setForumDie(actionDiceValue);
 	}
 
 
 
 	@Override
 	public void chooseActivateTemplum(boolean activate) {
-		// TODO Auto-generated method stub
-		if (activate) {
-			controller.insertInput("Y");
-		} else {
-			controller.insertInput("N");
-		}
+		params.setUseTemplum(activate);
 	}
 
 
 
 	@Override
 	public void chooseActivateTemplum(int diceValue) {
-		// TODO Auto-generated method stub
+		//params.setUseTemplum(activate);
 		
 	}
 

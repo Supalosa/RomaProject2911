@@ -1,10 +1,8 @@
 package cards;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import roma.Game;
-import roma.GameVisor;
+import java.util.*;
+import cards.activators.*;
+import roma.*;
 import enums.CardNames;
 
 public class CardConsiliarius extends Card {
@@ -39,43 +37,37 @@ public class CardConsiliarius extends Card {
 		return 4;
 	}
 
-	public boolean performEffect(GameVisor g, int pos) {
-		
-		boolean performed = true;
-		
-		List<Card> characters = new ArrayList<Card>();
-		for (Card c : g.getField().getSideAsList(g.whoseTurn())) {
-			if (!c.isBuilding()) {
-				characters.add(c);
-			}
-		}
-		
-		// remove the cards from the field
-		for (Card c : characters) {
-			g.getField().removeCard(c);
-		}
-		
-		// replace them
-		Card selectedCard = null;
-		while (characters.size() > 0) {
-			int dicePosition = -1;
-			selectedCard = g.getController().getCard(characters, "Select a character card to lay.");
-			while (selectedCard == null) {
-				selectedCard = g.getController().getCard(characters, "Invalid card. Select a character card to lay.");
-			}
-			
-			g.getController().showField();
-			
-			while (dicePosition < 1 || dicePosition > Game.FIELD_SIZE) {
-				dicePosition = g.getController().getInt("Select a position to lay " + selectedCard.getName() + ":");
-			}
-			characters.remove(selectedCard);
-			g.getField().setCard(g.whoseTurn(), dicePosition-1, selectedCard);
+	@Override
+	public CardParams getParams() {
+		return new ConsiliariusParams();
+	}
 
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		ConsiliariusParams myParams = (ConsiliariusParams)a;
+		boolean performed = false;
+		
+		Map<Card, Integer> realMappings = new HashMap<Card, Integer>();
+		for (Map.Entry<Integer, Integer> mappings : myParams.getPositions().entrySet()) {
+			Card theCard = g.getField().getCard(g.whoseTurn(), mappings.getKey());
+			
+			realMappings.put(theCard, mappings.getValue());
+		}
+		
+		for (Map.Entry<Card, Integer> mappings : realMappings.entrySet()) {
+			Card theCard = mappings.getKey();
+			
+			//Remove card from the field
+			g.getField().removeCard(theCard);
+			
+			// Re-Add the card to the field
+			g.getField().setCard(g.whoseTurn(), mappings.getValue(), theCard);
+			
+			//System.out.println("Card at (" + theCard.getName() + ") -> " + mappings.getValue());
 		}
 		
 		return performed;
-
 	}
 
 }

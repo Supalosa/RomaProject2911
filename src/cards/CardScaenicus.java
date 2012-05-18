@@ -63,7 +63,7 @@ public class CardScaenicus extends Card {
 			selectedCard = g.getController().getCard(characters, "Invalid card. Select a character card to lay.");
 		}
 		
-		selectedCard.performEffect(g, pos);
+		selectedCard.performEffect(g, null, pos);
 		
 		if (selectedCard.getID() != CardNames.Scaenicus) {
 			performed = true;

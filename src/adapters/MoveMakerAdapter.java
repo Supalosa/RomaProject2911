@@ -59,6 +59,16 @@ public class MoveMakerAdapter implements MoveMaker {
 				activator = new ForumAdapterActivator(disc, game, activatedCard);
 			} else if (activatedCard.getID() == CardNames.Consiliarius) {
 				activator = new ConsiliariusAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Essedum) {
+				activator = new EssedumAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Centurio) {
+				activator = new CenturioAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Legionarius) {
+				activator = new LegionariusAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Mercator) {
+				activator = new MercatorAdapterActivator(disc, game, activatedCard);
+			} else if (activatedCard.getID() == CardNames.Onager) {
+				activator = new OnagerAdapterActivator(disc, game, activatedCard);
 			}
 		}
 		

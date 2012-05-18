@@ -26,7 +26,7 @@ public class TribunusPlebisAdapterActivator implements TribunusPlebisActivator {
 	
 	@Override
 	public void complete() {
-		IPlayerAction action = new ActivateCardAction();
+		IPlayerAction action = new ActivateCardAction(null);
 		MockController controller = (MockController)game.getController();
 		controller.insertInput(Integer.toString(fieldPosition));
 		action.execute(game.getGameVisor());

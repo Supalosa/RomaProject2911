@@ -4,15 +4,22 @@ import java.util.List;
 
 import roma.*;
 import cards.*;
+import cards.activators.*;
 
 public class ActivateCardAction implements IPlayerAction {
 	
 	int targetPos;
 	Card targetCard;
 	GameVisor game;
+	CardParams params;
 	int bribeDice;
 	boolean confirmBribe;
 	
+	public ActivateCardAction(CardParams params) {
+		
+		this.params = params;
+		
+	}
 	
 	public boolean isValid(GameVisor g) {
 		
@@ -59,13 +66,23 @@ public class ActivateCardAction implements IPlayerAction {
 			valid = false;
 			game.getController().showMessage("You don't have a card at that dice disc.");
 		
+		} else if (params == null) { // no params (unactivatable card)
+			valid = false;
+			game.getController().showMessage("You cannot activate that card.");
+
+		} else if (!params.isValid()) {
+			valid = false;
+			game.getController().showMessage(params.getError());
+			
 		}
+		
 		return valid;
 	}
 
 	public void execute(GameVisor g) {
 		
 		game = g;
+		
 		query();
 		
 		if(isValid(game)) {
@@ -76,14 +93,14 @@ public class ActivateCardAction implements IPlayerAction {
 					
 					game.getController().showMessage("Action cancelled.");
 					
-				} else if (targetCard.performEffect(game, targetPos)) {
+				} else if (targetCard.performEffect(game, targetPos, params)) {
 					
 					game.getPlayer(g.whoseTurn()).setVP(game.getPlayer(g.whoseTurn()).getVP() - bribeDice);
 					game.useDice(bribeDice);
 					
 				}
 				
-			} else if (targetCard.performEffect(game, targetPos)) {
+			} else if (targetCard.performEffect(game, targetPos, params)) {
 				
 				game.useDice(targetPos);
 				
@@ -103,6 +120,7 @@ public class ActivateCardAction implements IPlayerAction {
 		
 		game.getController().showField();
 		
+		
 		targetPos = game.getController().getInt("Choose the Dice Disc you want to activate");
 		if (targetPos >= 1 && targetPos <= Game.FIELD_SIZE) {
 			targetCard = game.getField().getCard(game.whoseTurn(),targetPos-1);
@@ -113,6 +131,14 @@ public class ActivateCardAction implements IPlayerAction {
 			confirmBribe = game.getController().getBoolean("Are you sure you want to activate that disc? Doing so will cost extra Sestertii.");
 		} else {
 			confirmBribe = true;
+		}
+		
+		// Get the card params
+		if (params == null && targetCard != null) {
+			params = targetCard.getParams();
+			if (params != null) {
+				params.query(game,  targetPos);
+			}
 		}
 		
 	}

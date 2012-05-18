@@ -3,6 +3,9 @@ package cards;
 import java.util.ArrayList;
 import java.util.List;
 
+import cards.activators.CardParams;
+import cards.activators.OnagerParams;
+
 import enums.*;
 
 import roma.*;
@@ -30,59 +33,44 @@ public class CardOnager extends Card {
 	}
 
 	public String getDescription() {
-		return "This Roman cata- pult attacks any opposing building. " +
+		return "This Roman catapult attacks any opposing building. " +
 				"The battle die is thrown once.";
 	}
 
 	public int getDefense() {
 		return 4;
 	}
+	
+	@Override
+	public CardParams getParams() {
+		return new OnagerParams();
+	}
 
-	public boolean performEffect(GameVisor g, int pos) {
-		
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		OnagerParams myParams = (OnagerParams)a;
 		boolean performed = false;
 		
 		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		Card target = g.getField().getCard(enemy, myParams.getPositionToAttack());
 		
-		List<Card> enemyField = g.getField().getSideAsList(enemy);
-		
-		List<Card> buildings = new ArrayList<Card>();
-		
-		for (Card c : enemyField) {
+		if (target != null && target.isBuilding()) {
+			int diceRoll =  myParams.getBattleDie();
+			g.getController().showMessage("The battle die rolled a " + diceRoll);
 			
-			if (c.isBuilding()) {
+			if (diceRoll >= target.getRealDefense()) {
 				
-				buildings.add(c);
+				g.getField().setCard(enemy, myParams.getPositionToAttack(), null);
+				g.discard(target);
+				g.getController().showMessage("You killed a " + target.getName() + "!");
+				
+			} else {
+				
+				g.getController().showMessage("You're weak...");
 				
 			}
-			
 		}
-		
-		Card target = null;
-		
-		while (target == null) {
-			
-			target = g.getController().getCard(buildings, "Which opposing building card do you wish to attack?"); 
-		
-		}
-		
-		int diceRoll = g.rollDice();
-		g.getController().showMessage("The battle die rolled a " + diceRoll);
-		
-		if (diceRoll >= target.getDefense()) {
-			
-			g.getField().setCard(enemy, enemyField.indexOf(target), null);
-			g.discard(target);
-			g.getController().showMessage("You killed a " + target.getName() + "!");
-			
-		} else {
-			
-			g.getController().showMessage("You're weak...");
-			
-		}
-		
 		return performed;
-
 	}
 
 

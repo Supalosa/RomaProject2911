@@ -32,7 +32,7 @@ public class SenatorAdapterActivator implements SenatorActivator {
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction();	
+		IPlayerAction action = new ActivateCardAction(null);	
 		action.execute(game.getGameVisor());
 		
 	}

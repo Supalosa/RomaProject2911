@@ -2,6 +2,9 @@ package cards;
 
 import java.util.*;
 
+import cards.activators.CardParams;
+import cards.activators.ConsulParams;
+
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
@@ -46,54 +49,22 @@ public class CardConsul extends Card {
 
 
 	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		boolean activated = false;
+	public CardParams getParams() {
+		return new ConsulParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		
-		if (g.getNumDiceRolls() > 1) {
-			// Build a list of dice rolls that exclude the one that activated this card.
-			List<Integer> diceRolls = new ArrayList<Integer>();
-			boolean removedActivator = false;
-			int roll;
-			for (int i = 0; i < Game.NUM_DIE; i++) {
-				roll = g.getDiceRoll(i);
-				if (roll > 0) { // dice was not used
-					if (removedActivator || roll != pos) {
-						diceRolls.add(roll);
-					} else {
-						removedActivator = true;
-					}
-				}
-			}
-			g.getController().showMessage("Available dice: " + diceRolls.toString());
-			
-			int diceRoll;
-			boolean increase;
-			diceRoll = g.getController().getInt("Enter of the value of the dice roll you want to change:");
-			while (diceRolls.contains(diceRoll) == false) {
-				diceRoll = g.getController().getInt("You don't have that die. Enter of the value of the dice roll you want to change:");
-	
-			}
-			
-	
-			increase = g.getController().getBoolean("Do you want to increase (Y) or decrease (N) the value of that die?");
-			if (increase && diceRoll == 6) {
-				g.getController().showMessage("You cannot increase the value of a 6 die.");
-			} else if (!increase && diceRoll == 1) {
-				g.getController().showMessage("You cannot decrease the value of a 1 die.");
-			} else {
-				if (increase) {
-					g.setDiceRoll(diceRoll, diceRoll+1);
-				} else {
-					g.setDiceRoll(diceRoll, diceRoll-1);
-				}
-				activated = true;
-			}
+		ConsulParams myParams = (ConsulParams)a;
+		if (myParams.isIncreaseDice()) {
+			g.setDiceRoll(myParams.getDiceValue(), myParams.getDiceValue()+1);
 		} else {
-			g.getController().showMessage("You cannot activate this card, because you will not have any dice available.");
+			g.setDiceRoll(myParams.getDiceValue(), myParams.getDiceValue()-1);
 		}
 		
-		return activated;
-
+		return true;
+		
 	}
 
 }

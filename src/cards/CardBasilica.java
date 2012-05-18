@@ -1,5 +1,6 @@
 package cards;
 
+import cards.activators.CardParams;
 import roma.GameVisor;
 import enums.CardNames;
 
@@ -36,6 +37,22 @@ public class CardBasilica extends Card {
 
 	public boolean performEffect(GameVisor g, int pos) {
 		g.getController().showMessage("You cannot activate this card.");
+		return false;
+	}
+
+	/**
+	 * Basilica has no params (i.e. unactivatable)
+	 */
+	@Override
+	public CardParams getParams() {
+		return null;
+	}
+
+	/**
+	 * Basilica cannot be activated
+	 */
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		return false;
 	}
 
