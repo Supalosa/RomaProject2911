@@ -11,38 +11,25 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class ConsulAdapterActivator implements ConsulActivator {
+public class ConsulAdapterActivator extends GenericAdapterActivator implements ConsulActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	boolean increase;
-	int changedDice;
+
 	ConsulParams params;
 	
 	public ConsulAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
+		super(fieldPosition, game, theCard);
+		
 		this.params = new ConsulParams();
 		
 	}
 	
 	
-	
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(params);
-		MockController controller = (MockController)game.getController();
+		execute(params);
 		
-		controller.insertInput(Integer.toString(fieldPosition));
-		
-		action.execute(game.getGameVisor());
-	
 	}
-
-
 
 	/**
 	 * We send Y if increasing value, N if decreasing

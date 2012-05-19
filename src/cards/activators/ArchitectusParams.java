@@ -8,13 +8,13 @@ import cards.*;
 public class ArchitectusParams extends CardParams {
 	
 	/**
-	 * Map of hand position->new position
+	 * Map of Card (in hand)->new position
 	 */
-	Map<Integer, Integer> cardPositions;
+	Map<Card, Integer> cardPositions;
 	
 	public ArchitectusParams() {
 		
-		cardPositions = new HashMap<Integer, Integer>();
+		cardPositions = new HashMap<Card, Integer>();
 		
 	}
 	
@@ -30,7 +30,7 @@ public class ArchitectusParams extends CardParams {
 				} while (dicePosition < 0 || dicePosition > Game.FIELD_SIZE);
 				
 				if (dicePosition != 0) {
-					addPosition(handIndex, dicePosition);
+					addPosition(c, dicePosition);
 				}
 			}
 			
@@ -47,11 +47,11 @@ public class ArchitectusParams extends CardParams {
 	 * @param hand the position of the card in the hand
 	 * @param new_pos new position of this card in terms of array indices [0-7]
 	 */
-	public void addPosition(int hand, int new_pos) {
-		cardPositions.put(hand, new_pos);
+	public void addPosition(Card card, int new_pos) {
+		cardPositions.put(card, new_pos);
 	}
 	
-	public Map<Integer, Integer> getPositions() {
+	public Map<Card, Integer> getPositions() {
 		return cardPositions;
 	}
 	

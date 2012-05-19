@@ -12,5 +12,6 @@ public interface IModifiable {
 	void removeModifier (IModifier mod);
 	List<IModifier> getModifiers();
 	ModifierTarget getModifiableType();
+	boolean hasModifier (String modName);
 	
 }

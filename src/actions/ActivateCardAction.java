@@ -27,53 +27,61 @@ public class ActivateCardAction implements IPlayerAction {
 		
 		boolean hasDice = false;
 		boolean hasBribe = false;
-		for (int i : game.getDiceRolls()) {
+		
+		/*
+		 * if we have params already, ignore everything... (HACK.. not sure if this is correct TODO)
+		 */
+		
+		if (params == null) {
 			
-			if (i == targetPos) {
+			for (int i : game.getDiceRolls()) {
 				
-				hasDice = true;
-				
-			} else if (i == bribeDice) {
-				
-				hasBribe = true;
+				if (i == targetPos) {
+					
+					hasDice = true;
+					
+				} else if (i == bribeDice) {
+					
+					hasBribe = true;
+					
+				}
 				
 			}
+			if (targetPos == Game.BRIBE_DISC) {
+				if (hasBribe == false) {
+					game.getController().showMessage("You don't have the dice you chose to bribe with.");
+					valid = false;
+				} else if (g.getPlayer(g.whoseTurn()).getMoney() < bribeDice) {
+					game.getController().showMessage("You don't have enough sestertii to activate the Bribe Disc!");
+					valid = false;
+				}
 			
-		}
-		if (targetPos == Game.BRIBE_DISC) {
-			if (hasBribe == false) {
-				game.getController().showMessage("You don't have the dice you chose to bribe with.");
+			} else if (!hasDice) { // not bribe disc, and dont have dice
+				
+				game.getController().showMessage("You don't have a dice corresponding to the dice [" + targetPos + "]");
 				valid = false;
-			} else if (g.getPlayer(g.whoseTurn()).getMoney() < bribeDice) {
-				game.getController().showMessage("You don't have enough sestertii to activate the Bribe Disc!");
+			
+			} else if (g.getField().isBlocked(g.whoseTurn(), targetPos-1)) {
+			
+				game.getController().showMessage("That disc is blocked!");
 				valid = false;
+			
 			}
-		
-		} else if (!hasDice) { // not bribe disc, and dont have dice
 			
-			game.getController().showMessage("You don't have a dice corresponding to the dice [" + targetPos + "]");
-			valid = false;
-		
-		} else if (g.getField().isBlocked(g.whoseTurn(), targetPos-1)) {
-		
-			game.getController().showMessage("That disc is blocked!");
-			valid = false;
-		
-		}
-		
-		if (targetCard == null) { // no card selected
+			if (targetCard == null) { // no card selected
+				
+				valid = false;
+				game.getController().showMessage("You don't have a card at that dice disc.");
 			
-			valid = false;
-			game.getController().showMessage("You don't have a card at that dice disc.");
-		
-		} else if (params == null) { // no params (unactivatable card)
-			valid = false;
-			game.getController().showMessage("You cannot activate that card.");
-
-		} else if (!params.isValid()) {
-			valid = false;
-			game.getController().showMessage(params.getError());
-			
+			} else if (params == null) { // no params (unactivatable card)
+				valid = false;
+				game.getController().showMessage("You cannot activate that card.");
+	
+			} else if (!params.isValid()) {
+				valid = false;
+				game.getController().showMessage(params.getError());
+				
+			}
 		}
 		
 		return valid;

@@ -11,39 +11,25 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class CenturioAdapterActivator implements CenturioActivator {
+public class CenturioAdapterActivator extends GenericAdapterActivator implements CenturioActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	MockController controller;
 	CenturioParams params;
 	
 	public CenturioAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
-		this.controller = (MockController)game.getController();
+		super(fieldPosition, game, theCard);
+		
 		this.params = (CenturioParams) theCard.getParams();
 		
 	}
 	
 	
-	
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(params);	
-		
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
-				
-				
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
-
-
+	
 
 	@Override
 	public void giveAttackDieRoll(int roll) {

@@ -53,7 +53,7 @@ public class CardForum extends Card {
 			
 			
 			// use dice
-			g.useDice(pos);
+			//g.useDice(pos);
 			g.useDice(myParams.getForumDie());
 			vpIncrease = myParams.getForumDie();
 			
@@ -75,10 +75,12 @@ public class CardForum extends Card {
 			
 			if (myParams.isUseTemplum()) {
 				int[] rolls = g.getDiceRolls();
-				
+				boolean removedActivator = false;
 				for (int i = 0; i < rolls.length; i++) {
 					
-					if (rolls[i] != 0) {
+					if (rolls[i] == pos && removedActivator == false) {
+						removedActivator = true;
+					} else if (rolls[i] != 0) {
 						
 						vpIncrease += g.getDiceRoll(i);
 						g.getController().showMessage("Added " + g.getDiceRoll(i) + " VPs to your haul");
@@ -101,7 +103,7 @@ public class CardForum extends Card {
 		
 		}
 		
-		return false;
+		return true;
 
 	}
 

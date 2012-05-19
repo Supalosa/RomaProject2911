@@ -8,7 +8,7 @@ import enums.*;
 import modifiers.*;
 
 
-public abstract class Card implements IModifiable {
+public abstract class Card implements IModifiable, Cloneable {
 	
 	private int ownerId; // possibly redundant, id of player 0..1 of owner
 	private boolean isInPlay; // possibly redundant
@@ -16,7 +16,7 @@ public abstract class Card implements IModifiable {
 	List<IModifier> modifiers; // list of modifiers applying to this card
 	List<IModifier> castedModifiers; // list of modifiers casted by this card
 	private int realDefense; // defense after modifiers, etc
-	
+		
 /*	private CardNames id;
 	private int costToPlay;
 	private int diceToActivate;
@@ -35,6 +35,7 @@ public abstract class Card implements IModifiable {
 		modifiers = new ArrayList<IModifier>();
 		castedModifiers = new ArrayList<IModifier>();
 		realDefense = getDefense();
+		
 	}
 	
 	/* Card Definition boilerplates */
@@ -68,19 +69,26 @@ public abstract class Card implements IModifiable {
 	}
 	/* Events */
 	
-	// onEnterField: fires whenever a card enters the field (ALL cards receive event)
+	/**
+	 *   onEnterField: fires whenever a card enters the field (ALL cards receive event)
+	 */
 	public void onEnterField(Field f, int ownerId, int position) {
 
 	}
 	
-	// onLeaveField: fires when the card leaves the field (ALL cards recieve event)
-	public void onLeaveField(Field f, int ownerId, int position) {
+	/**
+	 * onLeaveField: fires when the card leaves the field (ALL cards recieve event).
+	 * @param g TODO
+	 */
+	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
 		if (f.getCard(ownerId, position) == this) { // if this card is the one that left
 			for (IModifier mod : modifiers) {
 				mod.unapply();
 			}
 			modifiers.clear();
 		}
+		
+		return true;
 	}
 	
 	// onTurnStart: when the turn starts
@@ -113,9 +121,14 @@ public abstract class Card implements IModifiable {
 		
 	}
 	
-	// onEnterDiscard: discard pile
-	public void onEnterDiscard() {
-		
+	/**
+	 * onEnterDiscard: fires when this card goes to the discard pile.
+	 * @return whether the card should actually go there or not.
+	 */
+	public boolean onEnterDiscard() {
+		boolean remove = true;
+
+		return remove;
 	}
 	
 	// onLeaveDiscard: 
@@ -130,6 +143,51 @@ public abstract class Card implements IModifiable {
 	
 	// activated (after performEffect)
 	public void onAfterActivate() {
+		
+	}
+	
+	/**
+	 * Triggers when this card is attacked. Overridable.
+	 * @param g TODO
+	 * @param c The card that is attacking this card.
+	 * @param pos TODO
+	 * @param battleDie The battle die value (after modification)
+	 * @return Whether the card dies or not
+	 */
+	public boolean onAttacked(GameVisor g, Card c, int pos, int battleDie) {
+		boolean killed = false;
+		int ownerId = getOwnerID();
+		boolean hasGrimReaperAura = hasModifier(GrimReaperAura.NAME);
+		if (battleDie >= getRealDefense()) {
+			
+			/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
+				
+				System.out.println (g.getField().getCard(ownerId, i));
+				
+			}
+			System.out.println (getName() + " [" + getOwnerID() + "] at " + (pos) + " died: " + battleDie + " > " + getRealDefense());
+			*/
+			g.getField().setCard(getOwnerID(), pos, null);
+
+			// grim reaper check
+			if (hasGrimReaperAura) {
+				//System.out.println ("Saved by Grim Reaper");
+				g.getPlayer(ownerId).addCard(this);
+			} else {
+				//System.out.println ("Killed...");
+
+				g.discard(this);
+			}
+			killed = true;
+			
+			/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
+				
+				System.out.println (g.getField().getCard(ownerId, i));
+				
+			}*/
+		}
+		
+		return killed;
 		
 	}
 	
@@ -161,6 +219,18 @@ public abstract class Card implements IModifiable {
 		return ModifierTarget.Card;
 	}
 	
+	public boolean hasModifier (String modName) {
+		boolean hasMod = false;
+		
+		for (IModifier mod : getModifiers()) {
+			if (mod.getName().equals(modName)) {
+				hasMod = true;
+			}
+		}
+		
+		return hasMod;
+	}
+	
 	public abstract CardNames getID();
 	public abstract int getCostToPlay();
 	public abstract int getDiceToActivate();
@@ -172,6 +242,17 @@ public abstract class Card implements IModifiable {
 	public abstract CardParams getParams();	
 	public abstract boolean performEffect (GameVisor g, int pos, CardParams a);
 	
+	public Card getCopy() {
+		Card copy = null;
+		try {
+			copy = (Card) this.clone();
+		} catch (CloneNotSupportedException e) {
+			System.err.println("Error: " + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return copy;
+	}
 	
 }
 

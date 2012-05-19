@@ -40,36 +40,9 @@ public class MoveMakerAdapter implements MoveMaker {
 		
 		CardActivator activator = null;
 		cards.Card activatedCard = game.getField().getCard(game.whoseTurn(), disc-1);
-		
-		// TODO better switching
+
 		if (activatedCard != null) {
-			if (activatedCard.getID() == CardNames.Tribunus_Plebis) {
-				activator = new TribunusPlebisAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID () == CardNames.Legat){
-				activator = new LegatAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID () == CardNames.Sicarius){
-				activator = new SicariusAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID () == CardNames.Aesculapinum) {
-				activator = new AesculapinumAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Consul) {
-				activator = new ConsulAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Senator) {
-				activator = new ConsulAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Forum) {
-				activator = new ForumAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Consiliarius) {
-				activator = new ConsiliariusAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Essedum) {
-				activator = new EssedumAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Centurio) {
-				activator = new CenturioAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Legionarius) {
-				activator = new LegionariusAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Mercator) {
-				activator = new MercatorAdapterActivator(disc, game, activatedCard);
-			} else if (activatedCard.getID() == CardNames.Onager) {
-				activator = new OnagerAdapterActivator(disc, game, activatedCard);
-			}
+			activator = CardActivatorAdapter.getActivator(activatedCard.getID(), disc, game, activatedCard);
 		}
 		
 		return activator;
@@ -118,8 +91,15 @@ public class MoveMakerAdapter implements MoveMaker {
 	@Override
 	public CardActivator activateBribeDisc(int diceToUse)
 			throws UnsupportedOperationException {
-		// TODO Auto-generated method stub
-		return null;
+		GenericAdapterActivator activator = null;
+		cards.Card activatedCard = game.getField().getCard(game.whoseTurn(), Game.BRIBE_DISC-1);
+
+		if (activatedCard != null) {
+			activator = (GenericAdapterActivator) CardActivatorAdapter.getActivator(activatedCard.getID(), Game.BRIBE_DISC-1, game, activatedCard);
+			activator.setBribe(diceToUse);
+		}
+		
+		return activator;
 	}
 
 	/**

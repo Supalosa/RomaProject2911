@@ -2,6 +2,8 @@ package cards;
 
 import java.util.*;
 
+import cards.activators.CardParams;
+
 import roma.*;
 import enums.*;
 
@@ -42,6 +44,18 @@ public class CardTelephoneBox extends Card {
 		g.getController().showMessage("Telephone Box activated");
 		return true;
 
+	}
+
+	@Override
+	public CardParams getParams() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

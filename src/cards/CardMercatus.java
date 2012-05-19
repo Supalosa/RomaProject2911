@@ -2,6 +2,9 @@ package cards;
 
 import java.util.List;
 
+import cards.activators.CardParams;
+import cards.activators.MercatusParams;
+
 import roma.*;
 import enums.*;
 
@@ -36,8 +39,15 @@ public class CardMercatus extends Card {
 		return 3;
 	}
 
-	public boolean performEffect(GameVisor g, int pos) {
-		
+
+
+	@Override
+	public CardParams getParams() {
+		return new MercatusParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		boolean performed = false;
 		
 		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
@@ -62,7 +72,6 @@ public class CardMercatus extends Card {
 		performed = true;
 		
 		return performed;
-
 	}
 
 }

@@ -44,11 +44,28 @@ public abstract class Pile {
 	}
 	*/
 	
+	/**
+	 * Adds a card to the end of the pile.
+	 * @param c
+	 */
 	public void addCard (Card c) {
 		//s.add(0, c);
 		//System.out.println ("AddCard: " + c.getName());
 		s.add(c);
 	}
+	
+	/**
+	 * Adds a card to the front of the pile.
+	 * Necessary for acceptance compliance, because the discard pile apparently is a stack...
+	 * @param c
+	 */
+	public void addCardToFront (Card c) {
+		//s.add(0, c);
+		//System.out.println ("AddCard: " + c.getName());
+		s.add(0, c);
+	}
+	
+	
 	
 	public void removeCard (Card c) {
 		s.remove(c);

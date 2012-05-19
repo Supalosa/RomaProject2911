@@ -1,8 +1,12 @@
 package adapters.activators;
 
+import java.util.Vector;
+
 import actions.*;
+import adapters.CardNameAdapter;
 import roma.*;
 import cards.Card;
+import cards.activators.SenatorParams;
 import framework.interfaces.activators.*;
 
 /**
@@ -10,37 +14,50 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class SenatorAdapterActivator implements SenatorActivator {
+public class SenatorAdapterActivator extends GenericAdapterActivator implements SenatorActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	MockController controller;
+	SenatorParams params;
+	Vector<Card> handCopy; // copy of the hand for mapping purposes
 	
 	public SenatorAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
-		this.controller = (MockController)game.getController();
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
+		super(fieldPosition, game, theCard);
 		
+		params = (SenatorParams)theCard.getParams();
+		
+		handCopy = (Vector<Card>) game.getCurrentPlayer().getHand().clone();
 	}
-	
 	
 	
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(null);	
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
 
 
 	@Override
-	public void layCard(framework.cards.Card myCard, int whichDiceDisc) {
-		// TODO Auto-generated method stub
+	public void layCard(framework.cards.Card card, int diceDisc) {
+		boolean foundCard = false;
+		
+		for (int pos = 0; pos < handCopy.size() && foundCard == false; pos++) {
+			// Get the card in that position
+			Card romaCard = handCopy.get(pos);
+			if (romaCard != null) {
+				// Get its acceptance name name
+				framework.cards.Card acceptanceName = CardNameAdapter.getAcceptanceCard(romaCard.getName());
+				
+				// Found the match!
+				if (acceptanceName == card) {
+					params.addPosition(romaCard, diceDisc); 
+					// Remove the entry in the field copy (so it won't get picked up again)
+					handCopy.set(pos, null);
+					foundCard = true;
+					System.out.println("Found " + card + " in position " + pos + " in the hand, going to pos " + (diceDisc));
+				}
+				
+			}
+		}
 		
 	}
 

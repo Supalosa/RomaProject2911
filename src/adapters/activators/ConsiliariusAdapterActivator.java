@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import java.util.*;
 
 import actions.*;
 import adapters.CardNameAdapter;
@@ -14,36 +13,31 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class ConsiliariusAdapterActivator implements ConsiliariusActivator {
-
-	Card theCard;
-	int fieldPosition;
-	Game game;
+public class ConsiliariusAdapterActivator extends GenericAdapterActivator implements ConsiliariusActivator {
 
 	ConsiliariusParams params;
 	
+	Card[] fieldList;
+	
 	public ConsiliariusAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		super(fieldPosition, game, theCard);;
 		
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
 		this.params = (ConsiliariusParams) theCard.getParams();
 		
+		// Need a copy of fieldList
+		// so we can destroy the values (i.e. avoid doubling
+		// up of cards with same name)
+		fieldList = game.getField().getSide(game.whoseTurn());
+		
 	}
-	
 	
 	
 	@Override
 	public void complete() {
-		IPlayerAction action = new ActivateCardAction(params);
-		MockController controller = (MockController)game.getController();
-
-		controller.insertInput(Integer.toString(fieldPosition));
 		
-
-		action.execute(game.getGameVisor());
+		execute(params);
+		
 	}
-
 
 
 	/**
@@ -51,18 +45,25 @@ public class ConsiliariusAdapterActivator implements ConsiliariusActivator {
 	 */
 	@Override
 	public void placeCard(framework.cards.Card card, int diceDisc) {
+		boolean foundCard = false;
 		
-		for (int pos = 0; pos < Game.FIELD_SIZE; pos++) {
+		for (int pos = 0; pos < Game.FIELD_SIZE && foundCard == false; pos++) {
 			// Get the card in that position
-			Card romaCard = game.getField().getCard(game.whoseTurn(), pos);
+			Card romaCard = fieldList[pos];
 			if (romaCard != null) {
 				// Get its acceptance name name
 				framework.cards.Card acceptanceName = CardNameAdapter.getAcceptanceCard(romaCard.getName());
 				
-				/* This will NOT work for doubled up cards!!! */
+				// Found the match!
 				if (acceptanceName == card) {
 					params.addPosition(pos, diceDisc-1); 
+					// Remove the entry in the field copy (so it won't get picked up again)
+					fieldList[pos] = null;
+					foundCard = true;
+					
+					//System.out.println ("Consil: " + card + " [" + pos + "] -> " + diceDisc);
 				}
+				
 			}
 		}
 		

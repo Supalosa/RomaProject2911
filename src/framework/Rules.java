@@ -17,7 +17,7 @@ public class Rules {
     /**
      * The number of cards in a player's hand at the start of the game.
      */
-    public static final int STARTING_HAND_CARDS = 4;
+    public static final int STARTING_HAND_CARDS = 5;
 
     /**
      * The total number of cards present in the game.
@@ -27,7 +27,7 @@ public class Rules {
      * players' hands.
      * </p>
      */
-    public static final int NUM_CARDS = 52;
+    public static final int NUM_CARDS = 56;
 
     /**
      * The total number of Victory Points present in the game.

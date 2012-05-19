@@ -11,19 +11,13 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class LegionariusAdapterActivator implements LegionariusActivator {
+public class LegionariusAdapterActivator extends GenericAdapterActivator implements LegionariusActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	MockController controller;
 	LegionariusParams params;
 	
 	public LegionariusAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
-		this.controller = (MockController)game.getController();
+		super(fieldPosition, game, theCard);
+		
 		this.params = (LegionariusParams) theCard.getParams();
 		
 	}
@@ -33,15 +27,10 @@ public class LegionariusAdapterActivator implements LegionariusActivator {
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(params);	
-		
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
-				
-				
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
+	
 
 
 

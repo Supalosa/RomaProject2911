@@ -1,10 +1,10 @@
 package cards;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import roma.Game;
-import roma.GameVisor;
+import cards.activators.*;
+
+import roma.*;
 import enums.CardNames;
 
 public class CardSenator extends Card {
@@ -45,35 +45,37 @@ public class CardSenator extends Card {
 		return 3;
 	}
 
-	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		boolean performed = false;
-		boolean stop = false;
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		SenatorParams myParams = (SenatorParams)a;
+		boolean performed = true;
+
+		Card laidOverCard;
 		
-		List<Card> characters = new ArrayList<Card>();
-		for (Card c : g.getCurrentPlayer().getHand()) {
-			if (!c.isBuilding()) {
-				characters.add(c);
+		for (Map.Entry<Card, Integer> mappings : myParams.getPositions().entrySet()) {
+			Card theCard = mappings.getKey();
+			// Remove card from their hand
+			g.getPlayer(g.whoseTurn()).removeCard(theCard);
+			
+			// Add the card to the field, discarding replaced card if necessary
+			if ((laidOverCard = g.getField().setCard(g.whoseTurn(), mappings.getValue()-1, theCard)) != null) {
+				g.discard(laidOverCard);
 			}
 		}
 		
-		Card selectedCard = null;
-		while (stop == false) {
-			int dicePosition = -1;
-			selectedCard = g.getController().getCard(characters, "Select a character card to lay. Enter negative to quit.");
-			if (selectedCard == null) {
-				stop = true;
-			} else {
-				performed = true;
-				while (dicePosition < 1 || dicePosition > Game.FIELD_SIZE) {
-					dicePosition = g.getController().getInt("Select a position to lay " + selectedCard.getName() + ":");
-				}
-				g.getCurrentPlayer().removeCard(selectedCard);
-				g.getField().setCard(g.whoseTurn(), dicePosition-1, selectedCard);
-			}
+		for (int i = 0; i < Game.FIELD_SIZE; i++) {
+		
+			System.out.println (g.getField().getCard(g.whoseTurn(), i));
+		
 		}
+
 		
 		return performed;
+
+	}
+
+	@Override
+	public CardParams getParams() {
+		return new SenatorParams();
 	}
 
 }

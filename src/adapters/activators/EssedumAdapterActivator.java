@@ -11,35 +11,22 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class EssedumAdapterActivator implements EssedumActivator {
+public class EssedumAdapterActivator extends GenericAdapterActivator implements EssedumActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	MockController controller;
+
 	EssedumParams params;
 	
 	public EssedumAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
-		this.controller = (MockController)game.getController();
+		super(fieldPosition, game, theCard);
+		
 		this.params = (EssedumParams) theCard.getParams();
 		
 	}
 	
-	
-	
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(params);	
-		
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
-				
-				
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
 

@@ -57,6 +57,7 @@ public class CardCenturio extends Card {
 		boolean performed = false;
 		int enemyPlayer = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		Card enemyCard = g.getField().getCard(enemyPlayer, pos-1);
+		int battleValue = myParams.getBattleDie();
 		// determine time paradox here
 		
 		if (enemyCard == null) {
@@ -66,12 +67,17 @@ public class CardCenturio extends Card {
 			performed = true;
 			if (myParams.isUseExtraDice()) {
 				g.useDice(myParams.getExtraDieValue());
+				battleValue += myParams.getExtraDieValue();
 			}
 			
-			if (myParams.getBattleDie() >= enemyCard.getRealDefense()) {
-				g.discard(enemyCard);
-				g.getField().setCard(enemyPlayer, pos-1, null);
+			if (enemyCard.onAttacked(g, this, pos-1, battleValue)) {
+
 				g.getController().showMessage("You killed a " + enemyCard.getName() + "!");
+				
+			} else {
+				
+				g.getController().showMessage("Could not kill the target, battle value was " + battleValue);
+				
 			}
 		}
 		

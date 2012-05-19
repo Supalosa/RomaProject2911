@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import roma.*;
-import cards.*;
 import enums.CardNames;
 
 public class ForumParams extends CardParams {

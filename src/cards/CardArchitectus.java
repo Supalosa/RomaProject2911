@@ -40,18 +40,25 @@ public class CardArchitectus extends Card {
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		ArchitectusParams myParams = (ArchitectusParams)a;
 		boolean performed = true;
+		Card laidOverCard;
 
 		
-		for (Map.Entry<Integer, Integer> mappings : myParams.getPositions().entrySet()) {
-			Card theCard = g.getPlayer(g.whoseTurn()).getHand().get(mappings.getKey());
-			
+		for (Map.Entry<Card, Integer> mappings : myParams.getPositions().entrySet()) {
+			Card theCard = mappings.getKey();
 			// Remove card from their hand
 			g.getPlayer(g.whoseTurn()).removeCard(theCard);
 			
-			// Add the card to the field
-			g.getField().setCard(g.whoseTurn(), mappings.getValue()-1, theCard);
+			// Add the card to the field, discarding replaced card if necessary
+			if ((laidOverCard = g.getField().setCard(g.whoseTurn(), mappings.getValue()-1, theCard)) != null) {
+				g.discard(laidOverCard);
+			}
 		}
 		
+		for (int i = 0; i < Game.FIELD_SIZE; i++) {
+		
+			System.out.println (g.getField().getCard(g.whoseTurn(), i));
+		
+		}
 
 		
 		return performed;

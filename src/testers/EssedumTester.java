@@ -74,7 +74,7 @@ public class EssedumTester implements ITestSuite {
 		int[] diceRolls = {2, 2, 2};
 		g.setDiceRolls(diceRolls);
 		gv.getCurrentPlayer().setMoney(1000);
-		action = new ActivateCardAction();
+		action = new ActivateCardAction(null);
 		controller.insertInput("2"); // essedum on dice 2
 		action.execute(gv);
 		
@@ -86,7 +86,7 @@ public class EssedumTester implements ITestSuite {
 		System.out.println ("> Activating Essedum effect 2x");
 		
 		
-		action = new ActivateCardAction();
+		action = new ActivateCardAction(null);
 		controller.insertInput("2"); // essedum on dice 2
 		action.execute(gv);
 		

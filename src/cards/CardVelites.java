@@ -3,6 +3,10 @@ package cards;
 import java.util.ArrayList;
 import java.util.List;
 
+import cards.activators.CardParams;
+import cards.activators.OnagerParams;
+import cards.activators.VelitesParams;
+
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
@@ -44,52 +48,36 @@ public class CardVelites extends Card {
 	public int getDefense() {
 		return 3;
 	}
+	
+
 	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		
-		boolean performed = false;
+	public CardParams getParams() {
+		return new VelitesParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		VelitesParams myParams = (VelitesParams)a;
+		boolean performed = true;
 		
 		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		Card target = g.getField().getCard(enemy, myParams.getPositionToAttack());
 		
-		List<Card> enemyField = g.getField().getSideAsList(enemy);
-		
-		List<Card> characters = new ArrayList<Card>();
-		
-		for (Card c : enemyField) {
+		if (target != null && !target.isBuilding()) {
+			int diceRoll =  myParams.getBattleDie();
+			g.getController().showMessage("The battle die rolled a " + diceRoll);
 			
-			if (c.isBuilding()) {
+			if (target.onAttacked(g, this, myParams.getPositionToAttack(), diceRoll)) {
+
+				g.getController().showMessage("You killed a " + target.getName() + "!");
 				
-				characters.add(c);
+			} else {
+				
+				g.getController().showMessage("Could not kill the target, battle value was " + diceRoll);
 				
 			}
-			
 		}
-		
-		Card target = null;
-		
-		while (target == null) {
-			
-			target = g.getController().getCard(characters, "Which opponent character card do you wish to attack?"); 
-		
-		}
-		
-		int diceRoll = g.rollDice();
-		g.getController().showMessage("The battle die rolled a " + diceRoll);
-		
-		if (diceRoll >= target.getDefense()) {
-			
-			g.getField().setCard(enemy, enemyField.indexOf(target), null);
-			g.discard(target);
-			g.getController().showMessage("You killed a " + target.getName() + "!");
-			
-		} else {
-			
-			g.getController().showMessage("You're weak...");
-			
-		}
-		
 		return performed;
-
 	}
 
 }

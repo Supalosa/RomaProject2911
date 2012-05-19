@@ -61,7 +61,7 @@ public class Game {
 		deck = new Deck();
 
 		
-		field = new Field();
+		field = new Field(this);
 		discardPile = new DiscardPile();
 		
 		diceRolls = new int[NUM_DIE];
@@ -443,7 +443,7 @@ public class Game {
 	public void discard(Card c) {
 		
 		// doesn't need handler: discardPile calls it
-		discardPile.addCard(c);
+		discardPile.addCardToFront(c);
 		
 	}
 	

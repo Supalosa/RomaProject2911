@@ -10,17 +10,13 @@ import cards.activators.*;
  * @author Supalosa
  *
  */
-public class LegatAdapterActivator implements LegatActivator {
+public class LegatAdapterActivator extends GenericAdapterActivator implements LegatActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
 	LegatParams params;
 	
 	public LegatAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
+		super(fieldPosition, game, theCard);
+		
 		this.params = new LegatParams();
 	}
 	
@@ -29,11 +25,9 @@ public class LegatAdapterActivator implements LegatActivator {
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(params);
-		MockController controller = (MockController)game.getController();
-		controller.insertInput(Integer.toString(fieldPosition));
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
+	
 
 }

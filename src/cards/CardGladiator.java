@@ -1,5 +1,7 @@
 package cards;
 
+import cards.activators.CardParams;
+import cards.activators.GladiatorParams;
 import roma.*;
 import enums.*;
 
@@ -41,54 +43,41 @@ public class CardGladiator extends Card {
 		return 5;
 	}
 
+
 	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		
+	public CardParams getParams() {
+		return new GladiatorParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		GladiatorParams myParams = (GladiatorParams) a;
 		boolean activated = false;
 		int enemyId = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
-		g.getController().showField();
-		
-		int targetPos = 0;
-		boolean valid = false;
-		
-		while (!valid) {
-			
-			targetPos = g.getController().getInt("Choose the enemy (dice disc) you want to return:");
 
-			if ((targetPos > 0 || targetPos <= Game.FIELD_SIZE)) {
-				
-				Card targetCard = g.getField().getCard(enemyId,targetPos-1);
-				
-				if (targetCard != null) {
-					
-					if (!targetCard.isBuilding()) {
-						
-						valid = true;
-						g.getField().setCard(enemyId, targetPos-1, null);
-						g.getPlayer(enemyId).addCard(targetCard);
-						activated = true;
-						
-					} else {
-						
-						g.getController().showMessage("Not a Character card");
-						
-					}
-				} else {
-					
-					g.getController().showMessage("No card there");
-					
-				}
-				
+
+		int targetPos = myParams.getPositionToAttack();
+		
+		Card targetCard = g.getField().getCard(enemyId,targetPos);
+
+		if (targetCard != null) {
+
+			if (!targetCard.isBuilding()) {
+
+				g.getField().setCard(enemyId, targetPos, null);
+				g.getPlayer(enemyId).addCard(targetCard);
+				activated = true;
+
 			} else {
-				
-				g.getController().showMessage("Invalid dice disc.");
+
+				g.getController().showMessage("Not a Character card");
 
 			}
-			
+		} else {
+			// time paradox?
 		}
 
 		return activated;
-
 	}
 
 }

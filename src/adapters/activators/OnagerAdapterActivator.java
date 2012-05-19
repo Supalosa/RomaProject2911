@@ -11,35 +11,22 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class OnagerAdapterActivator implements OnagerActivator {
+public class OnagerAdapterActivator extends GenericAdapterActivator implements OnagerActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	MockController controller;
 	OnagerParams params;
 	
 	public OnagerAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
-		this.controller = (MockController)game.getController();
+		super(fieldPosition, game, theCard);
+		
 		this.params = (OnagerParams) theCard.getParams();
 		
 	}
 	
 	
-	
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(params);	
-		
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
-				
-				
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
 

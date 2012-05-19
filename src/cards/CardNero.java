@@ -2,6 +2,10 @@ package cards;
 
 import java.util.*;
 
+import cards.activators.CardParams;
+import cards.activators.NeroParams;
+import cards.activators.SicariusParams;
+
 import roma.Game;
 import roma.GameVisor;
 import enums.CardNames;
@@ -34,47 +38,36 @@ public class CardNero extends Card {
 	}
 
 	public int getDefense() {
-		// TODO Auto-generated method stub
 		return 9;
 	}
 
-	public boolean performEffect(GameVisor g, int pos) {
-		
-		boolean performed = false;
-		
-		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
-		
-		List<Card> enemyField = g.getField().getSideAsList(enemy);
-		
-		List<Card> buildings = new ArrayList<Card>();
-		
-		for (Card c : enemyField) {
-			
-			if (c.isBuilding()) {
-				
-				buildings.add(c);
-				
-			}
-			
-		}
-		
-		Card destroy = null;
-		
-		while (destroy == null) {
-			
-			destroy = g.getController().getCard(buildings, "Which opposing building card do you wish to destroy?"); 
-		
-		}
-		
-		g.getField().setCard(g.whoseTurn(), pos, null);
-		g.getField().setCard(enemy, enemyField.indexOf(destroy), null);
-		g.discard(destroy);
-		g.discard(this);
-		
-		performed = true;
-		
-		return performed;
+	@Override
+	public CardParams getParams() {
+		return new NeroParams();
+	}
 
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		boolean performed = true;
+		NeroParams myParams = (NeroParams) a;
+		
+		int enemyPos = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		Card targetCard = g.getField().getCard(enemyPos, myParams.getTargetPos());
+		
+		if (targetCard != null && targetCard.isBuilding()) {
+			performed = true;
+			g.getField().setCard(g.whoseTurn(), pos-1, null);
+			g.discard(this);
+			
+			g.getField().removeCard(targetCard);
+			g.discard(targetCard);
+			
+			
+		} else {
+			
+		}
+
+		return performed;
 	}
 
 }

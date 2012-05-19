@@ -3,6 +3,10 @@ package cards;
 import java.util.ArrayList;
 import java.util.List;
 
+import cards.activators.AesculapinumParams;
+import cards.activators.CardParams;
+import cards.activators.HaruspexParams;
+
 import roma.GameVisor;
 import enums.CardNames;
 
@@ -44,35 +48,23 @@ public class CardHaruspex extends Card {
 		return 3;
 	}
 
-	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		boolean performed = false;
-		
-		if (!g.getDeck().isEmpty()) {
-			
-			List<Card> choices = new ArrayList<Card>();
-			
-			for (Card c : g.getDeck().asList()) {
-				choices.add(c);
-
-			}
-
-
-			Card selected = g.getController().getCard(choices, "Pick the card you wish to add to your hand");
-			if (selected != null) {
-				g.getCurrentPlayer().addCard(selected);
-				g.getDeck().removeCard(selected);
-				g.getDeck().shuffle();
-				performed = true;
-			} else {
-				g.getController().showMessage("That card was out of range.");
-			}
-
-		} else {
-			g.getController().showMessage("The deck is empty.");
-		}
-		
-		return performed;
+	public CardParams getParams () {
+		return new HaruspexParams ();
 	}
 
+	
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		
+		HaruspexParams myParams = (HaruspexParams) a;
+		boolean performed = true;
+		
+		Card pickedCard = g.getDeck().getIndex(myParams.getPickedUpCard());
+		
+		g.getDeck().removeCard(pickedCard);			
+		g.getCurrentPlayer().addCard(pickedCard);
+
+		
+		return performed;
+
+	}
 }

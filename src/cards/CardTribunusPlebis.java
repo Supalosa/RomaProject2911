@@ -53,6 +53,7 @@ public class CardTribunusPlebis extends Card {
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		boolean performed = false;
 		
+		//System.out.println ("Tribunus Plebis activated.");
 		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		
 		g.getCurrentPlayer().setVP(g.getCurrentPlayer().getVP() + 1);

@@ -5,8 +5,9 @@ import cards.Card;
 public class DiscardPile extends Pile {
 
 	public void addCard (Card c) {
-		c.onEnterDiscard();
-		super.addCard(c);
+		if (c.onEnterDiscard()) {
+			super.addCard(c);
+		}
 	}
 	
 	public void removeCard (Card c) {

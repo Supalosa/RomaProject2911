@@ -11,37 +11,26 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class ForumAdapterActivator implements ForumActivator {
+public class ForumAdapterActivator extends GenericAdapterActivator implements ForumActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	MockController controller;
 	ForumParams params;
 	
 	
 	public ForumAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
-		this.controller = (MockController)game.getController();
+		super(fieldPosition, game, theCard);
+		
 		this.params = new ForumParams();
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
+
 		
 	}
-	
-	
 	
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(params);	
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
-
-
+	
 
 	@Override
 	public void chooseActionDice(int actionDiceValue) {

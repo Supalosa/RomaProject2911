@@ -2,6 +2,12 @@ package cards;
 
 import java.util.*;
 
+import modifiers.GrimReaperAura;
+import modifiers.IModifier;
+import modifiers.TurrisAura;
+
+import cards.activators.CardParams;
+
 import roma.*;
 import enums.*;
 
@@ -38,11 +44,92 @@ public class CardGrimReaper extends Card {
 		return 3;
 	}
 
-	public boolean performEffect(GameVisor g, int pos) {	
-		
-		g.getController().showMessage("This card cannot be activated.");
-		return false;
+	
+	/**
+	 * When a card enters the field, apply a modifier on it if it's on our side.
+	 * If that card happens to be this one, then apply the modifier to all cards
+	 */
+	@Override
+	public void onEnterField(Field f, int ownerId, int position) {
+		Card c = f.getCard(ownerId, position);
 
+		// Note: Characters only
+		if (c == this) { // apply to all the cards on our side of the field, retroactively
+			for (Card myCard : f.getSideAsList(ownerId)) {
+				if (myCard != this && !myCard.isBuilding()) {
+					IModifier grimReaperAura = new GrimReaperAura();
+					castModifier(myCard, grimReaperAura);
+				}
+			}
+		} else if (ownerId == this.getOwnerID() && !c.isBuilding()) { // else a friendly card came in
+
+			IModifier grimReaperAura = new GrimReaperAura();
+			castModifier(c, grimReaperAura);
+			
+		}
+		super.onEnterField(f, ownerId, position);
+	}
+	
+	/**
+	 * When another card leaves the field (belonging to us), return it to the player hand
+	 * 
+	 * When THIS card leaves the field, remove all modifiers casted by us.
+	 */
+	@Override
+	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
+		boolean allowLeave = true;
+		Card c = f.getCard(ownerId, position);
+		
+		if (c == this) { // unapply all
+			// need this because you cannot iterate over modifier while removing
+			List<IModifier> modsToRemove = new ArrayList<IModifier>();
+			for (Card myCard : f.getSideAsList(ownerId)) {
+
+				if (myCard != this && !myCard.isBuilding()) {
+					for (IModifier modifier : myCard.getModifiers()) {
+						if (modifier.getCaster() == this) {
+							modsToRemove.add(modifier);
+						}
+					}
+				}
+			}
+			
+			for (IModifier mod : modsToRemove) {
+				mod.getTarget().removeModifier(mod);
+			}
+		} else if (ownerId == getOwnerID()) {
+			System.out.println ("Grim Reaper: a friendly " + c + " left the field!");
+
+			
+			// Determine whether that card has a modifier from me
+			for (IModifier modifier : c.getModifiers()) {
+				if (modifier.getCaster() == this) {
+					//allowLeave = false; // do NOT allow it to leave, we do it ourself
+					//g.addCard(ownerId,  c);
+				}
+			}
+			
+		}
+		
+		return (allowLeave && super.onLeaveField(g, f, ownerId, position));
+	}
+
+	/**
+	 * Grim Reaper is not activatable
+	 */
+	@Override
+	public CardParams getParams() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Grim reaper has no effect
+	 */
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

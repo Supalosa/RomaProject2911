@@ -49,7 +49,7 @@ public class CardOnager extends Card {
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		OnagerParams myParams = (OnagerParams)a;
-		boolean performed = false;
+		boolean performed = true;
 		
 		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		Card target = g.getField().getCard(enemy, myParams.getPositionToAttack());
@@ -58,15 +58,13 @@ public class CardOnager extends Card {
 			int diceRoll =  myParams.getBattleDie();
 			g.getController().showMessage("The battle die rolled a " + diceRoll);
 			
-			if (diceRoll >= target.getRealDefense()) {
-				
-				g.getField().setCard(enemy, myParams.getPositionToAttack(), null);
-				g.discard(target);
+			if (target.onAttacked(g, this, myParams.getPositionToAttack(), diceRoll)) {
+
 				g.getController().showMessage("You killed a " + target.getName() + "!");
 				
 			} else {
 				
-				g.getController().showMessage("You're weak...");
+				g.getController().showMessage("Could not kill the target, battle value was " + diceRoll);
 				
 			}
 		}

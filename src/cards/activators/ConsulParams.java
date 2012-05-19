@@ -3,7 +3,6 @@ package cards.activators;
 import java.util.ArrayList;
 import java.util.List;
 
-import cards.Card;
 import roma.Game;
 import roma.GameVisor;
 

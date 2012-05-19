@@ -1,10 +1,6 @@
 package cards.activators;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import roma.*;
-import cards.*;
 
 public class MercatorParams extends CardParams {
 	
@@ -28,9 +24,6 @@ public class MercatorParams extends CardParams {
 	
 	@Override
 	public void query(GameVisor g, int pos) {
-		boolean performed = false;
-		
-
 		
 		boolean valid = false;
 		int money;
@@ -45,7 +38,6 @@ public class MercatorParams extends CardParams {
 				if (money / 2 <= g.getPlayer(enemy).getVP()) {
 					
 					setMoneyToSpend(money);
-					performed = true;
 				
 				} else {
 					

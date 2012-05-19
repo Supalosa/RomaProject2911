@@ -3,6 +3,7 @@ package adapters.activators;
 import actions.*;
 import roma.*;
 import cards.Card;
+import cards.activators.SicariusParams;
 import framework.interfaces.activators.*;
 
 /**
@@ -10,56 +11,28 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class SicariusAdapterActivator implements SicariusActivator {
+public class SicariusAdapterActivator extends GenericAdapterActivator implements SicariusActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	MockController controller;
+	SicariusParams params;
 	
 	public SicariusAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
-		this.controller = (MockController)game.getController();
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
+		super(fieldPosition, game, theCard);
 		
+		this.params = (SicariusParams)theCard.getParams();
+
 	}
-	
 	
 	
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(null);	
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
 	
-	/**
-	 * Set the dice disc to be activated.
-	 * In our adapter, we have to convert it because the output
-	 * skips building cards.
-	 */
 	@Override
     public void chooseDiceDisc(int diceDisc) {
-		int otherPlayer = (game.whoseTurn() + 1) % Game.MAX_PLAYERS;
-		Card targetedCard = game.getField().getCard(otherPlayer, diceDisc-1);
-		int modifiedPosition = 0; // modified position in a list of character cards only
-		int temp = 0;
-		for (Card c : game.getField().getSideAsList(otherPlayer)) {
-			if (!c.isBuilding()) {
-				if (c == targetedCard) { // match!
-					modifiedPosition = temp;
-				}
-				temp ++;
-			}
-		}
-		//System.out.println ("ModifiedPosition = " + modifiedPosition);
-		
-		// Enter the target for sicarius...
-    	controller.insertInput (Integer.toString(modifiedPosition));
+		params.setTargetPos(diceDisc-1);
     }
     
 

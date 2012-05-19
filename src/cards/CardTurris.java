@@ -1,6 +1,8 @@
 package cards;
 
 import java.util.*;
+
+import cards.activators.CardParams;
 import modifiers.*;
 import enums.*;
 import roma.*;
@@ -35,14 +37,6 @@ public class CardTurris extends Card {
 	public int getDefense() {
 		return 6;
 	}
-
-
-	public boolean performEffect(GameVisor g, int pos) {
-		// Turris does nothing - cannot be activated
-		g.getController().showMessage("The Turris cannot be activated.");
-		return false;
-	}
-	
 	
 	/**
 	 * When a card enters the field, apply a modifier on it if it's on our side.
@@ -74,7 +68,7 @@ public class CardTurris extends Card {
 	 * When THIS card leaves the field, remove all modifiers casted by us.
 	 */
 	@Override
-	public void onLeaveField(Field f, int ownerId, int position) {
+	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
 		
 		Card c = f.getCard(ownerId, position);
 		
@@ -97,7 +91,23 @@ public class CardTurris extends Card {
 			}
 		}
 		
-		super.onLeaveField(f, ownerId, position);
+		return super.onLeaveField(g, f, ownerId, position);
+	}
+
+	/**
+	 * Turris is not activatable
+	 */
+	@Override
+	public CardParams getParams() {
+		return null;
+	}
+
+	/**
+	 * No effect
+	 */
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		return false;
 	}
 	
 

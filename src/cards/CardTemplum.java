@@ -1,5 +1,6 @@
 package cards;
 
+import cards.activators.CardParams;
 import roma.GameVisor;
 import enums.CardNames;
 
@@ -38,6 +39,22 @@ public class CardTemplum extends Card {
 
 	public boolean performEffect(GameVisor g, int pos) {
 		g.getController().showMessage("You cannot activate this card");
+		return false;
+	}
+
+	/**
+	 * Templum cannot be activated
+	 */
+	@Override
+	public CardParams getParams() {
+		return null;
+	}
+
+	/**
+	 * Templum does nothing
+	 */
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		return false;
 	}
 

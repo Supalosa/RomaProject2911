@@ -11,35 +11,21 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class AesculapinumAdapterActivator implements AesculapinumActivator {
+public class AesculapinumAdapterActivator extends GenericAdapterActivator implements AesculapinumActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
-	MockController controller;
 	AesculapinumParams params;
 	
 	public AesculapinumAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
-		this.controller = (MockController)game.getController();
+		super(fieldPosition, game, theCard);
+		
 		this.params = (AesculapinumParams) theCard.getParams();
 		
 	}
 	
-	
-	
 	@Override
 	public void complete() {
 		
-		IPlayerAction action = new ActivateCardAction(params);	
-		
-		// Enter the dice disc you want to activate...
-		controller.insertInput(Integer.toString(fieldPosition));
-				
-				
-		action.execute(game.getGameVisor());
+		execute(params);
 		
 	}
 	

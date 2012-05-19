@@ -1,12 +1,8 @@
 package adapters.activators;
 
-import java.util.*;
-
 import actions.*;
-import adapters.CardNameAdapter;
 import roma.*;
 import cards.Card;
-import cards.activators.ConsiliariusParams;
 import cards.activators.MercatorParams;
 import framework.interfaces.activators.*;
 
@@ -15,19 +11,14 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class MercatorAdapterActivator implements MercatorActivator {
+public class MercatorAdapterActivator extends GenericAdapterActivator implements MercatorActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
 
 	MercatorParams params;
 	
 	public MercatorAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
+		super(fieldPosition, game, theCard);
+
 		this.params = (MercatorParams) theCard.getParams();
 		
 	}
@@ -36,14 +27,11 @@ public class MercatorAdapterActivator implements MercatorActivator {
 	
 	@Override
 	public void complete() {
-		IPlayerAction action = new ActivateCardAction(params);
-		MockController controller = (MockController)game.getController();
-
-		controller.insertInput(Integer.toString(fieldPosition));
 		
-
-		action.execute(game.getGameVisor());
+		execute(params);
+		
 	}
+	
 
 
 

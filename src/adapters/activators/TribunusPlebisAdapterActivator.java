@@ -3,6 +3,7 @@ package adapters.activators;
 import actions.*;
 import roma.*;
 import cards.Card;
+import cards.activators.TribunusPlebisParams;
 import framework.interfaces.activators.*;
 
 /**
@@ -10,26 +11,22 @@ import framework.interfaces.activators.*;
  * @author Supalosa
  *
  */
-public class TribunusPlebisAdapterActivator implements TribunusPlebisActivator {
+public class TribunusPlebisAdapterActivator extends GenericAdapterActivator implements TribunusPlebisActivator {
 
-	Card theCard;
-	int fieldPosition;
-	Game game;
+	TribunusPlebisParams params;
 	
 	public TribunusPlebisAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		this.theCard = theCard;
-		this.fieldPosition = fieldPosition;
-		this.game = game;
+		super(fieldPosition, game, theCard);
+		this.params = (TribunusPlebisParams)theCard.getParams();
+
 	}
-	
 	
 	
 	@Override
 	public void complete() {
-		IPlayerAction action = new ActivateCardAction(null);
-		MockController controller = (MockController)game.getController();
-		controller.insertInput(Integer.toString(fieldPosition));
-		action.execute(game.getGameVisor());
+		
+		execute(params);
+		
 	}
 
 }

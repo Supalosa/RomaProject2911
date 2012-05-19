@@ -12,13 +12,15 @@ public class Field implements IModifiable {
 	
 	//TODO: make FieldPosition a class
 	private Card[][] fieldData;
-	List<IModifier> modifiers;
+	private List<IModifier> modifiers;
 	private boolean[][] fieldBlocked;
+	private Game game;
 	
-	public Field() {
+	public Field(Game g) {
 		fieldData = new Card[Game.MAX_PLAYERS][Game.FIELD_SIZE];
 		modifiers = new ArrayList<IModifier>();
 		fieldBlocked = new boolean[Game.MAX_PLAYERS][Game.FIELD_SIZE];
+		game = g;
 		
 		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
 			for (int j = 0; j < Game.FIELD_SIZE; j++) {
@@ -35,6 +37,8 @@ public class Field implements IModifiable {
 	 * @return The card that was replaced, if applicable
 	 */
 	public Card setCard (int player, int position, Card c) {
+		assert (player >= 0 && player < fieldData.length);
+		assert (position >= 0 && position < Game.FIELD_SIZE);
 		
 		Card replacedCard = fieldData[player][position];	
 		
@@ -75,7 +79,7 @@ public class Field implements IModifiable {
 						c.setOwnerId(Player.NO_OWNER);
 						/* hook the event for all the other cards */
 						for (Card otherCards : getAllCards()) {
-							otherCards.onLeaveField(this, player, cardPos);
+							otherCards.onLeaveField(this.game.getGameVisor(), this, player, cardPos);
 						}
 					}
 					fieldData[player][cardPos] = null;
@@ -110,6 +114,14 @@ public class Field implements IModifiable {
 		return cards;	
 	}
 
+	/**
+	 * Return a copy of one side of the field.
+	 * Useful because it preserves indexing.
+	 */
+	public Card[] getSide (int player) {
+		return fieldData[player].clone();
+	}
+	
 	@Override
 	public void addModifier(IModifier mod) {
 		modifiers.add(mod);
@@ -131,6 +143,18 @@ public class Field implements IModifiable {
 	@Override
 	public ModifierTarget getModifiableType() {
 		return ModifierTarget.Field;
+	}
+	
+	public boolean hasModifier (String modName) {
+		boolean hasMod = false;
+		
+		for (IModifier mod : getModifiers()) {
+			if (mod.getName().equals(modName)) {
+				hasMod = true;
+			}
+		}
+		
+		return hasMod;
 	}
 	
 	/**

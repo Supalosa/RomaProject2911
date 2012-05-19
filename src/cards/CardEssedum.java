@@ -52,7 +52,7 @@ public class CardEssedum extends Card {
 	 * When THIS card leaves the field, remove all modifiers casted by us.
 	 */
 	@Override
-	public void onLeaveField(Field f, int ownerId, int position) {
+	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
 		int enemyId = (ownerId + 1) % Game.MAX_PLAYERS;
 		Card c = f.getCard(ownerId, position);
 		
@@ -75,7 +75,7 @@ public class CardEssedum extends Card {
 			}
 		}
 		
-		super.onLeaveField(f, ownerId, position);
+		return super.onLeaveField(g, f, ownerId, position);
 	}
 	
 	/**

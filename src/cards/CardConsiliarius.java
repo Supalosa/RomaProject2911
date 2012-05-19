@@ -46,26 +46,33 @@ public class CardConsiliarius extends Card {
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		ConsiliariusParams myParams = (ConsiliariusParams)a;
-		boolean performed = false;
+		boolean performed = true;
 		
-		Map<Card, Integer> realMappings = new HashMap<Card, Integer>();
-		for (Map.Entry<Integer, Integer> mappings : myParams.getPositions().entrySet()) {
-			Card theCard = g.getField().getCard(g.whoseTurn(), mappings.getKey());
-			
-			realMappings.put(theCard, mappings.getValue());
-		}
+		PositionMapping thisMapping= myParams.getNextPosition();
 		
-		for (Map.Entry<Card, Integer> mappings : realMappings.entrySet()) {
-			Card theCard = mappings.getKey();
+		// Maintain a copy of the field, because swapping cards will cause problems
+		
+		Card[] fieldCopy = g.getField().getSide(g.whoseTurn());
+		
+		do {
+			//Card theCard = g.getField().getCard(g.whoseTurn(), thisMapping.getInitialPos());
+			Card theCard = fieldCopy[thisMapping.getInitialPos()];
 			
 			//Remove card from the field
 			g.getField().removeCard(theCard);
 			
 			// Re-Add the card to the field
-			g.getField().setCard(g.whoseTurn(), mappings.getValue(), theCard);
+			g.getField().setCard(g.whoseTurn(), thisMapping.getFinalPos(), theCard);
 			
-			//System.out.println("Card at (" + theCard.getName() + ") -> " + mappings.getValue());
-		}
+			//System.out.println ("ConsilPerform: " + thisMapping.getInitialPos() + " -> " + thisMapping.getFinalPos());
+			
+		} while ((thisMapping = myParams.getNextPosition()) != null);
+		
+		/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
+			
+			System.out.println (g.getField().getCard(g.whoseTurn(), i));
+			
+		}*/
 		
 		return performed;
 	}

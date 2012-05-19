@@ -2,6 +2,9 @@ package cards;
 
 import java.util.*;
 
+import cards.activators.CardParams;
+import cards.activators.PraetorianusParams;
+
 import modifiers.IModifier;
 import modifiers.PraetorAura;
 import roma.Game;
@@ -37,29 +40,6 @@ public class CardPraetorianus extends Card {
 	public int getDefense() {
 		return 4;
 	}
-
-	@Override
-	public boolean performEffect(GameVisor g, int pos) {
-		
-		boolean performed = false;
-		
-		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
-		
-		g.getController().showField();
-		
-		int diceDisc = g.getController().getInt("Which dice disc do you wish to block?");
-		
-		while (diceDisc < 1 || diceDisc > 7) {
-			diceDisc = g.getController().getInt("Invalid dice disc. Which dice disc do you wish to block?");
-		}
-		
-		// Cast the aura onto the field.
-		IModifier praetorAura = new PraetorAura(enemy, diceDisc-1);
-		castModifier(g.getField(), praetorAura);
-		
-		return performed;
-		
-	}
 	
 	// onTurnStart: when the turn starts
 	public void onTurnStart(GameVisor gv, int playerId) {
@@ -86,6 +66,26 @@ public class CardPraetorianus extends Card {
 			
 		}
 		
+	}
+
+	@Override
+	public CardParams getParams() {
+		return new PraetorianusParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		PraetorianusParams myParams = (PraetorianusParams)a;
+		boolean performed = true;
+		
+		int enemy = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
+		int position = myParams.getPositionToAttack();
+		
+		// Cast the aura onto the field.
+		IModifier praetorAura = new PraetorAura(enemy, position);
+		castModifier(g.getField(), praetorAura);
+		
+		return performed;
 	}
 
 }

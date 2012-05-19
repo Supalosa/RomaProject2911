@@ -1,7 +1,14 @@
 package cards;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import cards.activators.CardParams;
+import cards.activators.ConsiliariusParams;
+import cards.activators.MachinaParams;
+import cards.activators.PositionMapping;
 
 import enums.CardNames;
 
@@ -40,45 +47,42 @@ public class CardMachina extends Card {
 	}
 
 
-	public boolean performEffect(GameVisor g, int pos) {
-		
+	@Override
+	public CardParams getParams() {
+		return new MachinaParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		MachinaParams myParams = (MachinaParams)a;
 		boolean performed = true;
 		
-		List<Card> buildings = new ArrayList<Card>();
-		for (Card c : g.getField().getSideAsList(g.whoseTurn())) {
-			if (c.isBuilding()) {
-				buildings.add(c);
-			}
-		}
+		PositionMapping thisMapping= myParams.getNextPosition();
 		
-		// remove the cards from the field
-		for (Card c : buildings) {
-			g.getField().removeCard(c);
-		}
+		// Maintain a copy of the field, because swapping cards will cause problems
 		
-		// replace them
-		Card selectedCard = null;
-		while (buildings.size() > 0) {
-			int dicePosition = -1;
-			selectedCard = g.getController().getCard(buildings, "Select a character card to lay.");
-			while (selectedCard == null) {
-				selectedCard = g.getController().getCard(buildings, "Invalid card. Select a character card to lay.");
-			}
-			
-			g.getController().showField();
-			
-			while (dicePosition < 1 || dicePosition > Game.FIELD_SIZE) {
-				dicePosition = g.getController().getInt("Select a position to lay " + selectedCard.getName() + ":");
-			}
-			
-			buildings.remove(selectedCard);
-			g.getField().setCard(g.whoseTurn(), dicePosition-1, selectedCard);
-
-		}
+		Card[] fieldCopy = g.getField().getSide(g.whoseTurn());
 		
+		do {
+			//Card theCard = g.getField().getCard(g.whoseTurn(), thisMapping.getInitialPos());
+			Card theCard = fieldCopy[thisMapping.getInitialPos()];
+			
+			//Remove card from the field
+			g.getField().removeCard(theCard);
+			
+			// Re-Add the card to the field
+			g.getField().setCard(g.whoseTurn(), thisMapping.getFinalPos(), theCard);
+			
+			//System.out.println ("ConsilPerform: " + thisMapping.getInitialPos() + " -> " + thisMapping.getFinalPos());
+			
+		} while ((thisMapping = myParams.getNextPosition()) != null);
+		
+		/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
+			
+			System.out.println (g.getField().getCard(g.whoseTurn(), i));
+			
+		}*/
 		return performed;
-
-
 	}
 
 }

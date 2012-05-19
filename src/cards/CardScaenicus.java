@@ -3,6 +3,9 @@ package cards;
 import java.util.ArrayList;
 import java.util.List;
 
+import cards.activators.CardParams;
+import cards.activators.ScaenicusParams;
+
 import roma.*;
 import enums.*;
 
@@ -45,32 +48,35 @@ public class CardScaenicus extends Card {
 		return 3;
 	}
 
+
 	@Override
-	public boolean performEffect(GameVisor g, int pos) {
+	public CardParams getParams() {
+		return new ScaenicusParams();
+	}
+
+	@Override
+	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		ScaenicusParams myParams = (ScaenicusParams)a;
+		boolean performed = true;
 		
-		boolean performed = false;
+		int posToCopy = myParams.getPositionToCopy();
 		
-		List<Card> characters = new ArrayList<Card>();
-		for (Card c : g.getField().getSideAsList(g.whoseTurn())) {
-			if (!c.isBuilding()) {
-				characters.add(c);
-			}
-		}
+		Card copiedCard = g.getField().getCard(g.whoseTurn(), posToCopy);
 		
-		Card selectedCard = null;
-		selectedCard = g.getController().getCard(characters, "Select a character card to lay.");
-		while (selectedCard == null) {
-			selectedCard = g.getController().getCard(characters, "Invalid card. Select a character card to lay.");
-		}
-		
-		selectedCard.performEffect(g, null, pos);
-		
-		if (selectedCard.getID() != CardNames.Scaenicus) {
-			performed = true;
+		/* Very hacky fix, but acceptance works weirdly.
+		 * If we have been passed a CardActivator, then it has already been activated!
+		 * So don't run it here.
+		 */
+		if (copiedCard != null && myParams.getCopiedParams() == null) {
+			
+			CardParams params = copiedCard.getParams();
+			params.query(g, pos);
+			
+			copiedCard.performEffect(g, pos, params);
+
 		}
 		
 		return performed;
-
 	}
 
 }
