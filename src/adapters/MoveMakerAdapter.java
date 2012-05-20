@@ -51,7 +51,7 @@ public class MoveMakerAdapter implements MoveMaker {
 	@Override
 	public void activateCardsDisc(int diceToUse, Card chosen)
 			throws UnsupportedOperationException {
-		IPlayerAction action;
+		TakeCardAction action;
 		int cardIndex = 0;
 		int tempIndex;
 		// Get the card index (have to guess from the deck before we draw)
@@ -70,10 +70,11 @@ public class MoveMakerAdapter implements MoveMaker {
 		}
 		
 		action =  new TakeCardAction();
-		mockController.insertInput(Integer.toString(diceToUse));
+		//mockController.insertInput(Integer.toString(diceToUse));
 		
-		mockController.insertInput(Integer.toString(cardIndex));
-		
+		//mockController.insertInput(Integer.toString(cardIndex));
+		action.setCardIndexTaken(cardIndex);
+		action.setDiceRoll(diceToUse);
 		action.execute(game.getGameVisor());
 
 	}
@@ -82,8 +83,9 @@ public class MoveMakerAdapter implements MoveMaker {
 	public void activateMoneyDisc(int diceToUse)
 			throws UnsupportedOperationException {
 		
-		IPlayerAction action = new TakeMoneyAction();
-		mockController.insertInput(Integer.toString(diceToUse));
+		TakeMoneyAction action = new TakeMoneyAction();
+		//mockController.insertInput(Integer.toString(diceToUse));
+		action.setDiceToUse(diceToUse);
 		action.execute(game.getGameVisor());
 
 	}
@@ -95,7 +97,8 @@ public class MoveMakerAdapter implements MoveMaker {
 		cards.Card activatedCard = game.getField().getCard(game.whoseTurn(), Game.BRIBE_DISC-1);
 
 		if (activatedCard != null) {
-			activator = (GenericAdapterActivator) CardActivatorAdapter.getActivator(activatedCard.getID(), Game.BRIBE_DISC-1, game, activatedCard);
+			activator = (GenericAdapterActivator) CardActivatorAdapter.getActivator(activatedCard.getID(), Game.BRIBE_DISC, game, activatedCard);
+			System.out.println("MoveMakerAdapter:activateBribeDisc: Using bribe " + diceToUse + " for " + activatedCard);
 			activator.setBribe(diceToUse);
 		}
 		
@@ -107,8 +110,9 @@ public class MoveMakerAdapter implements MoveMaker {
 	 */
 	@Override
 	public void endTurn() throws UnsupportedOperationException {
-		IPlayerAction action = new EndTurnAction();
-		mockController.insertInput("Y");
+		EndTurnAction action = new EndTurnAction();
+		//mockController.insertInput("Y");
+		action.setEndTurn(true);
 		action.execute(game.getGameVisor());
 		
 	}
@@ -120,7 +124,7 @@ public class MoveMakerAdapter implements MoveMaker {
 	public void placeCard(Card toPlace, int discToPlaceOn)
 			throws UnsupportedOperationException {
 		
-		IPlayerAction action = new PlayCardAction();
+		PlayCardAction action = new PlayCardAction();
 		
 		// Have to determine which card corresponds to toPlace
 		int handIndex = -1;
@@ -133,8 +137,10 @@ public class MoveMakerAdapter implements MoveMaker {
 			
 			tempIndex ++;			
 		}
-		mockController.insertInput(Integer.toString(handIndex));
-		mockController.insertInput(Integer.toString(discToPlaceOn));
+		//mockController.insertInput(Integer.toString(handIndex));
+		//mockController.insertInput(Integer.toString(discToPlaceOn));
+		action.setTargetHandCard(handIndex);
+		action.setTargetDisc(discToPlaceOn);
 		action.execute(game.getGameVisor());
 
 	}

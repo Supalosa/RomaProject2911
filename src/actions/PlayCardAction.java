@@ -8,9 +8,16 @@ import cards.*;
 
 public class PlayCardAction implements IPlayerAction {
 	
-	Card targetCard;
+	int targetCard;
 	int diceDisc;
 	GameVisor game;
+	
+	@Override
+	public String describeParameters() {
+		return "targetCard: " + targetCard + ", diceDisc: " + diceDisc;
+	}
+	
+	
 	public boolean isValid(GameVisor g) {
 		
 		boolean isValid = true;
@@ -25,9 +32,18 @@ public class PlayCardAction implements IPlayerAction {
 			isValid = false;
 		}
 		
-		if (game.getCurrentPlayer().getMoney() < targetCard.getCostToPlay()) {
-			isValid = false;
-			game.getController().showMessage("You don't have enough Money to play " + targetCard.getName());
+		if (targetCard == -1) { // no card picked
+			game.getController().showMessage("No card selected.");
+		} else {
+			Card playedCard = g.getCurrentPlayer().getCard(targetCard);
+			
+			if (playedCard == null) {
+				isValid = false;
+				game.getController().showMessage("Invalid card index.");
+			} else if (game.getCurrentPlayer().getMoney() < playedCard.getCostToPlay()) {
+				isValid = false;
+				game.getController().showMessage("You don't have enough Money to play " + playedCard.getName());
+			}
 		}
 		
 	
@@ -38,18 +54,23 @@ public class PlayCardAction implements IPlayerAction {
 
 	public void execute(GameVisor g) {
 		game = g;
-		query();
-		
+		//System.out.println(g.getCurrentPlayer().getHand().toString());
+		//System.out.println ("EXECUTE PLAYCARD: " + targetCard + " -> " + diceDisc);
 		if (isValid(g)) {
+			//System.out.println("[valid]");
+			Card playedCard = g.getCurrentPlayer().getCard(targetCard);
 
-			game.getCurrentPlayer().getHand().removeElement(targetCard);
+			game.getCurrentPlayer().getHand().removeElement(playedCard);
 			if (game.getField().getCard(game.whoseTurn(), diceDisc - 1) != null) {
 				game.discard(game.getField().getCard(game.whoseTurn(),diceDisc - 1));				
 			}
-			game.getField().setCard(game.whoseTurn(), diceDisc - 1, targetCard);
-			game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - targetCard.getCostToPlay());
+			game.getField().setCard(game.whoseTurn(), diceDisc - 1, playedCard);
+			game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - playedCard.getCostToPlay());
 		
 		}
+		
+		// Log the action
+		g.getActionLogger().addAction(this);
 		
 	}
 
@@ -58,14 +79,28 @@ public class PlayCardAction implements IPlayerAction {
 		return "Lay Card";
 	}
 	
-	public void query() {
+	public void setTargetHandCard(int pos) {
 		
-		game.getController().showHand(game.getCurrentPlayer());
+		targetCard = pos;
 		
-		targetCard = game.getController().getCard(game.getCurrentPlayer(), "Choose the Card you want to play");
+	}
+	
+	public void setTargetDisc(int disc) {
 		
-		diceDisc = game.getController().getInt("And the dice disc you want to place it next to");
+		diceDisc = disc;
 		
+	}
+	
+	public void query(GameVisor g) {
+		
+		g.getController().showHand(g.getCurrentPlayer());
+		Card playedCard = g.getController().getCard(g.getCurrentPlayer(), "Choose the Card you want to play");
+		if (playedCard != null) {
+			targetCard = g.getCurrentPlayer().getHand().indexOf(playedCard);
+			diceDisc = g.getController().getInt("And the dice disc you want to place it next to");
+		} else {
+			targetCard = -1;
+		}
 	}
 
 	// only visible if we have cards in hand and cards to play

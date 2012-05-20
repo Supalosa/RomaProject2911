@@ -25,6 +25,9 @@ public class Game {
 	// Maps of Card -> Position for future cards to be placed
 	private List<TimeTravellingCard> pendingFutureCards; 
 	
+	// log of actions
+	private ActionLogger logger;
+	
 	
 	private GameVisor visor;
 	
@@ -75,6 +78,7 @@ public class Game {
 		
 		pendingFutureCards = new ArrayList<TimeTravellingCard>();
 		
+		logger = new ActionLogger();
 	}
 	
 	/**
@@ -100,7 +104,9 @@ public class Game {
 		prepare();
 		
 		// Start an initial turn.
-		startTurn ();
+		startTurn (rollDice(), rollDice(), rollDice());
+		
+		logger.setInitialState(this);
 		
 		// While the game is still running, keep query current player for action.
 		while (!isGameOver ()) {
@@ -117,10 +123,10 @@ public class Game {
 	
 	/**
 	 * Deduct appropriate number points from whoever's turn it is.
-	 * Roll three dice.
+	 * Set three dice.
 	 * Call all cards Start Turn event
 	 */
-	public void startTurn() {
+	public void startTurn(int die1, int die2, int die3) {
 		Player player = players[currentPlayer];			
 		int deduct = 0;
 		int i = 0;
@@ -135,11 +141,17 @@ public class Game {
 		}
 		player.setVP(player.getVP() - deduct);
 		
-		for (i = 0; i < NUM_DIE; i++) {
+		/*for (i = 0; i < NUM_DIE; i++) {
 			
 			diceRolls[i] = rollDice();
 			
-		}
+		}*/
+		
+		// Set the die
+		diceRolls[0] = die1;
+		diceRolls[1] = die2;
+		diceRolls[2] = die3;
+		
 		for (Card c : field.getAllCards()) {
 			c.onTurnStart(visor, currentPlayer);
 		}
@@ -197,7 +209,10 @@ public class Game {
 		
 		IPlayerAction nextAction = controller.getAction(player);
 		System.out.println("Action chosen: " + nextAction.getDescription());
+		
+		nextAction.query(visor);
 		nextAction.execute(visor);
+		
 
 	}
 
@@ -560,6 +575,16 @@ public class Game {
 	public void addPendingFutureCard(TimeTravellingCard tc) {
 		
 		pendingFutureCards.add(tc);
+		
+	}
+	
+	/**
+	 * Gets this game's action log
+	 * @return
+	 */
+	public ActionLogger getActionLogger() {
+		
+		return logger;
 		
 	}
 

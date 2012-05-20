@@ -9,8 +9,20 @@ import cards.*;
 
 public class TakeCardAction implements IPlayerAction {
 	
-	int diceRoll;
-	GameVisor game;
+	private int diceRoll;
+	private GameVisor game;
+	private int cardIndexTaken; // index of the card that was taken
+	
+	public TakeCardAction() {
+		
+		cardIndexTaken = -1;
+		
+	}
+	
+	@Override
+	public String describeParameters() {
+		return "diceRoll: " + diceRoll + ", cardIndexTaken: " + cardIndexTaken;
+	}
 	
 	public boolean isValid() {
 		
@@ -50,8 +62,6 @@ public class TakeCardAction implements IPlayerAction {
 		List<Card> temp = new ArrayList<Card>();
 		int i = 0;
 		
-		query();
-		
 		if (isValid()) {
 			
 			for (i = 0; i < diceRoll; i++) {
@@ -59,8 +69,14 @@ public class TakeCardAction implements IPlayerAction {
 				temp.add(g.drawCard());
 				
 			}
+			Card selected;
+			// If a card has not been chosen yet, choose it
+			if (cardIndexTaken == -1) {
+				selected = g.getController().getCard(temp, "Please select one Card that you want (the rest are discarded)");
+			} else {
+				selected = temp.get(cardIndexTaken);
+			}
 			
-			Card selected = g.getController().getCard(temp, "Please select one Card that you want (the rest are discarded)");
 			if (selected != null) {
 				g.useDice(diceRoll);
 				
@@ -88,6 +104,9 @@ public class TakeCardAction implements IPlayerAction {
 			
 		}
 		
+		// Log the action
+		g.getActionLogger().addAction(this);
+		
 	}
 
 
@@ -96,11 +115,22 @@ public class TakeCardAction implements IPlayerAction {
 		return "Take Card";
 	}
 
-	public void query() {
+	public void query(GameVisor g) {
 		
-		game.getController().showDiceRolls();
+		g.getController().showDiceRolls();
+
+		diceRoll = g.getController().getInt("Choose the Dice Roll you want to use");
+
 		
-		diceRoll = game.getController().getInt("Choose the Dice Roll you want to use");
+	}
+	
+	public void setDiceRoll(int dice) {
+		diceRoll = dice;
+	}
+	
+	public void setCardIndexTaken(int index) {
+		
+		cardIndexTaken = index;
 		
 	}
 

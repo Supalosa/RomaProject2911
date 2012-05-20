@@ -8,7 +8,7 @@ import modifiers.ModifierTarget;
 
 import cards.*;
 
-public class Field implements IModifiable {
+public class Field implements Cloneable, IModifiable {
 	
 	//TODO: make FieldPosition a class
 	private Card[][] fieldData;

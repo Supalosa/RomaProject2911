@@ -74,6 +74,11 @@ public class CardTelephoneBox extends Card {
 				// Use the dice
 				g.useDice(myParams.getDiceToUse());
 				
+			} else { // hard to go backwards
+				
+				// fuckkkk
+				Game newGame = g.getActionLogger().rebuildGame(0);
+				
 			}
 			
 		} else {

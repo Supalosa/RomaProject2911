@@ -17,8 +17,8 @@ public class CardActivatorAdapter {
 	 * @param activatedCard
 	 * @return The Activator Adapter.
 	 */
-	public static CardActivator getActivator(CardNames card, int disc, Game game, Card activatedCard) {
-		CardActivator activator = null;
+	public static GenericAdapterActivator getActivator(CardNames card, int disc, Game game, Card activatedCard) {
+		GenericAdapterActivator activator = null;
 		
 		if (card == CardNames.Tribunus_Plebis) {
 			

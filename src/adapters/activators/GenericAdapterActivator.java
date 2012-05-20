@@ -1,5 +1,6 @@
 package adapters.activators;
 
+import actions.ActivateCardAction;
 import roma.Game;
 import roma.MockController;
 import cards.Card;
@@ -13,6 +14,7 @@ public abstract class GenericAdapterActivator implements CardActivator {
 	private int fieldPosition;
 	private Game game;
 	private MockController controller;
+	private boolean isCopy; // is a copy created by Scaenicus
 	
 	// bribe?
 	private int bribeDice;
@@ -25,17 +27,24 @@ public abstract class GenericAdapterActivator implements CardActivator {
 		this.fieldPosition = fieldPosition;
 		this.controller = (MockController)game.getController();
 		this.bribeDice = NO_BRIBE;
+		this.isCopy = false;
 		
 	}
 	
 	@Override
 	public abstract void complete();
 	
+	public void setIsCopy(boolean result) {
+		
+		isCopy = result;
+		
+	}
+	
 	/**
 	 * A wrapper used to execute, because ActivateCardAction has incompatibilities
 	 */
 	public void execute(CardParams params) {
-		
+		/*
 		// stop if disc is blocked
 		if (!game.getField().isBlocked(game.whoseTurn(), fieldPosition-1)) {	
 			if (bribeDice != NO_BRIBE) { // bribe?
@@ -54,8 +63,24 @@ public abstract class GenericAdapterActivator implements CardActivator {
 			}
 		} else { // disc was blocked
 			System.out.println ("acceptance: did not activate " + theCard + ", disc is blocked");
+		}*/
+		
+		ActivateCardAction action = new ActivateCardAction(params);
+		action.setDiceDisc(fieldPosition+1);
+		//System.out.println ("GenericAdapterActivator:execute: execuitng at " + fieldPosition + " (" + bribeDice + ")");
+	
+		
+		if (fieldPosition == Game.BRIBE_DISC || !isCopy) {
+			action.setBribeDice(bribeDice);
+			action.setUseBribe(true);
+		} else {
+			action.setUseBribe(false);
 		}
-		 
+		
+		// don't execute if blocked
+		if (!game.getField().isBlocked(game.whoseTurn(), fieldPosition-1)) {
+			action.execute(game.getGameVisor(), theCard);
+		}
 	}
 	
 	public void setBribe(int dice) {

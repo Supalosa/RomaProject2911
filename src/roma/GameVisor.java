@@ -77,9 +77,9 @@ public class GameVisor {
 		
 	}
 	
-	public void onEndTurn () {
+	public void onEndTurn (int die1, int die2, int die3) {
 		game.nextTurn(); // Increment current player
-		game.startTurn(); // Perform start of turn actions.
+		game.startTurn(die1, die2, die3); // Perform start of turn actions.
 	}
 	
 	public Player getPlayer (int player) {
@@ -132,6 +132,16 @@ public class GameVisor {
 	public void addPendingFutureCard(TimeTravellingCard tc) {
 		
 		game.addPendingFutureCard(tc);
+		
+	}
+	
+	/**
+	 * Gets this game's action log
+	 * @return
+	 */
+	public ActionLogger getActionLogger() {
+		
+		return game.getActionLogger();
 		
 	}
 	

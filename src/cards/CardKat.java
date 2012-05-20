@@ -72,8 +72,10 @@ public class CardKat extends Card {
 	// onEnterField: fires whenever a card enters the field (ALL cards receive event)
 	public void onEnterField(Field f, int ownerId, int position) {
 		super.onEnterField(f, ownerId, position);
-		
-		lives = 9;
+		Card enteredCard = f.getCard(ownerId, position);
+		if (enteredCard == this) {
+			lives = 9;
+		}
 	}
 
 
@@ -85,7 +87,7 @@ public class CardKat extends Card {
 	 */
 	public boolean onAttacked(GameVisor g, Card c, int pos, int battleDie) {
 		if (battleDie >= getRealDefense()) {
-			System.out.println ("Kat was attacked with " + lives + " lives left");
+			//System.out.println ("Kat was attacked with " + lives + " lives left");
 			lives--;
 		}
 		

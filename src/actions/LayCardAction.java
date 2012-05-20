@@ -30,12 +30,16 @@ public class LayCardAction implements IPlayerAction {
 		return isValid;
 		
 	}
-
+	
+	@Override
+	public String describeParameters() {
+		return "N/A";
+	}
+	
 	@Override
 	public void execute(GameVisor g) {
 		
 		game = g;
-		query();
 		
 		if (isValid(g)) {
 
@@ -47,6 +51,8 @@ public class LayCardAction implements IPlayerAction {
 
 		}
 		
+		// do NOT log this
+		
 	}
 
 	@Override
@@ -54,13 +60,13 @@ public class LayCardAction implements IPlayerAction {
 		return "Lay Card";
 	}
 	
-	public void query() {
+	public void query(GameVisor g) {
 		
-		game.getController().showHand(game.getCurrentPlayer());
+		g.getController().showHand(g.getCurrentPlayer());
 		
-		targetCard = game.getController().getCard(game.getCurrentPlayer(), "Choose the Card you want to play");
+		targetCard = g.getController().getCard(g.getCurrentPlayer(), "Choose the Card you want to play");
 		
-		diceDisc = game.getController().getInt("And the dice disc you want to place it next to");
+		diceDisc = g.getController().getInt("And the dice disc you want to place it next to");
 		
 	}
 

@@ -8,6 +8,12 @@ public class TakeMoneyAction implements IPlayerAction {
 	int diceRoll;
 	GameVisor game;
 	
+	@Override
+	public String describeParameters() {
+		return "diceRoll: " + diceRoll;
+	}
+	
+	
 	public boolean isValid() {
 		
 		boolean isValid = true;
@@ -46,7 +52,6 @@ public class TakeMoneyAction implements IPlayerAction {
 	public void execute(GameVisor g) {
 		
 		game = g;
-		query();
 		
 		if (isValid()) {
 			
@@ -61,17 +66,27 @@ public class TakeMoneyAction implements IPlayerAction {
 			
 		}
 		
+		// Log the action
+		g.getActionLogger().addAction(this);
+		
 	}
 	
 	public String getDescription() {
 		return "Take Money";
 	}
 	
-	public void query() {
+	public void setDiceToUse(int diceRoll) {
 		
-		game.getController().showDiceRolls();
+	
+		this.diceRoll = diceRoll;
 		
-		diceRoll = game.getController().getInt("Choose the Dice Roll you want to use");
+	}
+	
+	public void query(GameVisor g) {
+		
+		g.getController().showDiceRolls();
+		
+		diceRoll = g.getController().getInt("Choose the Dice Roll you want to use");
 		
 	}
 

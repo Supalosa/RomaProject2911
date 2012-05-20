@@ -49,12 +49,14 @@ public class ScaenicusAdapterActivator extends GenericAdapterActivator implement
 		/*
 		 * Create the appropriate Activator object...
 		 */
-		CardActivator copiedActivator = CardActivatorAdapter.getActivator(cardInPosition.getID(), getFieldPosition(), getGame(), copiedCard);
+		GenericAdapterActivator copiedActivator = CardActivatorAdapter.getActivator(cardInPosition.getID(), getFieldPosition(), getGame(), copiedCard);
 		
+		copiedActivator.setIsCopy(true);
 		/*
 		 * Store it in Scaenicus's param object
 		 */
 		params.setCopiedParams(copiedActivator);
+		
 		
 		//System.out.println ("Created a " + copiedActivator.getClass().getName() + " activator");
 		return copiedActivator;

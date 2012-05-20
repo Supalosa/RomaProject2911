@@ -4,10 +4,18 @@ import roma.*;
 
 public interface IPlayerAction {
 	
-	public void execute (GameVisor g);
+	void execute (GameVisor g);
 	
-	public String getDescription ();
+	String getDescription ();
 	
-	public boolean isVisible (GameVisor g);
+	boolean isVisible (GameVisor g);
+	
+	void query(GameVisor g);
+	
+	/**
+	 * DEBUG, used for debugging replay
+	 * @return
+	 */
+	String describeParameters(); 
 	
 }

@@ -4,7 +4,7 @@ import java.util.*;
 import cards.Card;
 
 
-public abstract class Pile {
+public abstract class Pile implements Cloneable {
 	
 	private List<Card> s;
 	
@@ -84,6 +84,23 @@ public abstract class Pile {
 	public List<Card> asList() {
 		List<Card> myList = new ArrayList<Card>(s);
 		return myList;
+	}
+	
+	/**
+	 * Create an immutable copy of this pile
+	 * @return
+	 */
+	public Pile getCopy() {
+		Pile copy = null;
+		try {
+			copy = (Pile) this.clone();
+		} catch (CloneNotSupportedException e) {
+			System.err.println("Error while cloning pile: " + e.getMessage());
+			e.printStackTrace();
+			System.exit(1);
+		}
+		
+		return copy;
 	}
 	
 	public boolean isEmpty() {

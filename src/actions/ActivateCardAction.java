@@ -1,7 +1,5 @@
 package actions;
 
-import java.util.List;
-
 import roma.*;
 import cards.*;
 import cards.activators.*;
@@ -9,16 +7,21 @@ import cards.activators.*;
 public class ActivateCardAction implements IPlayerAction {
 	
 	int targetPos;
-	Card targetCard;
+	//Card targetCard;
 	GameVisor game;
 	CardParams params;
 	int bribeDice;
 	boolean confirmBribe;
 	
 	public ActivateCardAction(CardParams params) {
-		
+		targetPos = -1;
 		this.params = params;
 		
+	}
+
+	@Override
+	public String describeParameters() {
+		return "targetPos: " + targetPos + ", bribeDice: " + bribeDice + ",  confirmBribe: " + confirmBribe;
 	}
 	
 	public boolean isValid(GameVisor g) {
@@ -68,7 +71,7 @@ public class ActivateCardAction implements IPlayerAction {
 			
 			}
 			
-			if (targetCard == null) { // no card selected
+			if (targetPos == -1) { // no card selected
 				
 				valid = false;
 				game.getController().showMessage("You don't have a card at that dice disc.");
@@ -87,26 +90,30 @@ public class ActivateCardAction implements IPlayerAction {
 		return valid;
 	}
 
-	public void execute(GameVisor g) {
+	public void execute(GameVisor g, Card targetCard) {
 		
 		game = g;
 		
-		query();
-		
 		if(isValid(game)) {
-			
+			if (targetCard == null) {
+				targetCard = g.getField().getCard(g.whoseTurn(), targetPos-1);
+			}
+			//System.out.println ("ActivateCardAction (" + targetPos + "): " + targetCard );
 			if (targetPos == Game.BRIBE_DISC) {
-				
+				//System.out.println ("BribeDice: before " + game.getCurrentPlayer().getMoney() + " (-" + bribeDice + ")");
+
 				if (confirmBribe == false) {
 					
 					game.getController().showMessage("Action cancelled.");
 					
 				} else if (targetCard.performEffect(game, targetPos, params)) {
+					if (bribeDice > 0) {
+						game.getPlayer(g.whoseTurn()).setMoney(game.getPlayer(g.whoseTurn()).getMoney() - bribeDice);
 					
-					game.getPlayer(g.whoseTurn()).setVP(game.getPlayer(g.whoseTurn()).getVP() - bribeDice);
-					game.useDice(bribeDice);
-					
+						game.useDice(bribeDice);
+					}
 				}
+				//System.out.println ("BribeDice: after " + game.getCurrentPlayer().getMoney());
 				
 			} else if (targetCard.performEffect(game, targetPos, params)) {
 				
@@ -114,9 +121,24 @@ public class ActivateCardAction implements IPlayerAction {
 				
 			}
 			
+			
+			
 		} else {
 			game.getController().showMessage("Activation failed.");
 		}
+		
+		
+		// Log the action
+		g.getActionLogger().addAction(this);
+	}
+	
+
+	/**
+	 * "normal" execute
+	 */
+	@Override
+	public void execute(GameVisor g) {
+		execute(g, null);
 		
 	}
 
@@ -124,30 +146,49 @@ public class ActivateCardAction implements IPlayerAction {
 		return "Activate Card";
 	}
 
-	public void query() {
+	public void query(GameVisor g) {
 		
-		game.getController().showField();
+		g.getController().showField();
 		
 		
-		targetPos = game.getController().getInt("Choose the Dice Disc you want to activate");
+		targetPos = g.getController().getInt("Choose the Dice Disc you want to activate");
 		if (targetPos >= 1 && targetPos <= Game.FIELD_SIZE) {
-			targetCard = game.getField().getCard(game.whoseTurn(),targetPos-1);
-		}
-		
-		if (targetPos == Game.BRIBE_DISC) {
-			bribeDice = game.getController().getInt("Choose the Dice you want to use to activate the bribe disc.");
-			confirmBribe = game.getController().getBoolean("Are you sure you want to activate that disc? Doing so will cost extra Sestertii.");
-		} else {
-			confirmBribe = true;
-		}
-		
-		// Get the card params
-		if (params == null && targetCard != null) {
-			params = targetCard.getParams();
-			if (params != null) {
-				params.query(game,  targetPos);
+			Card targetCard = g.getField().getCard(g.whoseTurn(),targetPos-1);
+			
+			
+			if (targetPos == Game.BRIBE_DISC) {
+				bribeDice = g.getController().getInt("Choose the Dice you want to use to activate the bribe disc.");
+				confirmBribe = g.getController().getBoolean("Are you sure you want to activate that disc? Doing so will cost extra Sestertii.");
+			} else {
+				confirmBribe = true;
 			}
+			
+			// Get the card params
+			if (params == null && targetCard != null) {
+				params = targetCard.getParams();
+				if (params != null) {
+					params.query(g,  targetPos);
+				}
+			}
+		} else {
+			g.getController().showMessage("Invalid dice disc.");
 		}
+			
+	}
+	
+	public void setDiceDisc(int disc) {
+		targetPos = disc - 1;
+	}
+	
+	public void setUseBribe(boolean use) {
+		
+		confirmBribe = use;
+		
+	}
+	
+	public void setBribeDice(int dice) {
+		
+		bribeDice = dice;
 		
 	}
 
@@ -169,5 +210,7 @@ public class ActivateCardAction implements IPlayerAction {
 		}
 		return show && hasDice;	
 	}
+
+
 
 }
