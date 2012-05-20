@@ -185,7 +185,7 @@ public class MockController implements IController {
 	
 	public void showMessage (String s) {
 		// Mock: doesn't show anythign (suppress output)
-		//System.out.println(s);
+		System.out.println(s);
 		
 	}
 	

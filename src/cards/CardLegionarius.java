@@ -66,7 +66,7 @@ public class CardLegionarius extends Card {
 				
 			} else {
 				
-				g.getController().showMessage("Could not kill the target, battle value was " + myParams.getBattleDie());
+				g.getController().showMessage("Could not kill the " + enemyCard.getName() + ", battle value was " + myParams.getBattleDie());
 				
 			}
 		}

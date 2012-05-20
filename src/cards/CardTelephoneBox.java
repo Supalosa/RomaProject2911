@@ -76,9 +76,15 @@ public class CardTelephoneBox extends Card {
 				
 			} else { // hard to go backwards
 				
+				int toTurn = g.getTurnNumber() - myParams.getDiceToUse();
 				// fuckkkk
-				Game newGame = g.getActionLogger().rebuildGame(0);
+				Game newGame = g.getActionLogger().rebuildGame(toTurn);
 				
+				CardTypes library = new CardTypes();
+				Card copyOfCard = library.getCard(timeTravellingCard.getID());
+				Game updatedGame = g.getActionLogger().insertCardToGame(newGame, toTurn, copyOfCard, g.whoseTurn(), myParams.getDiceToSend()-1);
+				
+				System.out.println ("Updated game has " + updatedGame.getPlayer(1).getVP() + " vp for plr 2");
 			}
 			
 		} else {

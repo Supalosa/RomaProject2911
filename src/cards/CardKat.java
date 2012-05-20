@@ -87,7 +87,7 @@ public class CardKat extends Card {
 	 */
 	public boolean onAttacked(GameVisor g, Card c, int pos, int battleDie) {
 		if (battleDie >= getRealDefense()) {
-			//System.out.println ("Kat was attacked with " + lives + " lives left");
+			System.out.println ("Kat [" + this.hashCode() + "] was attacked with " + lives + " lives left");
 			lives--;
 		}
 		
@@ -95,6 +95,24 @@ public class CardKat extends Card {
 		// lives <= 0
 		return (lives <= 0 && super.onAttacked(g, c, pos, battleDie));
 
+	}
+	
+	public void setLives (int lives) {
+		
+		this.lives = lives;
+		
+	}
+	
+	/**
+	 * Get a copy of this Kat.
+	 * Set its lives appropriately
+	 */
+	@Override
+	public Card getCopy() {
+		CardKat copy = (CardKat) super.getCopy();
+		
+		copy.setLives(lives);
+		return copy;
 	}
 
 }

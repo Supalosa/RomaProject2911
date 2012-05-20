@@ -253,6 +253,7 @@ public abstract class Card implements IModifiable, Cloneable {
 		
 		return copy;
 	}
+
 	
 }
 

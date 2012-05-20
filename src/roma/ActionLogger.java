@@ -24,6 +24,11 @@ public class ActionLogger {
 	private int [] initialVP;
 	private Vector<Card>[] initialHands;
 	
+	private int initialPlayer;
+	
+	EndTurnAction lastEndTurnAction; // we keep track of this to store last turn's dice rolls
+
+	
 	@SuppressWarnings("unchecked")
 	public ActionLogger() {
 		actions = new ArrayList<IPlayerAction>();
@@ -38,11 +43,22 @@ public class ActionLogger {
 		
 		initialHands = new Vector[Game.MAX_PLAYERS];
 		
+		initialPlayer = 0;
+		
 	}
 	
+	public void setInitialPlayer(int turn) {
+		
+		initialPlayer = turn;
+		
+	}
 	public void setInitialDice(int[] rolls) {
 		if (initialDice == null) { // only do this once...
 			initialDice = rolls.clone();
+		} else if (lastEndTurnAction != null) {
+			
+			lastEndTurnAction.setDiceRolls(rolls.clone());
+			
 		}
 	}
 	
@@ -90,6 +106,7 @@ public class ActionLogger {
 	public void setInitialHand(int player, Vector<Card> hand) {
 		
 		if (initialHands[player] == null) {
+			System.out.println ("ActionLogger:setInitialHand: " + hand.toString());
 			initialHands[player] = (Vector<Card>) hand.clone();
 		}
 		
@@ -132,6 +149,11 @@ public class ActionLogger {
 		
 		actions.add(action);
 		
+		if (action.getDescription().equals("End Turn")) {
+			lastEndTurnAction = (EndTurnAction)action; // we keep track of this to store last turn's dice rolls
+
+		}
+		
 	}
 	
 	
@@ -144,12 +166,14 @@ public class ActionLogger {
 	 */
 	public Game rebuildGame(int turn) {
 		
-		CardTypes library = new CardTypes();
+		//CardTypes library = new CardTypes();
 		MockController mock = new MockController();
 		Game newGame = new Game(mock);
+		// set whose turn
+		newGame.setWhoseTurn(initialPlayer);
 		// set the initial dice rolls
 		newGame.setDiceRolls(initialDice);
-		
+		System.out.println ("START rebuilding a game...");
 		// set the vp, sestertii, hands
 		for (int i = 0; i <Game.MAX_PLAYERS; i++) {
 			
@@ -159,9 +183,9 @@ public class ActionLogger {
 			// give me a hand
 			if (initialHands[i] != null) {
 				for (int j = 0; j < initialHands[i].size(); j++) {
-					Card newCard = library.getCard(initialHands[i].get(j).getID());
-				
+					Card newCard = initialHands[i].get(j).getCopy();
 					newGame.getPlayer(i).getHand().insertElementAt(newCard, 0);
+					System.out.println ("rebuildGame: inserted a " + newCard + " into Player " + i + "'s hand");
 				}
 			}
 		}
@@ -170,14 +194,14 @@ public class ActionLogger {
 		// build the deck - copy
 		if (initialDeck != null) { // not empty
 			for (Card c : initialDeck.asList()) {
-				newGame.getDeck().addCard(library.getCard(c.getID()));
+				newGame.getDeck().addCard(c.getCopy());
 			}
 		}
 		
 		// build the discard - copy
 		if (initialDiscardPile != null) {
 			for (Card c : initialDiscardPile.asList()) {
-				newGame.getDiscardPile().addCard(library.getCard(c.getID()));
+				newGame.getDiscardPile().addCard(c.getCopy());
 			}
 		}
 		
@@ -188,7 +212,7 @@ public class ActionLogger {
 				
 				Card originalCard = initialField.getCard(i,  j);
 				if (originalCard != null) { // there was a card there
-					Card newCard = library.getCard(originalCard.getID());
+					Card newCard = originalCard.getCopy();
 					newGame.getField().setCard(i, j, newCard);
 				}
 				
@@ -200,12 +224,59 @@ public class ActionLogger {
 		for (IPlayerAction act : actions) {
 			System.out.println ("RebuildGame: executing " + act.getDescription() + "(" + act.describeParameters() + ")");
 			act.execute(newGame.getGameVisor());
+			if (newGame.getTurnNumber() > turn) {
+				System.out.println("RebuildGame: reached start of turn " + turn);
+				break;
+			}
 			
 		}
 		
 		
 		
 		return newGame;
+	}
+	
+	/**
+	 * Inserts a card to the specified game, then replays to the current point.
+	 * @param g The game to insert into
+	 * @param turn The turn the specified game is at (MUST be at the beginning of the turn)
+	 * @param c The card to insert
+	 * @param ownerId the owner of the card
+	 * @param pos which dice disc to insert it to (0-6)
+	 * @return the new game
+	 */
+	public Game insertCardToGame(Game g, int turn, Card c, int ownerId, int pos) {
+
+		System.out.println ("Inserting a " + c.getName() + " into the game...");
+		Card replacedCard = g.getField().setCard(ownerId, pos, c);
+		if (replacedCard != null) {
+			g.discard(replacedCard);
+		}
+		
+		// find the appropriate action start
+		boolean startReplaying = false;
+		for (IPlayerAction act : actions) {
+			
+			if (!startReplaying && act.getDescription().equals(EndTurnAction.DESCRIPTION)) {
+				
+				EndTurnAction eta = (EndTurnAction)act;
+				if(eta.getTurnNumber() >= turn) {
+					startReplaying = true;
+					System.out.println ("Beginning to re-insert actions...");
+				}
+				
+			} else if (startReplaying) {
+				System.out.println ("insertCardToGame: executing " + act.getDescription() + "(" + act.describeParameters() + ")");
+				System.out.println ("Player " + g.whoseTurn() + "'s hand: " + g.getCurrentPlayer().getHand());
+
+				act.execute(g.getGameVisor());
+				
+			}
+			
+		}
+		
+		
+		return g;
 	}
 	
 	/**

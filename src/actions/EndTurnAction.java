@@ -6,8 +6,11 @@ import roma.RandomGenerator;
 
 public class EndTurnAction implements IPlayerAction {
 
-	int [] diceRolls;
-	boolean doEndTurn;
+	private int [] diceRolls;
+	private boolean doEndTurn;
+	private int turnNumber;
+	
+	public static final String DESCRIPTION = "End Turn";
 	
 	public EndTurnAction() {
 		RandomGenerator gen = new RandomGenerator();
@@ -22,7 +25,12 @@ public class EndTurnAction implements IPlayerAction {
 	
 	@Override
 	public String describeParameters() {
-		return "doEndTurn: " + doEndTurn;
+		String rolls = "";
+		for (int i = 0; i < Game.NUM_DIE; i ++) {
+			
+			rolls += diceRolls[i] + ", ";
+		}
+		return "doEndTurn: " + doEndTurn + " (" + rolls + ")";
 	}
 	
 	
@@ -31,20 +39,36 @@ public class EndTurnAction implements IPlayerAction {
 		if (doEndTurn) {
 			g.onEndTurn(diceRolls[0], diceRolls[1], diceRolls[2]);
 			
+			turnNumber = g.getTurnNumber();
 			// Log the action
 			g.getActionLogger().addAction(this);
+			
+			
 		}
 		
 		
 	}
+	
+	/**
+	 * Returns the turn number that this action started (i.e. after it incremented
+	 * the turn counter)
+	 * @return
+	 */
+	public int getTurnNumber() {
+		return turnNumber;
+	}
 
+	public void setDiceRolls(int [] rolls) {
+		diceRolls = rolls;
+	}
+	
 	public void setEndTurn(boolean doEndTurn) {
 		this.doEndTurn = doEndTurn;
 	}
 	
 	@Override
 	public String getDescription() {
-		return "End Turn";
+		return DESCRIPTION;
 	}
 	
 	
