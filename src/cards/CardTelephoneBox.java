@@ -1,5 +1,6 @@
 package cards;
 
+import java.security.spec.MGF1ParameterSpec;
 import java.util.*;
 
 import cards.activators.CardParams;
@@ -58,7 +59,30 @@ public class CardTelephoneBox extends Card {
 		
 		System.out.println ("TelephoneBox: " + myParams.getDiceToSend() + ", " + myParams.isGoForward() + ", " + myParams.getDiceToUse());
 		
-		return false;
+		Card timeTravellingCard = g.getField().getCard(g.whoseTurn(), myParams.getDiceToSend()-1);
+		
+		if (timeTravellingCard != null) {
+			
+			if (myParams.isGoForward()) { // easy to go forward
+				
+				// Remove the card from the field
+				g.getField().setCard(g.whoseTurn(), myParams.getDiceToSend()-1, null);
+				
+				// Make it pending
+				g.addPendingFutureCard(new TimeTravellingCard(timeTravellingCard, g.getTurnNumber() + myParams.getDiceToUse(), myParams.getDiceToSend()-1, g.whoseTurn()));
+				
+				// Use the dice
+				g.useDice(myParams.getDiceToUse());
+				
+			}
+			
+		} else {
+			
+			// time paradox
+			
+		}
+		
+		return true;
 	}
 
 }

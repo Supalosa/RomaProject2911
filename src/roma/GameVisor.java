@@ -118,4 +118,21 @@ public class GameVisor {
 		return game.getDiscardPile().isEmpty();
 	}
 	
+	public int getTurnNumber() {
+		
+		return game.getTurnNumber();
+		
+	}
+	
+	/**
+	 * Add the specified TimeTravellingCard to the collection.
+	 * Used by: Grim Reaper
+	 * @param tc
+	 */
+	public void addPendingFutureCard(TimeTravellingCard tc) {
+		
+		game.addPendingFutureCard(tc);
+		
+	}
+	
 }

@@ -22,6 +22,9 @@ public class Game {
 	
 	private int turnNumber;
 	
+	// Maps of Card -> Position for future cards to be placed
+	private List<TimeTravellingCard> pendingFutureCards; 
+	
 	
 	private GameVisor visor;
 	
@@ -69,6 +72,8 @@ public class Game {
 		swappedCards = new List[MAX_PLAYERS];
 		
 		turnNumber = 0;
+		
+		pendingFutureCards = new ArrayList<TimeTravellingCard>();
 		
 	}
 	
@@ -138,6 +143,29 @@ public class Game {
 		for (Card c : field.getAllCards()) {
 			c.onTurnStart(visor, currentPlayer);
 		}
+		
+		
+		// Bring cards from the past into the future.
+		List<TimeTravellingCard> newCards = getPendingFutureCards(turnNumber);
+		
+		for (TimeTravellingCard tc : newCards) {
+			
+			removePendingFutureCard(tc);
+			
+			// REmove the card currently in that position
+			Card existingCard = getField().getCard(tc.getOwnerId(), tc.getPosition());
+			if (existingCard != null) {
+				System.out.println ("Card " + existingCard + " was overriden by " + tc.getTheCard().getName() + " from time travel!");
+				getField().setCard(tc.getOwnerId(), tc.getPosition(), null);
+				this.discard(existingCard); // ignores grim reaper
+			}
+			
+			// Add the card in that position
+			getField().setCard(tc.getOwnerId(), tc.getPosition(), tc.getTheCard());
+			
+			
+		}
+		
 	
 	}
 	
@@ -496,5 +524,43 @@ public class Game {
 		return actions;
 	}
 	
+	/**
+	 * Returns the list of cards that should appear in this turn.
+	 * @param turn
+	 * @return
+	 */
+	public List<TimeTravellingCard> getPendingFutureCards(int turn) {
+		List <TimeTravellingCard> result = new ArrayList<TimeTravellingCard>();
+		
+		for (TimeTravellingCard tc : pendingFutureCards) {
+			
+			if (tc.getTurnNumber() == turn) {
+				result.add(tc);
+			}
+			
+		}
+		
+		return result;		
+	}
+	
+	/**
+	 * Remove the specified TimeTravellingCard from the collection.
+	 * @param tc
+	 */
+	public void removePendingFutureCard(TimeTravellingCard tc) {
+		
+		pendingFutureCards.remove(tc);
+		
+	}
+	
+	/**
+	 * Add the specified TimeTravellingCard to the collection.
+	 * @param tc
+	 */
+	public void addPendingFutureCard(TimeTravellingCard tc) {
+		
+		pendingFutureCards.add(tc);
+		
+	}
 
 }
