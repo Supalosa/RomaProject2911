@@ -108,6 +108,10 @@ public class CardActivatorAdapter {
 			
 			activator = new HaruspexAdapterActivator(disc, game, activatedCard);
 			
+		} else if (card == CardNames.TelephoneBox) {
+			
+			activator = new TelephoneBoxAdapterActivator(disc, game, activatedCard);
+			
 		}
 		
 		return activator;

@@ -3,6 +3,7 @@ package cards;
 import java.util.*;
 
 import cards.activators.CardParams;
+import cards.activators.TelephoneBoxParams;
 
 import roma.*;
 import enums.*;
@@ -48,13 +49,15 @@ public class CardTelephoneBox extends Card {
 
 	@Override
 	public CardParams getParams() {
-		// TODO Auto-generated method stub
-		return null;
+		return new TelephoneBoxParams();
 	}
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
-		// TODO Auto-generated method stub
+		TelephoneBoxParams myParams = (TelephoneBoxParams)a;
+		
+		System.out.println ("TelephoneBox: " + myParams.getDiceToSend() + ", " + myParams.isGoForward() + ", " + myParams.getDiceToUse());
+		
 		return false;
 	}
 
