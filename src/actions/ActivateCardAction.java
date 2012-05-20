@@ -129,7 +129,7 @@ public class ActivateCardAction implements IPlayerAction {
 		
 		
 		// Log the action
-		g.getActionLogger().addAction(this);
+		g.getActionLogger().addAction(this, game.getTurnNumber());
 	}
 	
 

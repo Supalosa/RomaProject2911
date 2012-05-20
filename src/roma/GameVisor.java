@@ -144,5 +144,44 @@ public class GameVisor {
 		return game.getActionLogger();
 		
 	}
+
+	/**
+	 * Copies the state in the specified Game to our own game.
+	 * @param updatedGame
+	 */
+	public void copyStateFrom(Game updatedGame) {
+		
+		// VP, Sestertii, 
+		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+			game.getPlayer(i).setVP(updatedGame.getPlayer(i).getVP());
+			game.getPlayer(i).setMoney(updatedGame.getPlayer(i).getMoney());
+			
+		}
+		
+		// Action Dice
+		game.setDiceRolls(updatedGame.getDiceRolls().clone());
+		
+		// Discard pile
+		game.getDiscardPile().emptyPile();
+		
+		for (Card c : updatedGame.getDiscardPile().asList()) {
+			
+			game.getDiscardPile().addCardToFront(c.getCopy());
+			
+		}
+		
+		// Deck pile
+		game.getDeck().emptyPile();
+		
+		for (Card c : updatedGame.getDeck().asList()) {
+			
+			game.getDeck().addCardToFront(c.getCopy());
+			
+		}
+		
+		
+		
+		
+	}
 	
 }

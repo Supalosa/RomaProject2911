@@ -17,6 +17,12 @@ import enums.*;
 public class CardKat extends Card {
 
 	private int lives;
+	
+	public CardKat() {
+		
+		lives = 9;
+		
+	}
 	public CardNames getID() {
 		return CardNames.Kat;
 	}
@@ -67,15 +73,19 @@ public class CardKat extends Card {
 	}
 	
 	/**
-	 * Reset lives when the card enters the field.
+	 * Reset lives when the card leaves the field.
 	 */
-	// onEnterField: fires whenever a card enters the field (ALL cards receive event)
-	public void onEnterField(Field f, int ownerId, int position) {
-		super.onEnterField(f, ownerId, position);
+	// onLeaveField: fires whenever a card enters the field (ALL cards receive event)
+	@Override
+	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
+		
 		Card enteredCard = f.getCard(ownerId, position);
 		if (enteredCard == this) {
-			lives = 9;
+			System.out.println ("Reset life of kat");
+			//lives = 9;
 		}
+		
+		return super.onLeaveField(g, f, ownerId, position);
 	}
 
 
@@ -91,15 +101,24 @@ public class CardKat extends Card {
 			lives--;
 		}
 		
-		// the way this is structured is that onAttacked (Card) will only be called if
-		// lives <= 0
-		return (lives <= 0 && super.onAttacked(g, c, pos, battleDie));
+		if (lives <= 0) {
+			lives = 9;
+			return super.onAttacked(g, c, pos, battleDie);
+		} else {
+			return false;
+		}
 
 	}
 	
 	public void setLives (int lives) {
 		
 		this.lives = lives;
+		
+	}
+	
+	public int getLives() {
+		
+		return this.lives;
 		
 	}
 	
@@ -112,6 +131,7 @@ public class CardKat extends Card {
 		CardKat copy = (CardKat) super.getCopy();
 		
 		copy.setLives(lives);
+		System.out.println ("Kat copy [" + copy.hashCode() + "] has " + copy.getLives() + " lives");
 		return copy;
 	}
 

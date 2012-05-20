@@ -15,7 +15,8 @@ import cards.activators.*;
  */
 public class ActionLogger {
 
-	private List<IPlayerAction> actions;
+	private List<LoggedAction> actions;
+	
 	private Field initialField;
 	private int[] initialDice;
 	private Deck initialDeck;
@@ -31,7 +32,7 @@ public class ActionLogger {
 	
 	@SuppressWarnings("unchecked")
 	public ActionLogger() {
-		actions = new ArrayList<IPlayerAction>();
+		actions = new ArrayList<LoggedAction>();
 		initialSestertii = new int[Game.MAX_PLAYERS];
 		initialVP = new int[Game.MAX_PLAYERS];
 		
@@ -144,10 +145,11 @@ public class ActionLogger {
 	/**
 	 * Inserts an action to the log.
 	 * @param action The action to add
+	 * @param turnNumber the current turn number of this action
 	 */
-	public void addAction(IPlayerAction action) {
+	public void addAction(IPlayerAction action, int turnNumber) {
 		
-		actions.add(action);
+		actions.add(new LoggedAction(action, turnNumber));
 		
 		if (action.getDescription().equals("End Turn")) {
 			lastEndTurnAction = (EndTurnAction)action; // we keep track of this to store last turn's dice rolls
@@ -221,12 +223,16 @@ public class ActionLogger {
 		}
 		
 		// Game is now in initial state. Now rebuild from actions.
-		for (IPlayerAction act : actions) {
-			System.out.println ("RebuildGame: executing " + act.getDescription() + "(" + act.describeParameters() + ")");
-			act.execute(newGame.getGameVisor());
-			if (newGame.getTurnNumber() > turn) {
-				System.out.println("RebuildGame: reached start of turn " + turn);
-				break;
+		for (LoggedAction act : actions) {
+			if (act.turnNumber < turn) {
+				System.out.println ("RebuildGame: Turn [" + act.turnNumber + "] executing " + act.action.getDescription() + "(" + act.action.describeParameters() + ")");
+				act.action.execute(newGame.getGameVisor());
+				if (newGame.getTurnNumber() == turn) {
+					System.out.println("RebuildGame: reached start of turn " + turn);
+					break;
+				}
+			} else {
+				System.out.println ("RebuildGame: Reached end of turn");
 			}
 			
 		}
@@ -249,23 +255,17 @@ public class ActionLogger {
 
 		System.out.println ("Inserting a " + c.getName() + " into the game...");
 		Card replacedCard = g.getField().setCard(ownerId, pos, c);
-		if (replacedCard != null) {
+		// Note: laying over the same card has NO effect (i.e. not even going to discard pile)
+		if (replacedCard != null && replacedCard.getID() != c.getID()) {
 			g.discard(replacedCard);
 		}
 		
 		// find the appropriate action start
-		boolean startReplaying = false;
-		for (IPlayerAction act : actions) {
-			
-			if (!startReplaying && act.getDescription().equals(EndTurnAction.DESCRIPTION)) {
-				
-				EndTurnAction eta = (EndTurnAction)act;
-				if(eta.getTurnNumber() >= turn) {
-					startReplaying = true;
-					System.out.println ("Beginning to re-insert actions...");
-				}
-				
-			} else if (startReplaying) {
+		//int turnNumber = 0;
+		for (LoggedAction nextAction : actions) {
+			IPlayerAction act = nextAction.action;
+			System.out.println ("-- Game: " + g.getTurnNumber() + ", Action: " + nextAction.turnNumber);
+			if (nextAction.turnNumber >= turn) {
 				System.out.println ("insertCardToGame: executing " + act.getDescription() + "(" + act.describeParameters() + ")");
 				System.out.println ("Player " + g.whoseTurn() + "'s hand: " + g.getCurrentPlayer().getHand());
 
@@ -302,6 +302,19 @@ public class ActionLogger {
 		
 		
 		return result;
+	}
+	
+	private class LoggedAction {
+		
+		public final IPlayerAction action;
+		public final int turnNumber;
+		
+		public LoggedAction(IPlayerAction action, int turnNumber) {
+			
+			this.action = action;
+			this.turnNumber = turnNumber;
+			
+		}
 	}
 	
 }

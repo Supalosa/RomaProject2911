@@ -80,9 +80,31 @@ public class CardTelephoneBox extends Card {
 				// fuckkkk
 				Game newGame = g.getActionLogger().rebuildGame(toTurn);
 				
-				CardTypes library = new CardTypes();
-				Card copyOfCard = library.getCard(timeTravellingCard.getID());
+				//CardTypes library = new CardTypes();
+				//Card copyOfCard = library.getCard(timeTravellingCard.getID());
+				Card copyOfCard = timeTravellingCard.getCopy();
 				Game updatedGame = g.getActionLogger().insertCardToGame(newGame, toTurn, copyOfCard, g.whoseTurn(), myParams.getDiceToSend()-1);
+				
+				// the only thing missing is the activation of THIS card.. so use dice
+				updatedGame.useDice(pos);
+				
+				System.out.println ("Dice rolls:");
+				for (int i = 0; i < updatedGame.getDiceRolls().length; i++) {
+					System.out.print(updatedGame.getDiceRoll(i) + " ");
+				}
+				System.out.println();
+				
+				System.out.println ("Discard:");
+				/*for (int i = 0; i < updatedGame.getDiceRolls().length; i++) {
+					System.out.print(updatedGame.getDiceRoll(i) + " ");
+				}*/
+				System.out.println(updatedGame.getDiscardPile().asList());
+				
+				
+				g.copyStateFrom(updatedGame);
+				
+				
+				
 				
 				System.out.println ("Updated game has " + updatedGame.getPlayer(1).getVP() + " vp for plr 2");
 			}
@@ -93,7 +115,7 @@ public class CardTelephoneBox extends Card {
 			
 		}
 		
-		return true;
+		return true; // never used
 	}
 
 }

@@ -105,7 +105,7 @@ public class TakeCardAction implements IPlayerAction {
 		}
 		
 		// Log the action
-		g.getActionLogger().addAction(this);
+		g.getActionLogger().addAction(this,  g.getTurnNumber());
 		
 	}
 
