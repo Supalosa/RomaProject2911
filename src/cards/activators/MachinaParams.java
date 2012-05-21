@@ -54,6 +54,18 @@ public class MachinaParams extends CardParams {
 		return cardPositions.poll();
 	}
 	
+	
+	/**
+	 * Returns an immutable list of the mappings.
+	 * @return
+	 */
+	public List<PositionMapping> getMappings() {
+		
+		return new ArrayList<PositionMapping>(cardPositions);
+		
+	}
+	
+	
 	public boolean isValid() {
 		return cardPositions.size() > 0;
 	}
