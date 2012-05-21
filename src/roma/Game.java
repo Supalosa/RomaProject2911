@@ -25,13 +25,13 @@ public class Game {
 
 	// List of all active modifiers on the cards
 	private List<IModifier> activeModifiers;
-	
+
 	// Maps of Card -> Position for future cards to be placed
 	private List<TimeTravellingCard> pendingFutureCards;
 
 	// log of actions
 	private ActionLogger logger;
-	
+
 	// list of immutable game states at start of each turn
 	private List<ImmutableGameState> gameSnapshots;
 
@@ -57,8 +57,7 @@ public class Game {
 		visor = new GameVisor(this);
 
 		isTimeParadox = false;
-		
-		
+
 		initGame();
 
 	}
@@ -91,9 +90,9 @@ public class Game {
 		pendingFutureCards = new ArrayList<TimeTravellingCard>();
 
 		logger = new ActionLogger();
-		
+
 		gameSnapshots = new ArrayList<ImmutableGameState>();
-		
+
 		activeModifiers = new ArrayList<IModifier>();
 	}
 
@@ -117,7 +116,7 @@ public class Game {
 		// Start an initial turn.
 		startTurn(rollDice(), rollDice(), rollDice());
 
-		//logger.setInitialState(this);
+		// logger.setInitialState(this);
 
 		// While the game is still running, keep query current player for
 		// action.
@@ -192,14 +191,15 @@ public class Game {
 					tc.getTheCard());
 
 		}
-		
+
 		// Take a snapshot
 		ImmutableGameState snapshot = new ImmutableGameState(this, turnNumber);
 		gameSnapshots.add(snapshot);
 
-		
-		// Load this snapshot
-		getGameVisor().copyStateFrom(snapshot);
+		// Load this snapshot (DEBUG) - if anything
+		// goes wrong with acceptance with this line uncommented
+		// then there is something very wrong with ImmutableGameStates
+		//getGameVisor().copyStateFrom(snapshot);
 	}
 
 	/**
@@ -214,6 +214,13 @@ public class Game {
 		turnNumber++;
 	}
 
+	public void setTurnNumber(int turn) {
+		
+		turnNumber = turn;
+		
+	}
+	
+	
 	public int getTurnNumber() {
 		return turnNumber;
 	}
@@ -407,13 +414,14 @@ public class Game {
 
 	public void addDiscardToDeck() {
 
-		/*for (int i = topCards.size() - 1; i >= 0; i--) {
-			deck.addCardToFront(topCards.get(i));
-		}*/
+		/*
+		 * for (int i = topCards.size() - 1; i >= 0; i--) {
+		 * deck.addCardToFront(topCards.get(i)); }
+		 */
 		for (Card c : discardPile.asList()) {
 			deck.addCard(c);
 		}
-		
+
 		discardPile.emptyPile();
 		deck.shuffle();
 
@@ -645,113 +653,163 @@ public class Game {
 
 		System.out.println("!!!! Time Paradox !!!!");
 		this.isTimeParadox = true;
-		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+		// VP-causer loses his VP
+		players[currentPlayer].setVP(0);
 
-			players[i].setVP(0);
 
-		}
+		field.clearField();
 		testGameOver();
 	}
-	
+
+	/**
+	 * Called when the game starts. Basically creates a snapshot of the game at
+	 * turn 0, after all preparation has been made.
+	 */
+	public void onGameStarted() {
+
+		gameSnapshots.add(new ImmutableGameState(this, 0));
+
+	}
+
 	/**
 	 * Returns the list of modifiers active
 	 */
 	public List<IModifier> getModifiers() {
 		return this.activeModifiers;
 	}
-	
+
 	/**
 	 * Returns the list of all modifiers casted ON the field position specified
 	 */
 	public List<IModifier> getModifiersOn(int ownerId, int pos) {
-		List <IModifier> results = new ArrayList<IModifier>();
-		
+		List<IModifier> results = new ArrayList<IModifier>();
+
 		for (IModifier mod : activeModifiers) {
-			if (mod.getTargetOwnerId() == ownerId
-					&& mod.getTargetPos() == pos) {
+			if (mod.getTargetOwnerId() == ownerId && mod.getTargetPos() == pos) {
 				results.add(mod);
 			}
 		}
-		
+
 		return results;
-		
+
 	}
-	
+
 	/**
 	 * Returns the list of all modifiers casted BY the field position specified
 	 */
 	public List<IModifier> getModifiersBy(int ownerId, int pos) {
-		List <IModifier> results = new ArrayList<IModifier>();
-		
+		List<IModifier> results = new ArrayList<IModifier>();
+
 		for (IModifier mod : activeModifiers) {
-			if (mod.getCasterOwnerId() == ownerId
-					&& mod.getCasterPos() == pos) {
+			if (mod.getCasterOwnerId() == ownerId && mod.getCasterPos() == pos) {
 				results.add(mod);
 			}
 		}
-		
+
 		return results;
-		
+
 	}
-	
+
 	/**
 	 * Adds a modifier to the list
 	 */
 	public void addModifier(IModifier mod) {
-		
+
 		this.activeModifiers.add(mod);
-		
+
+	}
+
+	/**
+	 * Clears all the modifiers
+	 */
+	public void clearModifiers() {
+
+		this.activeModifiers.clear();
+
 	}
 	
 	/**
 	 * Deletes the specified modifier
 	 */
 	public void deleteModifier(IModifier mod) {
-		
+
 		this.activeModifiers.remove(mod);
-		
+
 	}
-	
+
 	/**
 	 * Deletes all modifiers casted ON the field position specified
 	 */
 	public void deleteModifiersOn(int ownerId, int pos) {
-		List <IModifier> toRemove = new ArrayList<IModifier>();
-		
+		List<IModifier> toRemove = new ArrayList<IModifier>();
+
 		for (IModifier mod : activeModifiers) {
-			if (mod.getTargetOwnerId() == ownerId
-					&& mod.getTargetPos() == pos) {
+			if (mod.getTargetOwnerId() == ownerId && mod.getTargetPos() == pos) {
 				toRemove.add(mod);
 			}
 		}
-		
+
 		for (IModifier mod : toRemove) {
-			
+
 			activeModifiers.remove(mod);
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	 * Deletes all modifiers casted BY the field position specified
 	 */
 	public void deleteModifiersBy(int ownerId, int pos) {
-		List <IModifier> toRemove = new ArrayList<IModifier>();
-		
+		List<IModifier> toRemove = new ArrayList<IModifier>();
+
 		for (IModifier mod : activeModifiers) {
-			if (mod.getCasterOwnerId() == ownerId
-					&& mod.getCasterPos() == pos) {
+			if (mod.getCasterOwnerId() == ownerId && mod.getCasterPos() == pos) {
 				toRemove.add(mod);
 			}
 		}
-		
+
 		for (IModifier mod : toRemove) {
-			
+
 			activeModifiers.remove(mod);
-			
+
 		}
-		
+
+	}
+
+	/**
+	 * Attempts to return the game state at the beginning of the specified turn.
+	 * The game state will be at the point where dice have been rolled, VP have
+	 * been deducted etc.
+	 * 
+	 * @param turn
+	 *            The turn to start at
+	 * @return The game state at the specified turn. Null if the game state did
+	 *         not exist (turn in the future, etc)
+	 */
+	public ImmutableGameState getGameStateForTurn(int turn) {
+		ImmutableGameState state = null;
+
+		for (ImmutableGameState iterator : gameSnapshots) {
+
+			if (iterator.getTurnNumber() == turn) {
+
+				state = iterator;
+
+			}
+
+		}
+
+		return state;
+	}
+
+	/**
+	 * Load snapshots from the list.
+	 * Should NOT be used in the main game, only for child games which are replays of the parent.
+	 * @param snapshots
+	 */
+	public void setGameSnapshots(List<ImmutableGameState> snapshots) {
+		gameSnapshots.addAll(snapshots);
 	}
 
 }

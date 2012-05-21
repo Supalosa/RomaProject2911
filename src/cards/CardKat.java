@@ -2,9 +2,12 @@ package cards;
 
 import java.util.*;
 
+import actions.ActivateCardAction;
+
 import modifiers.IModifier;
 
 import cards.activators.CardParams;
+import cards.activators.KatParams;
 
 import roma.*;
 import enums.*;
@@ -52,24 +55,38 @@ public class CardKat extends Card {
 		return 1;
 	}
 
-	public boolean performEffect(GameVisor g, int pos) {	
-		
-		g.getController().showMessage("Miaow");
-		return true;
 
-	}
-
-	/**
-	 * Not activatable
-	 */
 	@Override
 	public CardParams getParams() {
-		return null;
+		return new KatParams();
 	}
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		g.getController().showMessage("Miaow");
 		return false;
+	}
+	
+	/**
+	 * Kat activates itself at the start of the turn
+	 */
+	// onTurnStart: when the turn starts
+	public void onTurnStart(GameVisor gv, int playerId) {
+		
+		KatParams params = new KatParams();
+		ActivateCardAction action = new ActivateCardAction(params);
+		action.setDiceDisc(gv.getField().findCardPosition(this) + 2);
+		System.out.println ("KAT executed at start of turn " + gv.getTurnNumber());
+
+		
+		// kinda protects against Kat being on bribe dice,
+		// because bribe logic is ignored if not on bribe disc
+		action.setUseBribe(true);
+		action.setBribeDice(0);
+		action.setActionExecutor(getOwnerID());
+
+		action.execute(gv);
+		
 	}
 	
 	/**
@@ -81,7 +98,7 @@ public class CardKat extends Card {
 		
 		Card enteredCard = f.getCard(ownerId, position);
 		if (enteredCard == this) {
-			System.out.println ("Reset life of kat");
+		//	System.out.println ("Reset life of kat");
 			//lives = 9;
 		}
 		
@@ -131,7 +148,7 @@ public class CardKat extends Card {
 		CardKat copy = (CardKat) super.getCopy();
 		
 		copy.setLives(lives);
-		System.out.println ("Kat copy [" + copy.hashCode() + "] has " + copy.getLives() + " lives");
+		//System.out.println ("Kat copy [" + copy.hashCode() + "] has " + copy.getLives() + " lives");
 		return copy;
 	}
 

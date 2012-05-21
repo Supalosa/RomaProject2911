@@ -211,6 +211,12 @@ public abstract class Card implements Cloneable {
 		Card copy = null;
 		try {
 			copy = (Card) this.clone();
+			
+			// Cards can only get realDefense from auras, which is recalculated...
+			// So need to reset def when cloned
+			copy.setRealDefense(copy.getDefense());
+			
+			
 		} catch (CloneNotSupportedException e) {
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace();

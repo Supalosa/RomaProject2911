@@ -62,11 +62,11 @@ public class CardLegionarius extends Card {
 
 			if (enemyCard.onAttacked(g, this, pos-1, myParams.getBattleDie())) {
 
-				g.getController().showMessage("You killed a " + enemyCard.getName() + "!");
+				g.getController().showMessage("You killed a " + enemyCard.getName() + "! battle value was " + myParams.getBattleDie() + "/" + enemyCard.getRealDefense());
 				
 			} else {
 				
-				g.getController().showMessage("Could not kill the " + enemyCard.getName() + ", battle value was " + myParams.getBattleDie());
+				g.getController().showMessage("Could not kill the " + enemyCard.getName() + ", battle value was " + myParams.getBattleDie() + "/" + enemyCard.getRealDefense());
 				
 			}
 		}

@@ -10,11 +10,11 @@ public class ConsiliariusParams extends CardParams {
 	/**
 	 * Map of old position->new position
 	 */
-	Queue<PositionMapping> cardPositions;
+	List<PositionMapping> cardPositions;
 	
 	public ConsiliariusParams() {
 		
-		cardPositions = new LinkedList<PositionMapping>();
+		cardPositions = new ArrayList<PositionMapping>();
 		
 	}
 	
@@ -51,9 +51,19 @@ public class ConsiliariusParams extends CardParams {
 		cardPositions.add(new PositionMapping(old_pos, new_pos));
 	}
 	
-	public PositionMapping getNextPosition() {
-		return cardPositions.poll();
+	/**
+	 * Returns an immutable list of the mappings.
+	 * @return
+	 */
+	public List<PositionMapping> getMappings() {
+		
+		return new ArrayList<PositionMapping>(cardPositions);
+		
 	}
+	
+	/*public PositionMapping getNextPosition() {
+		return cardPositions.poll();
+	}*/
 	
 	public boolean isValid() {
 		return cardPositions.size() > 0;

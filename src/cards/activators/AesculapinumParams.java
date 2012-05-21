@@ -5,13 +5,22 @@ import java.util.List;
 
 import roma.*;
 import cards.*;
+import enums.*;
 
 public class AesculapinumParams extends CardParams {
 	
 	/**
 	 * The n'th card on the discard pile
 	 */
-	int pickedUpCard;
+	private int pickedUpCard;
+	
+	
+	/**
+	 * We also store the pickedUpCardName so we can check if the wrong card was picked up the next time.
+	 */
+	private CardNames pickedUpCardName;
+	
+	
 	
 	public AesculapinumParams() {
 		pickedUpCard = -1;
@@ -40,6 +49,7 @@ public class AesculapinumParams extends CardParams {
 				for (Card c : g.getDiscardPile().asList()) {
 					if (c == selected) {
 						setPickedUpCard(discardPosition);
+						setPickedUpCardName(c.getID());
 					}
 					discardPosition ++;
 				}
@@ -60,12 +70,26 @@ public class AesculapinumParams extends CardParams {
 	}
 	
 	/**
+	 * Sets the card name that was picked up
+	 */
+	public void setPickedUpCardName(CardNames name) {
+		
+		pickedUpCardName = name;
+		
+	}
+	
+	/**
 	 * Gets the card to be picked up
 	 */
 	public int getPickedUpCard() {
 		return pickedUpCard;
 	}
 	
+	
+	public CardNames getPickedUpCardName() {
+		return pickedUpCardName;
+	}
+
 	public boolean isValid() {
 		return (pickedUpCard != -1);
 	}

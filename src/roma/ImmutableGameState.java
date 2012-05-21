@@ -1,6 +1,10 @@
 package roma;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
+
+import modifiers.IModifier;
 
 import cards.Card;
 
@@ -12,6 +16,8 @@ public class ImmutableGameState {
 	private final int[] sestertii;
 	private final int[] VP;
 	private final Vector<Card>[] hands;
+	private final List<IModifier> modifiers;
+	private final List<ImmutableGameState> snapshots;
 
 	private final int player;
 
@@ -57,6 +63,25 @@ public class ImmutableGameState {
 
 		// current player's turn
 		player = g.whoseTurn();
+		
+		// list of active modifiers
+		modifiers = new ArrayList<IModifier>(g.getModifiers());
+		
+		// list of snapshots up to this turn
+		snapshots = new ArrayList<ImmutableGameState>();
+		
+		for (int i = 0; i < turnNumber; i++) {
+			ImmutableGameState snapshot = g.getGameStateForTurn(i);
+			
+			if (snapshot != null) {
+				snapshots.add(snapshot);
+			} else {
+				
+				System.out.println ("ImmutableGameState MISSING snapshot for turn " + i);
+				
+			}
+		}
+		// current turn #
 		this.turnNumber = turnNumber;
 
 	}
@@ -95,5 +120,17 @@ public class ImmutableGameState {
 
 	public int getTurnNumber() {
 		return turnNumber;
+	}
+	
+	public List<IModifier> getModifiers() {
+		
+		return modifiers;
+		
+	}
+	
+	public List<ImmutableGameState> getSnapshots() {
+		
+		return snapshots;
+		
 	}
 }

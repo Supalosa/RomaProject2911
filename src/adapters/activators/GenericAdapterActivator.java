@@ -15,6 +15,7 @@ public abstract class GenericAdapterActivator implements CardActivator {
 	private Game game;
 	private MockController controller;
 	private boolean isCopy; // is a copy created by Scaenicus
+	private GenericAdapterActivator copier; // the activator that copied this activator
 	
 	// bribe?
 	private int bribeDice;
@@ -28,9 +29,18 @@ public abstract class GenericAdapterActivator implements CardActivator {
 		this.controller = (MockController)game.getController();
 		this.bribeDice = NO_BRIBE;
 		this.isCopy = false;
+		this.copier = null;
 		
 	}
 	
+	public GenericAdapterActivator getCopier() {
+		return copier;
+	}
+
+	public void setCopier(GenericAdapterActivator copier) {
+		this.copier = copier;
+	}
+
 	@Override
 	public abstract void complete();
 	
@@ -44,42 +54,35 @@ public abstract class GenericAdapterActivator implements CardActivator {
 	 * A wrapper used to execute, because ActivateCardAction has incompatibilities
 	 */
 	public void execute(CardParams params) {
-		/*
-		// stop if disc is blocked
-		if (!game.getField().isBlocked(game.whoseTurn(), fieldPosition-1)) {	
-			if (bribeDice != NO_BRIBE) { // bribe?
-				System.out.println ("BribeDice: before " + game.getCurrentPlayer().getMoney() + " (-" + bribeDice + ")");
-				if (theCard.performEffect(game.getGameVisor(), fieldPosition, params)) {
-					
-					game.getCurrentPlayer().setMoney(game.getCurrentPlayer().getMoney() - bribeDice);
-					game.useDice(bribeDice);
-				}
-				System.out.println ("BribeDice: after " + game.getCurrentPlayer().getMoney());
-				
-			} else if (theCard.performEffect(game.getGameVisor(), fieldPosition, params)) {
-					
-				game.useDice(fieldPosition);
-					
+		
+		// do NOT activate if this is a copy - scaenicus will do it! (we just give the params to the scaenicus)
+		if (isCopy == false) {
+			
+			ActivateCardAction action = new ActivateCardAction(params);
+			action.setDiceDisc(fieldPosition+1);
+			//System.out.println ("GenericAdapterActivator:execute: execuitng at " + fieldPosition + " (" + bribeDice + ")");
+		
+			
+			if (fieldPosition == Game.BRIBE_DISC) {
+				action.setBribeDice(bribeDice);
+				action.setUseBribe(true);
+			} else {
+				action.setUseBribe(false);
 			}
-		} else { // disc was blocked
-			System.out.println ("acceptance: did not activate " + theCard + ", disc is blocked");
-		}*/
-		
-		ActivateCardAction action = new ActivateCardAction(params);
-		action.setDiceDisc(fieldPosition+1);
-		//System.out.println ("GenericAdapterActivator:execute: execuitng at " + fieldPosition + " (" + bribeDice + ")");
-	
-		
-		if (fieldPosition == Game.BRIBE_DISC || !isCopy) {
-			action.setBribeDice(bribeDice);
-			action.setUseBribe(true);
-		} else {
-			action.setUseBribe(false);
-		}
-		
-		// don't execute if blocked
-		if (!game.getField().isBlocked(game.whoseTurn(), fieldPosition-1)) {
-			action.execute(game.getGameVisor(), theCard);
+			
+			action.setActionExecutor(game.whoseTurn());
+			
+			// don't execute if blocked
+			if (!game.getField().isBlocked(game.whoseTurn(), fieldPosition-1)) {
+				action.execute(game.getGameVisor(), theCard);
+			}
+		} else { // this is a copy - apply to the scaenicus
+			
+			ScaenicusAdapterActivator scaenicusActivator = (ScaenicusAdapterActivator)getCopier();
+			
+			scaenicusActivator.getParams().setCopiedParams(params);
+			scaenicusActivator.getParams().setCopiedCard(theCard.getID());
+			
 		}
 	}
 	

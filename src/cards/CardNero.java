@@ -54,17 +54,19 @@ public class CardNero extends Card {
 		int enemyPos = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		Card targetCard = g.getField().getCard(enemyPos, myParams.getTargetPos());
 		
+		
+		// RG - seems like Nero always sacrifices even if it can't kill
+		g.getField().setCard(g.whoseTurn(), pos-1, null);
+		g.discard(this);
+		
 		if (targetCard != null && targetCard.isBuilding()) {
-			performed = true;
-			g.getField().setCard(g.whoseTurn(), pos-1, null);
-			g.discard(this);
-			
+
 			g.getField().removeCard(targetCard);
 			g.discard(targetCard);
 			
 			
 		} else {
-			
+			g.getController().showMessage("Nero is not crazy enough to attack the " + targetCard + ", it's not a building!");
 		}
 
 		return performed;

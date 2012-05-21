@@ -14,7 +14,7 @@ import framework.interfaces.activators.*;
  */
 public class ScaenicusAdapterActivator extends GenericAdapterActivator implements ScaenicusActivator {
 
-	ScaenicusParams params;
+	private ScaenicusParams params;
 	
 	public ScaenicusAdapterActivator(int fieldPosition, Game game, Card theCard) {
 		super(fieldPosition, game, theCard);
@@ -33,6 +33,11 @@ public class ScaenicusAdapterActivator extends GenericAdapterActivator implement
 	}
 
 
+	public ScaenicusParams getParams() {
+		
+		return params;
+		
+	}
 	/**
 	 * Looks like we have to return an activator for the card that's in that position
 	 */
@@ -51,11 +56,13 @@ public class ScaenicusAdapterActivator extends GenericAdapterActivator implement
 		 */
 		GenericAdapterActivator copiedActivator = CardActivatorAdapter.getActivator(cardInPosition.getID(), getFieldPosition(), getGame(), copiedCard);
 		
+		params.setPositionToCopy(diceDisc-1);
 		copiedActivator.setIsCopy(true);
+		copiedActivator.setCopier(this);
 		/*
 		 * Store it in Scaenicus's param object
 		 */
-		params.setCopiedParams(copiedActivator);
+		//params.setCopiedParams(copiedActivator);
 		
 		
 		//System.out.println ("Created a " + copiedActivator.getClass().getName() + " activator");

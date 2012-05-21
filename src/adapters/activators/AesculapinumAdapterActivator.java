@@ -38,6 +38,11 @@ public class AesculapinumAdapterActivator extends GenericAdapterActivator implem
 	public void chooseCardFromPile(int indexOfCard) {
 
 		params.setPickedUpCard(indexOfCard);
+		// peek ahead to see what that card would have been
+		Card actualCard = getGame().getDiscardPile().getIndex(indexOfCard);
+		params.setPickedUpCardName(actualCard.getID());
+		
+		
 	}
 
 }

@@ -6,6 +6,7 @@ public class TurrisAura extends IModifier {
 
 	public static final String NAME = "Turris Aura";
 	
+	boolean applied = false;
 	@Override
 	public String getName() {
 		return NAME;
@@ -21,7 +22,12 @@ public class TurrisAura extends IModifier {
 	 */
 	@Override
 	public void apply(Card c) {
-		c.setRealDefense(c.getRealDefense() + 1);
+		/*if (applied == false) {
+			applied = true;
+		*/
+			System.out.println("TURRIS APPLY " + c.getName() + " [" + c.getRealDefense() + "]");
+			c.setRealDefense(c.getRealDefense() + 1);
+		//}
 	}
 
 	/**
@@ -29,7 +35,12 @@ public class TurrisAura extends IModifier {
 	 */
 	@Override
 	public void unapply(Card c) {
-		c.setRealDefense(c.getRealDefense() - 1);
+		/*if (applied == true) {
+			applied = false;
+		*/
+			System.out.println("TURRIS UNAPPLY " + c.getName() + " [" + c.getRealDefense() + "]");
+			c.setRealDefense(c.getRealDefense() - 1);
+		//}
 	}
 
 }

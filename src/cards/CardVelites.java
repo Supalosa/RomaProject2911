@@ -73,7 +73,7 @@ public class CardVelites extends Card {
 				
 			} else {
 				
-				g.getController().showMessage("Could not kill the target, battle value was " + diceRoll);
+				g.getController().showMessage("Could not kill the target, battle value was " + diceRoll + " / " + target.getRealDefense());
 				
 			}
 		}

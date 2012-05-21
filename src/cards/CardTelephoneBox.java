@@ -83,43 +83,37 @@ public class CardTelephoneBox extends Card {
 			} else { // hard to go backwards
 
 				int toTurn = g.getTurnNumber() - myParams.getDiceToUse();
-				// fuckkkk
+				
+				// If going too far back, go to the start of the game.
+				if (toTurn < 0) {
+					toTurn = 0;
+				}
 				System.out.println("Telephone Box activated at turn "
 						+ g.getTurnNumber() + " and going back "
 						+ myParams.getDiceToUse() + " turns");
 				
-				/*
-				Game newGame = g.getActionLogger().rebuildGame(toTurn);
-
-				// CardTypes library = new CardTypes();
-				// Card copyOfCard =
-				// library.getCard(timeTravellingCard.getID());
+				
 				Card copyOfCard = timeTravellingCard.getCopy();
+				ImmutableGameState gameSnapshot = g.getGameStateForTurn(toTurn);
+				
+				if (gameSnapshot == null) { // ABORT
+					
+					System.err.println ("Error: gameSnapshot for turn " + toTurn + " doesn't exit!");
+					System.exit(1);
+				}
 				Game updatedGame = g.getActionLogger().insertCardToGame(
-						newGame, toTurn, copyOfCard, g.whoseTurn(),
+						gameSnapshot, toTurn, copyOfCard, g.whoseTurn(),
 						myParams.getDiceToSend() - 1);
 
 				// the only thing missing is the activation of THIS card.. so
 				// use dice
 				updatedGame.useDice(pos);
 
-				System.out.println("Dice rolls:");
-				for (int i = 0; i < updatedGame.getDiceRolls().length; i++) {
-					System.out.print(updatedGame.getDiceRoll(i) + " ");
-				}
-				System.out.println();
-
-				System.out.println("Discard:");
-				/*
-				 * for (int i = 0; i < updatedGame.getDiceRolls().length; i++) {
-				 * System.out.print(updatedGame.getDiceRoll(i) + " "); }
-
-				System.out.println(updatedGame.getDiscardPile().asList());
-
-				g.copyStateFrom(updatedGame);
-
-				System.out.println("Updated game has "
-						+ updatedGame.getPlayer(1).getVP() + " vp for plr 2");*/
+			
+				// We want to be the updated game... use the interim ImmutableGameState.
+				ImmutableGameState interimState = new ImmutableGameState(updatedGame, updatedGame.getTurnNumber());
+				
+				g.copyStateFrom(interimState);
 			}
 
 		} else {

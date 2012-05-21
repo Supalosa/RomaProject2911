@@ -47,10 +47,28 @@ public class CardTurris extends Card {
 		Card c = f.getCard(ownerId, position);
 
 		if (c == this) { // apply to all the cards on our side of the field, retroactively
+			System.out.println("Turris entered the field, applying to cards...");
 			for (Card myCard : f.getSideAsList(ownerId)) {
 				if (myCard != this) {
-					IModifier turrisAura = new TurrisAura();
-					castModifier(g, myCard, turrisAura);
+					// do NOT apply if it already has this modifier FROM US!
+					boolean hasOurModifier = false;
+					
+					List<IModifier> mods = g.getModifiersOn(myCard);
+					for (IModifier mod : mods) {
+						System.out.println (" > Target has mod : " + mod.getName());
+						if (mod.getCasterOwnerId() == ownerId && mod.getCasterPos() == position) {
+							System.out.println (" > TURRIS did not apply, already has a modifier");
+							hasOurModifier = true; // :( already applied (possibly due to copying game state)
+						}
+						
+					}
+					
+					
+					if (!hasOurModifier) {
+						System.out.println(" > Applied to " + myCard);
+						IModifier turrisAura = new TurrisAura();
+						castModifier(g, myCard, turrisAura);
+					}
 				}
 			}
 		} else if (ownerId == this.getOwnerID()) { // else a friendly card came in
@@ -76,13 +94,15 @@ public class CardTurris extends Card {
 			// need this because you cannot iterate over modifier while removing
 			List<IModifier> modsToRemove = g.getModifiersBy(this);
 			
+			System.out.println ("Turris, left the field.");
 			for (IModifier mod : modsToRemove) {
 				Card modTarget = f.getCard(mod.getTargetOwnerId(), mod.getTargetPos());
-				System.out.println("Turris leaving field, applying on " + mod.getTargetOwnerId() + ", " + mod.getTargetPos());
+				//System.out.println("Turris leaving field, applying on " + mod.getTargetOwnerId() + ", " + mod.getTargetPos());
 				if (modTarget != null) {
 					mod.unapply(modTarget);
+					System.out.println(" > Unapplied on " + modTarget + " (@ " + mod.getTargetPos() + ")");
 				} else {
-					System.out.println ("Turris: target at " + mod.getTargetOwnerId() + ", " + mod.getTargetPos() + " no longer exists!");
+				//	System.out.println ("Turris: target at " + mod.getTargetOwnerId() + ", " + mod.getTargetPos() + " no longer exists!");
 				}
 			}
 		}

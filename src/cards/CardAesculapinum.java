@@ -47,9 +47,15 @@ public class CardAesculapinum extends Card {
 		
 		Card revivedCard = g.getDiscardPile().getIndex(myParams.getPickedUpCard());
 		
-		g.getDiscardPile().removeCard(revivedCard);			
-		g.getCurrentPlayer().addCard(revivedCard);
-
+		// Time paradox if wrong card or null
+		if (revivedCard == null || revivedCard.getID() != myParams.getPickedUpCardName()) {
+			g.getController().showMessage("Oh dear! You caused a Time Paradox through Aesculapinum!");
+			g.onTimeParadox();
+		} else {
+			g.getDiscardPile().removeCard(revivedCard);			
+			g.getCurrentPlayer().addCard(revivedCard);
+		}
+		
 		
 		return performed;
 

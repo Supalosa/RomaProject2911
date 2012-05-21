@@ -196,7 +196,7 @@ public class GameVisor {
 	 */
 	public void copyStateFrom(ImmutableGameState gameState) {
 		
-		//System.out.println ("-- copyStateFromImmutable Start --");
+		System.out.println ("-- copyStateFromImmutable Start --");
 		// VP, Sestertii, 
 		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
 			game.getPlayer(i).setVP(gameState.getVP(i));
@@ -204,10 +204,10 @@ public class GameVisor {
 			
 			
 			// load hands
-			System.out.println("Mutable Hand: " + game.getPlayer(i).getHand());
+			//System.out.println("Mutable Hand: " + game.getPlayer(i).getHand());
 			game.getPlayer(i).getHand().clear();
 			game.getPlayer(i).getHand().addAll(gameState.getHands(i));
-			System.out.println("Immutable Hand: " + game.getPlayer(i).getHand());
+			//System.out.println("Immutable Hand: " + game.getPlayer(i).getHand());
 		}
 		
 		// Action Dice
@@ -231,6 +231,52 @@ public class GameVisor {
 			
 		}
 		
+		
+
+		game.getField().clearField();
+		// field
+		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+			
+			for (int j = 0; j < Game.FIELD_SIZE; j++) {
+				//Card onGame = game.getField().getCard(i, j);
+				Card onState = gameState.getField().getCard(i, j);
+				game.getField().setCard(i, j, onState);
+			}
+			
+		}
+		
+		game.clearModifiers();
+		// modifiers
+		for (IModifier mod : gameState.getModifiers()) {
+			
+			game.addModifier(mod);
+			
+		}
+		
+		
+		// snapshots
+		game.setGameSnapshots(gameState.getSnapshots());
+		
+		/*
+		 * 				if ((onGame == null) != (onState == null)) {
+					System.out.println("** Warning: copyStateFromImmutable: Fields at [" + i + "," + j + "] were not the same - empty/occupied mismatch");
+					System.out.println ("    Field [" + i + ", " + j + "] before: " + onGame + ", after: " + onState);
+
+					//System.exit(1);
+				} else if (onGame != null && onState != null && onGame.getID() != onState.getID()) {
+					System.out.println("** Warning: copyStateFromImmutable: Fields at [" + i + "," + j + "] were not the same - type mismatch");
+					System.out.println ("    Field [" + i + ", " + j + "] before: " + onGame + ", after: " + onState);
+
+					//System.exit(1);
+				}
+				
+		 */
+		// Turn Number
+		game.setTurnNumber(gameState.getTurnNumber());
+		
+		// Whose turn
+		game.setWhoseTurn(gameState.getPlayer());
+		
 		//System.out.println ("-- copyStateFromImmutable End --");
 		
 		// testing
@@ -244,6 +290,8 @@ public class GameVisor {
 				assert (game.getPlayer(i).getMoney() == gameState.getSestertii(i));
 				
 			}
+			
+			assert(game.getModifiers().size() == gameState.getModifiers().size());
 			
 		} catch (AssertionError ex) {
 			
@@ -347,6 +395,22 @@ public class GameVisor {
 	 */
 	public void deleteModifiersBy(int ownerId, int pos) {
 		game.deleteModifiersBy(ownerId, pos);
+		
+	}
+	
+	/**
+	 * Attempts to return the game state at the beginning of the specified turn.
+	 * The game state will be at the point where dice have been rolled, VP have
+	 * been deducted etc.
+	 * 
+	 * @param turn
+	 *            The turn to start at
+	 * @return The game state at the specified turn. Null if the game state did
+	 *         not exist (turn in the future, etc)
+	 */
+	public ImmutableGameState getGameStateForTurn(int turn) {
+		
+		return game.getGameStateForTurn(turn);
 		
 	}
 	

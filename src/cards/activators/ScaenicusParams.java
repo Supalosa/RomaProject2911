@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cards.Card;
+import enums.CardNames;
 import framework.interfaces.activators.CardActivator;
 import roma.GameVisor;
 
@@ -12,19 +13,13 @@ public class ScaenicusParams extends CardParams {
 	private int battleDie;
 	private int positionToCopy;
 	private boolean valid;
-	private CardActivator copiedActivator;
+	private CardNames copiedCard;
+	private CardParams copiedParams;
 	
 	public ScaenicusParams() {
 		valid = true;
 	}
 	
-	public int getBattleDie() {
-		return battleDie;
-	}
-	
-	public void setBattleDie(int dieValue) {
-		battleDie = dieValue;
-	}
 
 	public int getPositionToCopy() {
 		return positionToCopy;
@@ -45,12 +40,13 @@ public class ScaenicusParams extends CardParams {
 		}
 		
 		Card selectedCard = null;
-		selectedCard = g.getController().getCard(characters, "Select a character card to lay.");
+		selectedCard = g.getController().getCard(characters, "Select a character card to copy.");
 
 		if (selectedCard != null) {
 
 			valid = true;
 			setPositionToCopy(g.getField().findCardPosition(selectedCard));
+			setCopiedCard(selectedCard.getID());
 			
 		}
 		
@@ -61,14 +57,22 @@ public class ScaenicusParams extends CardParams {
 		return valid;
 	}
 
-	/* these are used purely for acceptance testing.. fuck */
+
 	
-	public CardActivator getCopiedParams() {
-		return copiedActivator;
+	public CardNames getCopiedCard() {
+		return copiedCard;
 	}
 
-	public void setCopiedParams(CardActivator copiedActivator) {
-		this.copiedActivator = copiedActivator;
+	public void setCopiedCard(CardNames copiedCard) {
+		this.copiedCard = copiedCard;
+	}
+
+	public CardParams getCopiedParams() {
+		return copiedParams;
+	}
+
+	public void setCopiedParams(CardParams copiedActivator) {
+		this.copiedParams = copiedActivator;
 	}
 
 

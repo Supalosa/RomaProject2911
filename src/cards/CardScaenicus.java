@@ -56,25 +56,36 @@ public class CardScaenicus extends Card {
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
-		ScaenicusParams myParams = (ScaenicusParams)a;
 		boolean performed = true;
+		ScaenicusParams myParams = (ScaenicusParams)a;
 		
-		int posToCopy = myParams.getPositionToCopy();
+		/* Determine which card Scaenicus copied */
 		
-		Card copiedCard = g.getField().getCard(g.whoseTurn(), posToCopy);
+		// Time Paradox occurs if 'copied card' and card that's actually there is inconsistent.
+		CardTypes library = new CardTypes();
 		
-		/* Very hacky fix, but acceptance works weirdly.
-		 * If we have been passed a CardActivator, then it has already been activated!
-		 * So don't run it here.
-		 */
-		if (copiedCard != null && myParams.getCopiedParams() == null) {
+		Card inPlace = g.getField().getCard(g.whoseTurn(), myParams.getPositionToCopy());
+		
+		if (inPlace == null || inPlace.getID() != myParams.getCopiedCard()) {
 			
-			CardParams params = copiedCard.getParams();
-			params.query(g, pos);
+			g.getController().showMessage("Oh dear! You caused a time paradox by changing the card activated by Scaenicus.");
+			g.getController().showMessage("In place: " + inPlace.getID() + ", Expected: " + myParams.getCopiedCard());
+			g.onTimeParadox();
+		} else {
 			
-			copiedCard.performEffect(g, pos, params);
+			Card invokedCard = library.getCard(myParams.getCopiedCard());
 
+			if (invokedCard != null && myParams.getCopiedParams() != null) {
+			
+				invokedCard.performEffect(g, pos, myParams.getCopiedParams());
+				
+			} else { // error...
+				
+				System.err.println ("SCAENICUS error in activation... invalid invokedCard or no params");
+				System.exit(1);
+			}
 		}
+
 		
 		return performed;
 	}

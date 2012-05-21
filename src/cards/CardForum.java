@@ -74,21 +74,49 @@ public class CardForum extends Card {
 			}
 			
 			if (myParams.isUseTemplum()) {
-				int[] rolls = g.getDiceRolls();
-				boolean removedActivator = false;
-				for (int i = 0; i < rolls.length; i++) {
-					
-					if (rolls[i] == pos && removedActivator == false) {
-						removedActivator = true;
-					} else if (rolls[i] != 0) {
+				boolean hasTemplum = false;
+				
+				// find a templum...
+				
+				if (pos > 1) {
+					Card left = g.getField().getCard(g.whoseTurn(), pos-2);
+					if (left != null && left.getID() == CardNames.Templum) {
+						hasTemplum = true;
+					}
+				}
+				
+				if (pos < Game.FIELD_SIZE - 1) {
+					Card right = g.getField().getCard(g.whoseTurn(), pos);
+					if (right != null && right.getID() == CardNames.Templum) {
+						hasTemplum = true;
+					}
+				}
+				
+				if (hasTemplum) {
+				
+					int[] rolls = g.getDiceRolls();
+					boolean removedActivator = false;
+					for (int i = 0; i < rolls.length; i++) {
 						
-						vpIncrease += g.getDiceRoll(i);
-						g.getController().showMessage("Added " + g.getDiceRoll(i) + " VPs to your haul");
-						g.useDice(g.getDiceRoll(i));
-					
+						if (rolls[i] == pos && removedActivator == false) {
+							removedActivator = true;
+						} else if (rolls[i] != 0) {
+							
+							vpIncrease += g.getDiceRoll(i);
+							g.getController().showMessage("Added " + g.getDiceRoll(i) + " VPs to your haul");
+							g.useDice(g.getDiceRoll(i));
+						
+						}
+						
 					}
 					
+				} else { // no templum but it was activated... time paradox
+					
+					g.getController().showMessage("Oh dear! You caused a Time Paradox by activating a Forum and requesting a Templum where there is none.");
+					g.onTimeParadox();					
+					
 				}
+				
 				
 			}
 			

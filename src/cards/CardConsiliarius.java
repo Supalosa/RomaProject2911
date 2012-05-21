@@ -47,15 +47,28 @@ public class CardConsiliarius extends Card {
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		ConsiliariusParams myParams = (ConsiliariusParams)a;
 		boolean performed = true;
-		
-		PositionMapping thisMapping= myParams.getNextPosition();
+				
+		// Time Paradox if there are not enough mappings made.
+		int numCharacters = 0;
+		int movements = 0;
+		for (Card c : g.getField().getSideAsList(g.whoseTurn())) {
+			
+			if (!c.isBuilding()) {
+				
+				numCharacters ++;
+				
+			}
+			
+		}
 		
 		// Maintain a copy of the field, because swapping cards will cause problems
-		
 		Card[] fieldCopy = g.getField().getSide(g.whoseTurn());
 		
-		do {
-			//Card theCard = g.getField().getCard(g.whoseTurn(), thisMapping.getInitialPos());
+		
+		// Use a copy of the params, because getNextPosition destroys the value (cannot replay.. bad)
+		List<PositionMapping> mappings = myParams.getMappings();
+		for (PositionMapping thisMapping : mappings)  {
+
 			Card theCard = fieldCopy[thisMapping.getInitialPos()];
 			
 			//Remove card from the field
@@ -65,9 +78,17 @@ public class CardConsiliarius extends Card {
 			g.getField().setCard(g.whoseTurn(), thisMapping.getFinalPos(), theCard);
 			
 			//System.out.println ("ConsilPerform: " + thisMapping.getInitialPos() + " -> " + thisMapping.getFinalPos());
+			movements ++;
 			
-		} while ((thisMapping = myParams.getNextPosition()) != null);
+		}
 		
+		
+		// TIME PARADOX!
+		if (movements != numCharacters) {
+			g.getController().showMessage("Consiliarius caused a Time Paradox. There were more Character Cards than expected in the past!");
+			g.onTimeParadox();
+			
+		}
 		/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
 			
 			System.out.println (g.getField().getCard(g.whoseTurn(), i));

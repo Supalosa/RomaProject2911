@@ -64,6 +64,35 @@ public class Field implements Cloneable {
 	}
 	
 	/**
+	 * Forces a card in the specified position. Does NOT trigger events
+	 * @param player Which player
+	 * @param position Which dice disc (0..max) to place it next to
+	 * @param c the card
+	 * @return The card that was replaced, if applicable
+	 */
+	public Card setCardForced (int player, int position, Card c) {
+		assert (player >= 0 && player < fieldData.length);
+		assert (position >= 0 && position < Game.FIELD_SIZE);
+		
+		Card replacedCard = fieldData[player][position];	
+		
+		if (replacedCard != null) {
+
+			replacedCard.setOwnerId(Player.NO_OWNER);
+			
+		}
+		
+		fieldData[player][position] = c;
+		
+		if (c != null) {
+			c.setOwnerId(player);
+		}
+
+		
+		return replacedCard;
+	}
+	
+	/**
 	 * Remove the card from the field, regardless of its position
 	 * @param c
 	 */
@@ -190,10 +219,16 @@ public class Field implements Cloneable {
 		Field clonedField = null;
 		try {
 			clonedField = (Field) super.clone();
+			clonedField.modifiers = new ArrayList<IModifier>(clonedField.modifiers);
+			clonedField.fieldData = clonedField.fieldData.clone();
 			for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+				clonedField.fieldData[i] = clonedField.fieldData[i].clone();
 				
+			}
+			
+			for (int i = 0; i < Game.MAX_PLAYERS; i++) {
 				for (int j = 0; j < Game.FIELD_SIZE; j++) {
-					
+
 					if (clonedField.fieldData[i][j] != null) {
 						clonedField.fieldData[i][j] = clonedField.fieldData[i][j].getCopy();
 					}
@@ -206,6 +241,29 @@ public class Field implements Cloneable {
 			e.printStackTrace();
 		}
 		return clonedField;
+	}
+	
+	/**
+	 * Deletes all the cards from the fields.
+	 * Since they are not going anywhere, it is assumed this is because of a wipe
+	 * (i.e. Telephone Box) - dont' need to trigger  events
+	 */
+	public void clearField() {
+		
+		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+			
+			for (int j = 0; j < Game.FIELD_SIZE; j++) {
+				
+				if (fieldData[i][j] != null) {
+					
+					fieldData[i][j] = null;
+				
+				}
+			}
+			
+		}
+		
+		
 	}
 
 }
