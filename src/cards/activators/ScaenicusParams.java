@@ -48,6 +48,9 @@ public class ScaenicusParams extends CardParams {
 			setPositionToCopy(g.getField().findCardPosition(selectedCard));
 			setCopiedCard(selectedCard.getID());
 			
+			// get the parameters for the copied card
+			CardParams params = selectedCard.getParams();
+			params.query(g, pos);
 		}
 		
 	}

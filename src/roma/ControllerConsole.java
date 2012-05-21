@@ -117,6 +117,9 @@ public class ControllerConsole implements IController {
 		
 		int cardIndex = 0;
 		Card result = null;
+		
+		showMessage(message);
+		
 		for (Card c : cardList) {
 			
 			showMessage(cardIndex + ": " + c.getName());
@@ -124,7 +127,7 @@ public class ControllerConsole implements IController {
 		
 		}
 		
-		cardIndex = getInt(message);
+		cardIndex = getInt("[Enter 0-" + cardList.size() + "]: ");
 	
 		if (cardIndex >= 0 && cardIndex < cardList.size()) {
 			result = cardList.get(cardIndex);

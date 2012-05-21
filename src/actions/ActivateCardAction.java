@@ -39,6 +39,8 @@ public class ActivateCardAction implements IPlayerAction {
 		 */
 
 		if (params == null) {
+			
+			
 
 			for (int i : game.getDiceRolls()) {
 
@@ -65,32 +67,40 @@ public class ActivateCardAction implements IPlayerAction {
 					valid = false;
 				}
 
-			} else if (!hasDice) { // not bribe disc, and dont have dice
+			}
+			
+			if (valid && !hasDice) { // not bribe disc, and dont have dice
 
 				game.getController().showMessage(
 						"You don't have a dice corresponding to the dice ["
 								+ targetPos + "]");
 				valid = false;
 
-			} else if (g.getField().isBlocked(actionExecutor, targetPos - 1)) {
+			}
+			
+			if (valid && g.getField().isBlocked(actionExecutor, targetPos - 1)) {
 
 				game.getController().showMessage("That disc is blocked!");
 				valid = false;
 
 			}
 
-			if (targetPos == -1) { // no card selected
+			if (valid && targetPos == -1) { // no card selected
 
 				valid = false;
 				game.getController().showMessage(
 						"You don't have a card at that dice disc.");
 
-			} else if (params == null) { // no params (unactivatable card)
+			}
+			
+			if (valid && params == null) { // no params (unactivatable card)
 				valid = false;
 				game.getController().showMessage(
 						"You cannot activate that card.");
 
-			} else if (!params.isValid()) {
+			}
+			
+			if (valid && !params.isValid()) {
 				valid = false;
 				game.getController().showMessage(params.getError());
 

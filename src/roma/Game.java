@@ -321,7 +321,13 @@ public class Game {
 		}
 
 		currentPlayer = 0;
+		
+		controller.showMessage("Both players have been given FOUR (4) cards.");
+		
+		controller.showMessage("They will now swap two cards each from their hands.");
 
+		controller.showMessage("");
+		
 		// For all players, query them for the cards they want to swap.
 		for (int player = 0; player < MAX_PLAYERS; player++) {
 			currentPlayer = player;
@@ -333,7 +339,7 @@ public class Game {
 						.getCard(
 								players[currentPlayer].getHand(),
 								"Player "
-										+ player
+										+ (player + 1)
 										+ ": Please select a card to pass to your opponent ("
 										+ swappedCards[player].size() + "/"
 										+ NUM_SWAP_CARDS + ")")) == null) {
@@ -347,7 +353,13 @@ public class Game {
 
 		// Perform the actual swap.
 		swapAllCards();
-
+		
+		controller.showMessage("");
+		
+		controller.showMessage("Both will now decide where to allocate their four cards.");
+		
+		controller.showMessage("");
+		
 		// For all players, query them for where to lay their initial cards.
 		currentPlayer = 0;
 		Player p;
@@ -355,10 +367,14 @@ public class Game {
 		for (currentPlayer = 0; currentPlayer < MAX_PLAYERS; currentPlayer++) {
 			p = players[currentPlayer];
 			while (p.getHandSize() != 0) {
+				controller.showField();
+				layCard.query(getGameVisor());
 				layCard.execute(visor);
 			}
 		}
 
+		controller.showMessage("");
+		
 		currentPlayer = 0;
 	}
 
