@@ -5,17 +5,18 @@ import java.util.*;
 import roma.*;
 
 import cards.*;
+import enums.CardNames;
 
 
 public class TakeCardAction implements IPlayerAction {
 	
 	private int diceRoll;
 	private GameVisor game;
-	private int cardIndexTaken; // index of the card that was taken
+	private CardNames cardIndexTaken; // ID of the card that was taken
 	
 	public TakeCardAction() {
 		
-		cardIndexTaken = -1;
+		cardIndexTaken = null;
 		
 	}
 	
@@ -69,15 +70,42 @@ public class TakeCardAction implements IPlayerAction {
 				temp.add(g.drawCard());
 				
 			}
-			Card selected;
+			Card selected = null;
 			// If a card has not been chosen yet, choose it
-			if (cardIndexTaken == -1) {
+			if (cardIndexTaken == null) {
 				selected = g.getController().getCard(temp, "Please select one Card that you want (the rest are discarded)");
 			} else {
-				selected = temp.get(cardIndexTaken);
+				
+				// Find requested card
+				boolean found = false;
+				int position = -1;
+				int index = 0;
+				//System.out.println ("---- Looking for: " + cardIndexTaken + " -----");
+				for (Card c : temp) {
+					//System.out.println (c);
+					if (c.getID() == cardIndexTaken) {
+						position = index; 
+						found = true;
+						break;
+					}
+					
+					index++;
+					
+				}
+				
+				//System.out.println (" ------- Finished --------");
+				if (found) {
+					selected = temp.get(position);
+				} else {
+					
+					// taking cards.. error
+					assert (false);
+					
+				}
 			}
 			
 			if (selected != null) {
+				g.getController().showMessage("You have added a " + selected + " to your hand!");
 				g.useDice(diceRoll);
 				
 				g.getCurrentPlayer().addCard(selected);
@@ -128,7 +156,7 @@ public class TakeCardAction implements IPlayerAction {
 		diceRoll = dice;
 	}
 	
-	public void setCardIndexTaken(int index) {
+	public void setCardIndexTaken(CardNames index) {
 		
 		cardIndexTaken = index;
 		

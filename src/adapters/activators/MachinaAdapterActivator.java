@@ -5,6 +5,7 @@ import actions.*;
 import adapters.CardNameAdapter;
 import roma.*;
 import cards.Card;
+import cards.activators.ConsiliariusParams;
 import cards.activators.MachinaParams;
 import framework.interfaces.activators.*;
 
@@ -20,8 +21,7 @@ public class MachinaAdapterActivator extends GenericAdapterActivator implements 
 	Card[] fieldList;
 	
 	public MachinaAdapterActivator(int fieldPosition, Game game, Card theCard) {
-		
-		super(fieldPosition, game, theCard);
+		super(fieldPosition, game, theCard);;
 		
 		this.params = (MachinaParams) theCard.getParams();
 		
@@ -31,7 +31,6 @@ public class MachinaAdapterActivator extends GenericAdapterActivator implements 
 		fieldList = game.getField().getSide(game.whoseTurn());
 		
 	}
-	
 	
 	
 	@Override
@@ -62,6 +61,8 @@ public class MachinaAdapterActivator extends GenericAdapterActivator implements 
 					// Remove the entry in the field copy (so it won't get picked up again)
 					fieldList[pos] = null;
 					foundCard = true;
+					
+					//System.out.println ("Consil: " + card + " [" + pos + "] -> " + diceDisc);
 				}
 				
 			}

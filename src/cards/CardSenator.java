@@ -62,11 +62,11 @@ public class CardSenator extends Card {
 			}
 		}
 		
-		for (int i = 0; i < Game.FIELD_SIZE; i++) {
+		/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
 		
 			System.out.println (g.getField().getCard(g.whoseTurn(), i));
 		
-		}
+		}*/
 
 		
 		return performed;

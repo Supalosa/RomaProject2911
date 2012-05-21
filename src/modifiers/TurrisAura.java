@@ -25,7 +25,7 @@ public class TurrisAura extends IModifier {
 		/*if (applied == false) {
 			applied = true;
 		*/
-			System.out.println("TURRIS APPLY " + c.getName() + " [" + c.getRealDefense() + "]");
+			//System.out.println("TURRIS APPLY " + c.getName() + " [" + c.getRealDefense() + "]");
 			c.setRealDefense(c.getRealDefense() + 1);
 		//}
 	}
@@ -38,7 +38,7 @@ public class TurrisAura extends IModifier {
 		/*if (applied == true) {
 			applied = false;
 		*/
-			System.out.println("TURRIS UNAPPLY " + c.getName() + " [" + c.getRealDefense() + "]");
+			//System.out.println("TURRIS UNAPPLY " + c.getName() + " [" + c.getRealDefense() + "]");
 			c.setRealDefense(c.getRealDefense() - 1);
 		//}
 	}

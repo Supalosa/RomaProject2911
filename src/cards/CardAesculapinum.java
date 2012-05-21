@@ -45,13 +45,17 @@ public class CardAesculapinum extends Card {
 		AesculapinumParams myParams = (AesculapinumParams) a;
 		boolean performed = true;
 		
-		Card revivedCard = g.getDiscardPile().getIndex(myParams.getPickedUpCard());
+		// Find the first instance of the requested card!
+		int index = g.getDiscardPile().findCard(myParams.getPickedUpCardName());
 		
-		// Time paradox if wrong card or null
-		if (revivedCard == null || revivedCard.getID() != myParams.getPickedUpCardName()) {
+		if (index == -1) { // time paradox because the card doesn't exist
 			g.getController().showMessage("Oh dear! You caused a Time Paradox through Aesculapinum!");
+			g.getController().showMessage("You were supposed to get a " + myParams.getPickedUpCardName() + " that's no longer in the discard pile.");
+			
 			g.onTimeParadox();
 		} else {
+			
+			Card revivedCard = g.getDiscardPile().getIndex(index);
 			g.getDiscardPile().removeCard(revivedCard);			
 			g.getCurrentPlayer().addCard(revivedCard);
 		}

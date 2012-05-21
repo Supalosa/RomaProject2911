@@ -90,7 +90,7 @@ public class CardGrimReaper extends Card {
 			}
 			
 		} else if (ownerId == getOwnerID()) {
-			System.out.println ("Grim Reaper: a friendly " + c + " left the field!");
+			//System.out.println ("Grim Reaper: a friendly " + c + " left the field!");
 			
 		}
 		

@@ -84,6 +84,8 @@ public class GameVisor {
 	public void onEndTurn (int die1, int die2, int die3) {
 		game.nextTurn(); // Increment current player
 		game.startTurn(die1, die2, die3); // Perform start of turn actions.
+		
+		game.takeSnapshot(); // take snapshot in case
 	}
 	
 	public Player getPlayer (int player) {
@@ -148,47 +150,6 @@ public class GameVisor {
 		return game.getActionLogger();
 		
 	}
-
-	/**
-	 * Copies the state in the specified Game to our own game.
-	 * @param updatedGame
-	 */
-	public void copyStateFrom(Game updatedGame) {
-		
-		System.out.println ("-- copyStateFrom Start --");
-		// VP, Sestertii, 
-		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
-			game.getPlayer(i).setVP(updatedGame.getPlayer(i).getVP());
-			game.getPlayer(i).setMoney(updatedGame.getPlayer(i).getMoney());
-			
-		}
-		
-		// Action Dice
-		game.setDiceRolls(updatedGame.getDiceRolls().clone());
-		
-		// Discard pile
-		game.getDiscardPile().emptyPile();
-		
-		for (Card c : updatedGame.getDiscardPile().asList()) {
-			
-			game.getDiscardPile().addCardToFront(c.getCopy());
-			
-		}
-		
-		// Deck pile
-		game.getDeck().emptyPile();
-		
-		for (Card c : updatedGame.getDeck().asList()) {
-			
-			game.getDeck().addCardToFront(c.getCopy());
-			
-		}
-		
-		System.out.println ("-- copyStateFrom End --");
-		
-		
-	}
-	
 	
 	/**
 	 * Copies the state in the specified ImmutableGameState to our game
@@ -196,7 +157,7 @@ public class GameVisor {
 	 */
 	public void copyStateFrom(ImmutableGameState gameState) {
 		
-		System.out.println ("-- copyStateFromImmutable Start --");
+		//System.out.println ("-- copyStateFromImmutable Start --");
 		// VP, Sestertii, 
 		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
 			game.getPlayer(i).setVP(gameState.getVP(i));
@@ -211,7 +172,7 @@ public class GameVisor {
 		}
 		
 		// Action Dice
-		game.setDiceRolls(gameState.getDice());
+		game.setDiceRolls(gameState.getDice().clone());
 		
 		// Discard pile
 		game.getDiscardPile().emptyPile();
@@ -233,6 +194,7 @@ public class GameVisor {
 		
 		
 
+
 		game.getField().clearField();
 		// field
 		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
@@ -244,7 +206,7 @@ public class GameVisor {
 			}
 			
 		}
-		
+
 		game.clearModifiers();
 		// modifiers
 		for (IModifier mod : gameState.getModifiers()) {
@@ -252,7 +214,6 @@ public class GameVisor {
 			game.addModifier(mod);
 			
 		}
-		
 		
 		// snapshots
 		game.setGameSnapshots(gameState.getSnapshots());
@@ -277,28 +238,45 @@ public class GameVisor {
 		// Whose turn
 		game.setWhoseTurn(gameState.getPlayer());
 		
-		//System.out.println ("-- copyStateFromImmutable End --");
 		
-		// testing
-		try {
+		// game overrrr
+		boolean paradoxed = gameState.isTimeParadox();
+		game.setTimeParadox(paradoxed);
+		
+		boolean ended = gameState.isGameOver();
+		game.setGameOver(ended);
+		
+		game.testGameOver();
+		
+		if (game.isTimeParadox()) {
 			
-			assert (game.getDeck().getSize() == gameState.getDeck().getSize());
-			assert (game.getDiscardPile().getSize() == gameState.getDiscardPile().getSize());
+			game.getController().showMessage("Oh dear! You caused a Time Paradox!");
+			game.onTimeParadox();
 			
-			for (int i = 0; i < Game.MAX_PLAYERS; i++) {
-				assert (game.getPlayer(i).getVP() == gameState.getVP(i));
-				assert (game.getPlayer(i).getMoney() == gameState.getSestertii(i));
+		} else {
+			//System.out.println ("-- copyStateFromImmutable End --");
+		
+			// testing
+			try {
+				
+				assert (game.getDeck().getSize() == gameState.getDeck().getSize());
+				assert (game.getDiscardPile().getSize() == gameState.getDiscardPile().getSize());
+				
+				for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+					assert (game.getPlayer(i).getVP() == gameState.getVP(i));
+					assert (game.getPlayer(i).getMoney() == gameState.getSestertii(i));
+					
+				}
+				
+				assert(game.getModifiers().size() == gameState.getModifiers().size());
+				
+			} catch (AssertionError ex) {
+				
+				System.err.println ("Unexpected variation when copying immutable state: " + ex.getMessage());
+				ex.printStackTrace();
+				System.exit(1);
 				
 			}
-			
-			assert(game.getModifiers().size() == gameState.getModifiers().size());
-			
-		} catch (AssertionError ex) {
-			
-			System.err.println ("Variation when copying immutable state: " + ex.getMessage());
-			ex.printStackTrace();
-			System.exit(1);
-			
 		}
 	}
 	

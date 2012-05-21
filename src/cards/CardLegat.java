@@ -62,7 +62,7 @@ public class CardLegat extends Card {
 		
 		g.getCurrentPlayer().setVP(g.getCurrentPlayer().getVP() + points);
 		
-		System.out.println ("legat gave " + points + " points");
+		g.getController().showMessage("You gained " + points + " points from Legat.");
 		performed = true;
 		
 		return performed;

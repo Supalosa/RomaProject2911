@@ -76,7 +76,7 @@ public class CardKat extends Card {
 		KatParams params = new KatParams();
 		ActivateCardAction action = new ActivateCardAction(params);
 		action.setDiceDisc(gv.getField().findCardPosition(this) + 2);
-		System.out.println ("KAT executed at start of turn " + gv.getTurnNumber());
+		//System.out.println ("KAT executed at start of turn " + gv.getTurnNumber());
 
 		
 		// kinda protects against Kat being on bribe dice,
@@ -114,7 +114,7 @@ public class CardKat extends Card {
 	 */
 	public boolean onAttacked(GameVisor g, Card c, int pos, int battleDie) {
 		if (battleDie >= getRealDefense()) {
-			System.out.println ("Kat [" + this.hashCode() + "] was attacked with " + lives + " lives left");
+			//System.out.println ("Kat [" + this.hashCode() + "] was attacked with " + lives + " lives left");
 			lives--;
 		}
 		

@@ -33,7 +33,7 @@ public class PlayCardAction implements IPlayerAction {
 			g.getController().showMessage("No card selected.");
 		} else {
 			if (targetCard >= g.getCurrentPlayer().getHandSize()) {
-				System.out.println ("PlayCardAction ERROR: " + targetCard + " > " + g.getCurrentPlayer().getHandSize());
+				g.getController().showMessage("You do not have enough cards in your hand.");
 				isValid = false;
 			} else {
 				Card playedCard = g.getCurrentPlayer().getCard(targetCard);

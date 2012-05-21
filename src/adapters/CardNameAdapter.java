@@ -94,6 +94,10 @@ public enum CardNameAdapter {
 		return adapter;
 	}
 	
+	public static CardNameAdapter getRomaAdapter (Card acceptanceCard) {
+		return getRomaAdapter(acceptanceCard.toString());
+	}
+	
 	public static CardNameAdapter getAcceptanceAdapter (String romaName) {
 		CardNameAdapter adapter = null;
 		for (CardNameAdapter tempAdapter : CardNameAdapter.values()) {

@@ -60,7 +60,7 @@ public class ActionLogger {
 	public Game insertCardToGame(ImmutableGameState state, int turn, Card c, int ownerId, int pos) {
 
 		
-		System.out.println("Inserting a " + c.getName() + " into the gamestate...");
+		//System.out.println("Inserting a " + c.getName() + " into the gamestate...");
 		MockController mock = new MockController();
 		Game newGame = new Game(mock);
 		
@@ -79,7 +79,7 @@ public class ActionLogger {
 			IPlayerAction act = nextAction.action;
 			
 			if (nextAction.turnNumber >= turn) {
-				System.out.println("-- Game: " + newGame.getTurnNumber() + ", Action: "
+				/*System.out.println("-- Game: " + newGame.getTurnNumber() + ", Action: "
 						+ nextAction.turnNumber);
 				
 				System.out.println("Player " + newGame.whoseTurn() + "'s hand: "
@@ -114,7 +114,7 @@ public class ActionLogger {
 
 				System.out.println("insertCardToGame: executing "
 						+ act.getDescription() + "(" + act.describeParameters()
-						+ ")");
+						+ ")");*/
 
 				try {
 
@@ -138,7 +138,7 @@ public class ActionLogger {
 			// Time Paradox
 			if (newGame.testGameOver()) {
 
-				System.out.println("!!!! Game Over !!!!!");
+				//System.out.println("!!!! Game Over !!!!!");
 				break;
 
 			}
@@ -147,12 +147,35 @@ public class ActionLogger {
 
 		}
 
-		System.out.println("---- End of Replay! ----");
+		//System.out.println("---- End of Replay! ----");
 	
 		return newGame;
 	}
 
-
+	/**
+	 * Return the last End Turn Action sent to this logger.
+	 * @return
+	 */
+	public EndTurnAction getLastEndTurnAction () {
+		
+		EndTurnAction lastEndTurnAction = null;
+		
+		for (LoggedAction action : actions) {
+			
+			IPlayerAction actualAction = action.action;
+			if (actualAction.getDescription().equals(EndTurnAction.DESCRIPTION)) {
+				
+				lastEndTurnAction = (EndTurnAction) actualAction;
+				
+			}
+			
+		}
+		
+		return lastEndTurnAction;
+		
+	}
+	
+	
 	private class LoggedAction {
 
 		public final IPlayerAction action;

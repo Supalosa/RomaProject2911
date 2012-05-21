@@ -45,6 +45,11 @@ public class MoveMakerAdapter implements MoveMaker {
 		 * Testing mode - the setters run, then the actions (in MoveMaker) are
 		 * called.
 		 * 
+		 * 
+		 * NOTE: as of 6:15am the day this shit is due, I decided to make it
+		 * check firstaction every turn.. first move after EndTurnAction
+		 * 
+		 * 
 		 */
 		isFirstActionMade = false;
 	}
@@ -56,15 +61,9 @@ public class MoveMakerAdapter implements MoveMaker {
 
 			isFirstActionMade = true;
 			game.onGameStarted();
-			System.out.println("Game started - logged!");
-			Field f = game.getGameStateForTurn(0).getField();
-			for (int i = 0; i < Game.FIELD_SIZE; i++) {
-
-				System.out.print(f.getCard(0, i) + " ");
-
-			}
-
-			System.out.println();
+			game.takeSnapshot();
+			//System.out.println("Game started - logged!");
+			
 
 		}
 
@@ -78,7 +77,8 @@ public class MoveMakerAdapter implements MoveMaker {
 	public CardActivator chooseCardToActivate(int disc)
 			throws UnsupportedOperationException {
 
-		// Check if it is the first move - if so, save the game state.
+		// Check if it is the first move after a turn ended - if so, save the
+		// game state.
 		checkFirstMove();
 
 		CardActivator activator = null;
@@ -101,64 +101,16 @@ public class MoveMakerAdapter implements MoveMaker {
 		checkFirstMove();
 
 		TakeCardAction action;
-		int cardIndex = -1;
-		int tempIndex;
-		// Get the card index (have to guess from the deck before we draw)
 
-		List<cards.Card> deck = game.getDeck().asList();
-		/*
-		 * if (deck.size() < diceToUse) { game.addDiscardToDeck(); deck =
-		 * game.getDeck().asList(); }
-		 */
+		// Convert the chosen to internal ID
+		CardNameAdapter romaCard = CardNameAdapter.getRomaAdapter(chosen);
+		CardNames requestedCard = romaCard.getRomaEnum();
 
-		// stop drawing out if diceToUse > remaining cards
-		int overflow = 0;
-		if (diceToUse > game.getDeck().getSize()) {
-			System.out.println("Warning: outdrawing deck");
-			overflow = diceToUse - game.getDeck().getSize();
-			diceToUse = game.getDeck().getSize();
-
-		}
-
-		List<cards.Card> topCards = deck.subList(0, diceToUse);
-
-		tempIndex = 0;
-		for (cards.Card c : topCards) {
-
-			CardNameAdapter acceptanceAdapter = CardNameAdapter
-					.getAcceptanceAdapter(c.getName());
-			if (chosen.toString().equals(acceptanceAdapter.getAcceptanceName())) {
-				cardIndex = tempIndex;
-			}
-			tempIndex++;
-		}
-
-		if (cardIndex == -1) {
-
-			System.err.println("Error: activatedCardsDisc: could not find "
-					+ chosen);
-			System.err.println("Drawn cards:");
-			for (cards.Card c : topCards) {
-				System.err.println("   " + c);
-			}
-			// System.exit(1);
-			assert (false);
-		}
 		action = new TakeCardAction();
-		// mockController.insertInput(Integer.toString(diceToUse));
 
-		// mockController.insertInput(Integer.toString(cardIndex));
-		action.setCardIndexTaken(cardIndex);
+		action.setCardIndexTaken(requestedCard);
 		action.setDiceRoll(diceToUse);
 		action.execute(game.getGameVisor());
-		// System.out.println(game.getDiscardPile().asList().size());
-
-		for (int i = 0; i < overflow; i++) {
-
-			cards.Card overdrawn = game.drawCard();
-			game.discard(overdrawn);
-			System.out.println("overdraw: " + overdrawn);
-		}
 
 	}
 
@@ -191,9 +143,9 @@ public class MoveMakerAdapter implements MoveMaker {
 			activator = (GenericAdapterActivator) CardActivatorAdapter
 					.getActivator(activatedCard.getID(), Game.BRIBE_DISC, game,
 							activatedCard);
-			System.out
+			/*System.out
 					.println("MoveMakerAdapter:activateBribeDisc: Using bribe "
-							+ diceToUse + " for " + activatedCard);
+							+ diceToUse + " for " + activatedCard);*/
 			activator.setBribe(diceToUse);
 		}
 
@@ -213,6 +165,9 @@ public class MoveMakerAdapter implements MoveMaker {
 		// mockController.insertInput("Y");
 		action.setEndTurn(true);
 		action.execute(game.getGameVisor());
+		
+		// listen for first action
+		isFirstActionMade = false;
 
 	}
 

@@ -53,7 +53,7 @@ public class SenatorAdapterActivator extends GenericAdapterActivator implements 
 					// Remove the entry in the field copy (so it won't get picked up again)
 					handCopy.set(pos, null);
 					foundCard = true;
-					System.out.println("Found " + card + " in position " + pos + " in the hand, going to pos " + (diceDisc));
+					//System.out.println("Found " + card + " in position " + pos + " in the hand, going to pos " + (diceDisc));
 				}
 				
 			}

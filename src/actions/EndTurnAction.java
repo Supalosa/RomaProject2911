@@ -44,6 +44,8 @@ public class EndTurnAction implements IPlayerAction {
 			g.getActionLogger().addAction(this, g.getTurnNumber()-1);
 			
 			
+			
+			
 		}
 		
 		

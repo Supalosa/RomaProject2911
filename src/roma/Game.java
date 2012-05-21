@@ -116,6 +116,8 @@ public class Game {
 		// Start an initial turn.
 		startTurn(rollDice(), rollDice(), rollDice());
 
+		// Take a snapshot of Turn 0
+		takeSnapshot();
 		// logger.setInitialState(this);
 
 		// While the game is still running, keep query current player for
@@ -129,6 +131,48 @@ public class Game {
 		}
 
 		controller.showMessage("GG");
+
+	}
+
+	public void takeSnapshot() {
+
+		// System.out.println ("Take Snapshot Start: " + gameSnapshots.size());
+		// Take a snapshot
+		ImmutableGameState snapshot = new ImmutableGameState(this, turnNumber);
+
+		// search for snapshots with same turn, delete
+		// this allows us to add snapshots with impunity until we are sure that
+		// the snapshot is in the final state
+		// the reason we may not be sure it is final is because acceptance
+		// testing does not set the dice until a seperate function call
+		List<ImmutableGameState> toDelete = new ArrayList<ImmutableGameState>();
+		for (ImmutableGameState state : gameSnapshots) {
+
+			if (state.getTurnNumber() == turnNumber) {
+				// System.out.println ("Found dupe gamestate turn " + turnNumber
+				// + ", deleting");
+				toDelete.add(state);
+			}
+
+		}
+
+		// delete duplicates
+		for (ImmutableGameState state : toDelete) {
+
+			gameSnapshots.remove(state);
+
+		}
+
+		// add this one
+		gameSnapshots.add(snapshot);
+
+		// Load this snapshot (DEBUG) - if anything
+		// goes wrong with acceptance with this line uncommented
+		// then there is something very wrong with ImmutableGameStates
+
+		// ACTUALLY Nvm - ImmutableGameStates is bugged wrt dice rollls
+		// see if this fixes it?
+		// getGameVisor().copyStateFrom(snapshot);
 
 	}
 
@@ -192,14 +236,24 @@ public class Game {
 
 		}
 
-		// Take a snapshot
-		ImmutableGameState snapshot = new ImmutableGameState(this, turnNumber);
-		gameSnapshots.add(snapshot);
+		if (getNumSnapshots() < turnNumber - 1) {
 
-		// Load this snapshot (DEBUG) - if anything
-		// goes wrong with acceptance with this line uncommented
-		// then there is something very wrong with ImmutableGameStates
-		//getGameVisor().copyStateFrom(snapshot);
+			System.err.println("Incongruous snapshots, something was missed. "
+					+ getNumSnapshots() + " snapshots but in turn "
+					+ turnNumber);
+			for (ImmutableGameState g : gameSnapshots) {
+				System.err.print(g.getTurnNumber() + ", ");
+			}
+
+			System.err.println();
+			try {
+				throw new Exception("Incongruous Snapshot Count");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.exit(1);
+		}
 	}
 
 	/**
@@ -215,12 +269,11 @@ public class Game {
 	}
 
 	public void setTurnNumber(int turn) {
-		
+
 		turnNumber = turn;
-		
+
 	}
-	
-	
+
 	public int getTurnNumber() {
 		return turnNumber;
 	}
@@ -239,6 +292,12 @@ public class Game {
 		System.out.println("Action chosen: " + nextAction.getDescription());
 
 		nextAction.query(visor);
+
+		// take a snapshot lah THIS NOT WORK
+		if (nextAction.getDescription().equals(EndTurnAction.DESCRIPTION)) {
+			takeSnapshot();
+		}
+
 		nextAction.execute(visor);
 
 	}
@@ -467,6 +526,14 @@ public class Game {
 
 		diceRolls = rolls;
 
+		// HACK : for the last EndTurnAction, set the dice rolls! :)
+		EndTurnAction lastEndTurnAction = null;
+
+		lastEndTurnAction = logger.getLastEndTurnAction();
+
+		if (lastEndTurnAction != null) {
+			lastEndTurnAction.setDiceRolls(rolls);
+		}
 	}
 
 	public int getDiceRoll(int i) {
@@ -651,11 +718,10 @@ public class Game {
 	 */
 	public void onTimeParadox() {
 
-		System.out.println("!!!! Time Paradox !!!!");
+		//System.out.println("!!!! Time Paradox !!!!");
 		this.isTimeParadox = true;
 		// VP-causer loses his VP
 		players[currentPlayer].setVP(0);
-
 
 		field.clearField();
 		testGameOver();
@@ -667,7 +733,7 @@ public class Game {
 	 */
 	public void onGameStarted() {
 
-		gameSnapshots.add(new ImmutableGameState(this, 0));
+		takeSnapshot();
 
 	}
 
@@ -727,7 +793,7 @@ public class Game {
 		this.activeModifiers.clear();
 
 	}
-	
+
 	/**
 	 * Deletes the specified modifier
 	 */
@@ -804,12 +870,68 @@ public class Game {
 	}
 
 	/**
-	 * Load snapshots from the list.
-	 * Should NOT be used in the main game, only for child games which are replays of the parent.
+	 * Load snapshots from the list. Should NOT be used in the main game, only
+	 * for child games which are replays of the parent.
+	 * 
 	 * @param snapshots
 	 */
 	public void setGameSnapshots(List<ImmutableGameState> snapshots) {
-		gameSnapshots.addAll(snapshots);
+		// gameSnapshots.addAll(snapshots);
+		gameSnapshots = new ArrayList<ImmutableGameState>(snapshots);
+	}
+
+	/**
+	 * Returns whether the game has entered a Time Paradox.
+	 * 
+	 * @return
+	 */
+	public boolean isTimeParadox() {
+
+		return isTimeParadox;
+
+	}
+
+	/**
+	 * Sets the TIme Paradox state (oh god i'm tired)
+	 * 
+	 * @param value
+	 */
+	public void setTimeParadox(boolean value) {
+
+		this.isTimeParadox = value;
+
+	}
+
+	/**
+	 * Sets theGame over(oh god i'm tired)
+	 * 
+	 * @param value
+	 */
+	public void setGameOver(boolean value) {
+
+		gameOver = value;
+
+	}
+
+	/**
+	 * Return the number of snapshots (i.e. the highest turn) in the game
+	 * 
+	 * @return
+	 */
+	public int getNumSnapshots() {
+
+		return gameSnapshots.size();
+	}
+
+	/**
+	 * Get an immutable list of all the snapshots for this game
+	 * 
+	 * @return
+	 */
+	public List<ImmutableGameState> getSnapshots() {
+
+		return new ArrayList<ImmutableGameState>(gameSnapshots);
+
 	}
 
 }

@@ -20,6 +20,9 @@ public class ImmutableGameState {
 	private final List<ImmutableGameState> snapshots;
 
 	private final int player;
+	
+	private final boolean isGameOver;
+	private final boolean timeParadox;
 
 	private final int turnNumber;
 
@@ -68,19 +71,17 @@ public class ImmutableGameState {
 		modifiers = new ArrayList<IModifier>(g.getModifiers());
 		
 		// list of snapshots up to this turn
-		snapshots = new ArrayList<ImmutableGameState>();
+		//napshots = new ArrayList<ImmutableGameState>();
 		
-		for (int i = 0; i < turnNumber; i++) {
-			ImmutableGameState snapshot = g.getGameStateForTurn(i);
-			
-			if (snapshot != null) {
-				snapshots.add(snapshot);
-			} else {
-				
-				System.out.println ("ImmutableGameState MISSING snapshot for turn " + i);
-				
-			}
-		}
+		// etc
+		isGameOver = g.isGameOver();
+	
+		timeParadox = g.isTimeParadox();
+		
+		// just get all the snapshots of the parent...
+		// children might need it later.
+		snapshots = g.getSnapshots();
+		
 		// current turn #
 		this.turnNumber = turnNumber;
 
@@ -132,5 +133,13 @@ public class ImmutableGameState {
 		
 		return snapshots;
 		
+	}
+
+	public boolean isGameOver() {
+		return isGameOver;
+	}
+
+	public boolean isTimeParadox() {
+		return timeParadox;
 	}
 }

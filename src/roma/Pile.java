@@ -2,6 +2,7 @@ package roma;
 import java.util.*;
 
 import cards.Card;
+import enums.CardNames;
 
 
 public abstract class Pile implements Cloneable {
@@ -114,6 +115,35 @@ public abstract class Pile implements Cloneable {
 		
 		return copy;
 	}
+	
+	/**
+	 * return the first instance of specified card name
+	 * @return
+	 * -1 if could not find card
+	 */
+	public int findCard(CardNames name) {
+		
+		int result = -1;
+		
+		int index = 0;
+		for (Card c : s) {
+			
+			
+			if (c.getID() == name) {
+				
+				result = index;
+				break;
+				
+			}
+			
+			index ++;		
+			
+		}
+		
+		return result;
+		
+	}
+	
 	
 	public boolean isEmpty() {
 		return s.isEmpty();

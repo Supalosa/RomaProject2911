@@ -57,8 +57,8 @@ public class CardTelephoneBox extends Card {
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		TelephoneBoxParams myParams = (TelephoneBoxParams) a;
 
-		System.out.println("TelephoneBox: " + myParams.getDiceToSend() + ", "
-				+ myParams.isGoForward() + ", " + myParams.getDiceToUse());
+		/*System.out.println("TelephoneBox: " + myParams.getDiceToSend() + ", "
+				+ myParams.isGoForward() + ", " + myParams.getDiceToUse());*/
 
 		Card timeTravellingCard = g.getField().getCard(g.whoseTurn(),
 				myParams.getDiceToSend() - 1);
@@ -88,9 +88,9 @@ public class CardTelephoneBox extends Card {
 				if (toTurn < 0) {
 					toTurn = 0;
 				}
-				System.out.println("Telephone Box activated at turn "
+				/*System.out.println("Telephone Box activated at turn "
 						+ g.getTurnNumber() + " and going back "
-						+ myParams.getDiceToUse() + " turns");
+						+ myParams.getDiceToUse() + " turns");*/
 				
 				
 				Card copyOfCard = timeTravellingCard.getCopy();
@@ -108,6 +108,15 @@ public class CardTelephoneBox extends Card {
 				// the only thing missing is the activation of THIS card.. so
 				// use dice
 				updatedGame.useDice(pos);
+				// use dice on time travell'd card
+				updatedGame.useDice(myParams.getDiceToSend());
+				/*System.out.println ("Dice: ");
+				for (int i = 0; i < Game.NUM_DIE; i++) {
+					
+					System.out.print (updatedGame.getDiceRoll(i));
+					
+				}
+				System.out.println();*/
 
 			
 				// We want to be the updated game... use the interim ImmutableGameState.
