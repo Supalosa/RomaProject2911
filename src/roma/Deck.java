@@ -13,4 +13,5 @@ public class Deck extends Pile {
 		c.onLeaveDeck();
 		super.removeCard(c);
 	}
+	
 }

@@ -5,6 +5,7 @@ import framework.interfaces.GameState;
 import framework.interfaces.MoveMaker;
 
 public class AcceptanceAdapter implements AcceptanceInterface {
+	
 	GameAdapter game;
 	MoveMaker mover;
 	

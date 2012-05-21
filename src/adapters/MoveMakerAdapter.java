@@ -57,6 +57,10 @@ public class MoveMakerAdapter implements MoveMaker {
 		// Get the card index (have to guess from the deck before we draw)
 		
 		List<cards.Card> deck = game.getDeck().asList();
+		if (deck.size() < diceToUse) {
+			game.addDiscardtoDeck();
+			deck = game.getDeck().asList();
+		}
 		List<cards.Card> topCards = deck.subList(0, diceToUse);
 		
 		tempIndex = 0;
@@ -76,6 +80,7 @@ public class MoveMakerAdapter implements MoveMaker {
 		action.setCardIndexTaken(cardIndex);
 		action.setDiceRoll(diceToUse);
 		action.execute(game.getGameVisor());
+		System.out.println(game.getDiscardPile().asList().size());
 
 	}
 

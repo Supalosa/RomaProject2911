@@ -45,7 +45,7 @@ public class ActionLogger {
 		initialHands = new Vector[Game.MAX_PLAYERS];
 		
 		initialPlayer = 0;
-		
+				
 	}
 	
 	public void setInitialPlayer(int turn) {
@@ -78,7 +78,6 @@ public class ActionLogger {
 	public void setInitialField(Field f) {
 		if (initialField == null) { // only do this once
 			initialField = new Field(null);
-			
 			// Get a copy of the field, into our initial state.
 			for (int i = 0 ; i < Game.MAX_PLAYERS; i++) {
 				for (int j = 0; j < Game.FIELD_SIZE; j++) {
@@ -86,6 +85,7 @@ public class ActionLogger {
 				}
 			}
 		}
+		
 	}
 	
 	public void setInitialVP(int player, int amount) {
@@ -236,10 +236,9 @@ public class ActionLogger {
 			}
 			
 		}
-		
-		
-		
+				
 		return newGame;
+	
 	}
 	
 	/**

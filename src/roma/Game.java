@@ -375,8 +375,22 @@ public class Game {
 			discardPile = new DiscardPile();
 			
 		}
+		
 		return deck.getCard();
 	
+	}
+	
+	public void addDiscardtoDeck() {
+		
+		discardPile.shuffle();
+		List<cards.Card> topCards = deck.asList();
+		deck = discardPile;
+		discardPile = new DiscardPile();
+		
+		for (int i = topCards.size() - 1; i >= 0; i--) {
+			deck.addCardToFront(topCards.get(i));
+		}
+		
 	}
 	
 	// Get the deck
@@ -585,6 +599,12 @@ public class Game {
 	public ActionLogger getActionLogger() {
 		
 		return logger;
+		
+	}
+	
+	public void setActionLogger(ActionLogger al) {
+		
+		logger = al;
 		
 	}
 

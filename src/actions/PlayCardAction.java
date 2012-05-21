@@ -27,9 +27,6 @@ public class PlayCardAction implements IPlayerAction {
 		if (i < 1 || i > Game.FIELD_SIZE) {
 			isValid = false;
 			g.getController().showMessage("Cannot play that card, that disc value is not possible");
-		} else if (g.getField().isBlocked(g.whoseTurn(), diceDisc-1)) {
-			g.getController().showMessage("Cannot play that card, that disc is blocked!");
-			isValid = false;
 		}
 		
 		if (targetCard == -1) { // no card picked
