@@ -57,7 +57,7 @@ public class TakeCardAction implements IPlayerAction {
 	
 	}
 	
-	public void execute(GameVisor g) {
+	public void execute(GameVisor g) throws AssertionError {
 		game = g;
 		List<Card> temp = new ArrayList<Card>();
 		int i = 0;

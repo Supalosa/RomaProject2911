@@ -3,9 +3,6 @@ package cards.activators;
 import java.util.ArrayList;
 import java.util.List;
 
-import modifiers.IModifier;
-import modifiers.PraetorAura;
-
 import cards.Card;
 import roma.Game;
 import roma.GameVisor;

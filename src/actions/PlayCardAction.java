@@ -54,7 +54,7 @@ public class PlayCardAction implements IPlayerAction {
 		
 	}
 
-	public void execute(GameVisor g) {
+	public void execute(GameVisor g) throws AssertionError {
 
 		//System.out.println(g.getCurrentPlayer().getHand().toString());
 		//System.out.println ("EXECUTE PLAYCARD: " + targetCard + " -> " + diceDisc);

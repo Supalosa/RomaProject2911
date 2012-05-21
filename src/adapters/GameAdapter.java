@@ -77,7 +77,6 @@ public class GameAdapter implements GameState {
 			}
 		}
 		
-		myGame.getActionLogger().setInitialDeck((Deck)myGame.getDeck());
 	}
 
 	/**
@@ -124,7 +123,6 @@ public class GameAdapter implements GameState {
 			}
 		}
 		
-		myGame.getActionLogger().setInitialDiscard((DiscardPile)myGame.getDiscardPile());
 
 	}
 
@@ -136,7 +134,6 @@ public class GameAdapter implements GameState {
 	@Override
 	public void setPlayerSestertii(int playerNum, int amount) {
 		myGame.getPlayer(playerNum).setMoney(amount);
-		myGame.getActionLogger().setInitialSestertii(playerNum, amount);
 	}
 
 	@Override
@@ -148,7 +145,6 @@ public class GameAdapter implements GameState {
 	@Override
 	public void setPlayerVictoryPoints(int playerNum, int points) {
 		myGame.getPlayer(playerNum).setVP(points);
-		myGame.getActionLogger().setInitialVP(playerNum, points);
 	}
 
 	/**
@@ -194,7 +190,6 @@ public class GameAdapter implements GameState {
 			
 		}
 		
-		myGame.getActionLogger().setInitialHand(playerNum, myGame.getPlayer(playerNum).getHand());
 	}
 	
 
@@ -231,10 +226,7 @@ public class GameAdapter implements GameState {
 			myGame.getField().setCard(playerNum,i,thisCard);
 		}
 		
-		if (playerNum == 1) { // hack
-			myGame.getActionLogger().setInitialField(myGame.getField());
-		}
-		
+	
 		
 	}
 
@@ -267,7 +259,6 @@ public class GameAdapter implements GameState {
 		
 		myGame.setDiceRolls(diceRolls);
 		
-		myGame.getActionLogger().setInitialDice(diceRolls);
 	}
 
 	@Override

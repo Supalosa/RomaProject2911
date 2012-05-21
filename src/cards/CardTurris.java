@@ -43,23 +43,23 @@ public class CardTurris extends Card {
 	 * If that card happens to be this one, then apply the modifier to all cards
 	 */
 	@Override
-	public void onEnterField(Field f, int ownerId, int position) {
+	public void onEnterField(GameVisor g, Field f, int ownerId, int position) {
 		Card c = f.getCard(ownerId, position);
 
 		if (c == this) { // apply to all the cards on our side of the field, retroactively
 			for (Card myCard : f.getSideAsList(ownerId)) {
 				if (myCard != this) {
 					IModifier turrisAura = new TurrisAura();
-					castModifier(myCard, turrisAura);
+					castModifier(g, myCard, turrisAura);
 				}
 			}
 		} else if (ownerId == this.getOwnerID()) { // else a friendly card came in
 
 			IModifier turrisAura = new TurrisAura();
-			castModifier(c, turrisAura);
+			castModifier(g, c, turrisAura);
 			
 		}
-		super.onEnterField(f, ownerId, position);
+		super.onEnterField(g, f, ownerId, position);
 	}
 	
 	/**
@@ -74,20 +74,16 @@ public class CardTurris extends Card {
 		
 		if (c == this) { // unapply all
 			// need this because you cannot iterate over modifier while removing
-			List<IModifier> modsToRemove = new ArrayList<IModifier>();
-			for (Card myCard : f.getSideAsList(ownerId)) {
-
-				if (myCard != this) {
-					for (IModifier modifier : myCard.getModifiers()) {
-						if (modifier.getCaster() == this) {
-							modsToRemove.add(modifier);
-						}
-					}
-				}
-			}
+			List<IModifier> modsToRemove = g.getModifiersBy(this);
 			
 			for (IModifier mod : modsToRemove) {
-				mod.getTarget().removeModifier(mod);
+				Card modTarget = f.getCard(mod.getTargetOwnerId(), mod.getTargetPos());
+				System.out.println("Turris leaving field, applying on " + mod.getTargetOwnerId() + ", " + mod.getTargetPos());
+				if (modTarget != null) {
+					mod.unapply(modTarget);
+				} else {
+					System.out.println ("Turris: target at " + mod.getTargetOwnerId() + ", " + mod.getTargetPos() + " no longer exists!");
+				}
 			}
 		}
 		

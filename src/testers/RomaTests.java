@@ -30,8 +30,6 @@ public class RomaTests {
 		tests.add(new InitTester());
 		tests.add(new TurnTester());
 		tests.add(new PlayCardActionTester());
-		tests.add(new TurrisTester());
-		tests.add(new EssedumTester());
 		
 		
 		

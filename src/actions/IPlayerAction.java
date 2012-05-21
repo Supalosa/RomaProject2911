@@ -4,7 +4,7 @@ import roma.*;
 
 public interface IPlayerAction {
 	
-	void execute (GameVisor g);
+	void execute (GameVisor g) throws AssertionError;
 	
 	String getDescription ();
 	

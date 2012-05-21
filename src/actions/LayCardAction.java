@@ -34,7 +34,7 @@ public class LayCardAction implements IPlayerAction {
 	}
 	
 	@Override
-	public void execute(GameVisor g) {
+	public void execute(GameVisor g) throws AssertionError {
 		
 		game = g;
 		

@@ -8,13 +8,11 @@ import enums.*;
 import modifiers.*;
 
 
-public abstract class Card implements IModifiable, Cloneable {
+public abstract class Card implements Cloneable {
 	
 	private int ownerId; // possibly redundant, id of player 0..1 of owner
 	private boolean isInPlay; // possibly redundant
 	private boolean isFaceUp;
-	List<IModifier> modifiers; // list of modifiers applying to this card
-	List<IModifier> castedModifiers; // list of modifiers casted by this card
 	private int realDefense; // defense after modifiers, etc
 		
 /*	private CardNames id;
@@ -31,9 +29,7 @@ public abstract class Card implements IModifiable, Cloneable {
 		ownerId = -1;
 		isInPlay = false;
 		isFaceUp = false;
-		
-		modifiers = new ArrayList<IModifier>();
-		castedModifiers = new ArrayList<IModifier>();
+
 		realDefense = getDefense();
 		
 	}
@@ -71,8 +67,9 @@ public abstract class Card implements IModifiable, Cloneable {
 	
 	/**
 	 *   onEnterField: fires whenever a card enters the field (ALL cards receive event)
+	 * @param g TODO
 	 */
-	public void onEnterField(Field f, int ownerId, int position) {
+	public void onEnterField(GameVisor g, Field f, int ownerId, int position) {
 
 	}
 	
@@ -82,10 +79,13 @@ public abstract class Card implements IModifiable, Cloneable {
 	 */
 	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
 		if (f.getCard(ownerId, position) == this) { // if this card is the one that left
-			for (IModifier mod : modifiers) {
-				mod.unapply();
+			
+			// remove all modifiers on this card
+			List<IModifier> modsToRemove = g.getModifiersOn(this);
+			
+			for (IModifier mod : modsToRemove) {
+				mod.unapply(this);
 			}
-			modifiers.clear();
 		}
 		
 		return true;
@@ -157,7 +157,7 @@ public abstract class Card implements IModifiable, Cloneable {
 	public boolean onAttacked(GameVisor g, Card c, int pos, int battleDie) {
 		boolean killed = false;
 		int ownerId = getOwnerID();
-		boolean hasGrimReaperAura = hasModifier(GrimReaperAura.NAME);
+		boolean hasGrimReaperAura = hasModifier(g, GrimReaperAura.NAME);
 		if (battleDie >= getRealDefense()) {
 			
 			/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
@@ -192,45 +192,6 @@ public abstract class Card implements IModifiable, Cloneable {
 	}
 	
 	
- 	
-	/* Modifier */
-	public void castModifier (IModifiable target, IModifier mod) {
-		castedModifiers.add(mod);
-		mod.setCaster(this);
-		target.addModifier(mod);
-	}
-	
-	public void addModifier (IModifier mod) {
-		modifiers.add(mod);
-		mod.setTarget(this);
-		mod.apply();
-	}
-	
-	public void removeModifier (IModifier mod) {
-		modifiers.remove(mod);
-		mod.unapply();
-	}
-	
-	public List<IModifier> getModifiers() {
-		return modifiers;
-	}
-	
-	public ModifierTarget getModifiableType() {
-		return ModifierTarget.Card;
-	}
-	
-	public boolean hasModifier (String modName) {
-		boolean hasMod = false;
-		
-		for (IModifier mod : getModifiers()) {
-			if (mod.getName().equals(modName)) {
-				hasMod = true;
-			}
-		}
-		
-		return hasMod;
-	}
-	
 	public abstract CardNames getID();
 	public abstract int getCostToPlay();
 	public abstract int getDiceToActivate();
@@ -242,6 +203,10 @@ public abstract class Card implements IModifiable, Cloneable {
 	public abstract CardParams getParams();	
 	public abstract boolean performEffect (GameVisor g, int pos, CardParams a);
 	
+	/**
+	 * Returns an immutable copy of this card (deep copy)
+	 * @return
+	 */
 	public Card getCopy() {
 		Card copy = null;
 		try {
@@ -253,7 +218,53 @@ public abstract class Card implements IModifiable, Cloneable {
 		
 		return copy;
 	}
+	
+	/**
+	 * Modifier stuff
+	 */
+	
+	/**
+	 * Casts a modifier onto the specified card
+	 * @param c
+	 * @param modifier
+	 */
+	public void castModifier(GameVisor g, Card c, IModifier modifier) {
+		
+		int myOwner = g.getField().findCardOwner(this);
+		int myPos = g.getField().findCardPosition(this);
+		
+		int targetOwner = g.getField().findCardOwner(c);
+		int targetPos = g.getField().findCardPosition(c);
+		
+		modifier.setCaster(myOwner, myPos);
+		modifier.setTarget(targetOwner, targetPos);
+	
+		g.addModifier(modifier);
+		
+		modifier.apply(c);
+	}
 
+	/**
+	 * Returns whether this card has a modifier on it
+	 * @param g
+	 * @param modifierName
+	 * @return
+	 */
+	public boolean hasModifier(GameVisor g, String modifierName) {
+		boolean result = false;
+		
+		List<IModifier> mods = g.getModifiersOn(this);
+		
+		for (IModifier mod : mods) {
+			
+			if (mod.getName().equals(modifierName)) {
+				result = true;
+			}
+			
+		}
+		
+		return result;
+	}
 	
 }
 

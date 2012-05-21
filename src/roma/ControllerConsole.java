@@ -223,14 +223,16 @@ public class ControllerConsole implements IController {
 			String cardRight = "";
 			if (field.getCard(0,i) != null) {
 				cardLeft = field.getCard(0,i).getName();
-				if (field.getCard(0, i).getModifiers().size() > 0) {
+				List<IModifier> mods = g.getModifiersOn(0, i);
+				if (mods.size() > 0) {
 					cardLeft += "*";
 				}
 			}
 			if (field.getCard(1,i) != null) {
 				cardRight = field.getCard(1,i).getName();
-				if (field.getCard(1, i).getModifiers().size() > 0) {
-					cardRight += "*";
+				List<IModifier> mods = g.getModifiersOn(1, i);
+				if (mods.size() > 0) {
+					cardLeft += "*";
 				}
 			}
 			s = String.format("%-25s %d %25s", cardLeft, i+1, cardRight);
@@ -308,10 +310,16 @@ public class ControllerConsole implements IController {
 		System.out.format ("- COST: %2d ---- DEF: %2d [%+2d] -\n", c.getCostToPlay(), c.getDefense(), (c.getRealDefense() - c.getDefense()));
 		System.out.println ("-------------------");
 		// show active effects
-		if (c.getModifiers().size() > 0) {
+		int ownerId = g.getField().findCardOwner(c);
+		int pos = g.getField().findCardPosition(c);
+		
+		List<IModifier> mods = g.getModifiersOn(ownerId, pos);
+		
+		if (mods.size() > 0) {
 			System.out.println ("- Active Effects: -");
 			System.out.println ("-------------------");
-			for (IModifier mod : c.getModifiers()) {
+			
+			for (IModifier mod : mods) {
 				System.out.println (mod.getName() + ": " + mod.getDescription());
 			}
 			System.out.println ("-------------------");

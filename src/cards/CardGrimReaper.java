@@ -50,7 +50,7 @@ public class CardGrimReaper extends Card {
 	 * If that card happens to be this one, then apply the modifier to all cards
 	 */
 	@Override
-	public void onEnterField(Field f, int ownerId, int position) {
+	public void onEnterField(GameVisor g, Field f, int ownerId, int position) {
 		Card c = f.getCard(ownerId, position);
 
 		// Note: Characters only
@@ -58,16 +58,16 @@ public class CardGrimReaper extends Card {
 			for (Card myCard : f.getSideAsList(ownerId)) {
 				if (myCard != this && !myCard.isBuilding()) {
 					IModifier grimReaperAura = new GrimReaperAura();
-					castModifier(myCard, grimReaperAura);
+					castModifier(g, myCard, grimReaperAura);
 				}
 			}
 		} else if (ownerId == this.getOwnerID() && !c.isBuilding()) { // else a friendly card came in
 
 			IModifier grimReaperAura = new GrimReaperAura();
-			castModifier(c, grimReaperAura);
+			castModifier(g, c, grimReaperAura);
 			
 		}
-		super.onEnterField(f, ownerId, position);
+		super.onEnterField(g, f, ownerId, position);
 	}
 	
 	/**
@@ -81,33 +81,16 @@ public class CardGrimReaper extends Card {
 		Card c = f.getCard(ownerId, position);
 		
 		if (c == this) { // unapply all
-			// need this because you cannot iterate over modifier while removing
-			List<IModifier> modsToRemove = new ArrayList<IModifier>();
-			for (Card myCard : f.getSideAsList(ownerId)) {
-
-				if (myCard != this && !myCard.isBuilding()) {
-					for (IModifier modifier : myCard.getModifiers()) {
-						if (modifier.getCaster() == this) {
-							modsToRemove.add(modifier);
-						}
-					}
-				}
-			}
+			// Remove all modifiers casted by us
+			List<IModifier> modsToRemove = g.getModifiersBy(this);
 			
 			for (IModifier mod : modsToRemove) {
-				mod.getTarget().removeModifier(mod);
+				Card modTarget = f.getCard(mod.getTargetOwnerId(), mod.getTargetPos());
+				mod.unapply(modTarget);
 			}
+			
 		} else if (ownerId == getOwnerID()) {
 			System.out.println ("Grim Reaper: a friendly " + c + " left the field!");
-
-			
-			// Determine whether that card has a modifier from me
-			for (IModifier modifier : c.getModifiers()) {
-				if (modifier.getCaster() == this) {
-					//allowLeave = false; // do NOT allow it to leave, we do it ourself
-					//g.addCard(ownerId,  c);
-				}
-			}
 			
 		}
 		

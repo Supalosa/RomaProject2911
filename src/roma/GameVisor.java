@@ -1,5 +1,9 @@
 package roma;
 
+import java.util.List;
+
+import modifiers.IModifier;
+
 import cards.Card;
 
 public class GameVisor {
@@ -151,6 +155,7 @@ public class GameVisor {
 	 */
 	public void copyStateFrom(Game updatedGame) {
 		
+		System.out.println ("-- copyStateFrom Start --");
 		// VP, Sestertii, 
 		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
 			game.getPlayer(i).setVP(updatedGame.getPlayer(i).getVP());
@@ -179,8 +184,169 @@ public class GameVisor {
 			
 		}
 		
+		System.out.println ("-- copyStateFrom End --");
 		
 		
+	}
+	
+	
+	/**
+	 * Copies the state in the specified ImmutableGameState to our game
+	 * @param updatedGame
+	 */
+	public void copyStateFrom(ImmutableGameState gameState) {
+		
+		//System.out.println ("-- copyStateFromImmutable Start --");
+		// VP, Sestertii, 
+		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+			game.getPlayer(i).setVP(gameState.getVP(i));
+			game.getPlayer(i).setMoney(gameState.getSestertii(i));
+			
+			
+			// load hands
+			System.out.println("Mutable Hand: " + game.getPlayer(i).getHand());
+			game.getPlayer(i).getHand().clear();
+			game.getPlayer(i).getHand().addAll(gameState.getHands(i));
+			System.out.println("Immutable Hand: " + game.getPlayer(i).getHand());
+		}
+		
+		// Action Dice
+		game.setDiceRolls(gameState.getDice());
+		
+		// Discard pile
+		game.getDiscardPile().emptyPile();
+				
+		for (Card c : gameState.getDiscardPile().asList()) {
+			
+			game.getDiscardPile().addCard(c.getCopy());
+			
+		}
+		
+		// Deck pile
+		game.getDeck().emptyPile();
+		
+		for (Card c : gameState.getDeck().asList()) {
+			
+			game.getDeck().addCard(c.getCopy());
+			
+		}
+		
+		//System.out.println ("-- copyStateFromImmutable End --");
+		
+		// testing
+		try {
+			
+			assert (game.getDeck().getSize() == gameState.getDeck().getSize());
+			assert (game.getDiscardPile().getSize() == gameState.getDiscardPile().getSize());
+			
+			for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+				assert (game.getPlayer(i).getVP() == gameState.getVP(i));
+				assert (game.getPlayer(i).getMoney() == gameState.getSestertii(i));
+				
+			}
+			
+		} catch (AssertionError ex) {
+			
+			System.err.println ("Variation when copying immutable state: " + ex.getMessage());
+			ex.printStackTrace();
+			System.exit(1);
+			
+		}
+	}
+	
+	
+	/**
+	 * Called when a time paradox occurs. Ends the game.
+	 */
+	public void onTimeParadox() {
+		
+		game.onTimeParadox();
+		
+	}
+	
+	/**
+	 * Returns the list of modifiers active
+	 */
+	public List<IModifier> getModifiers() {
+		
+		return game.getModifiers();
+
+	}
+	
+	/**
+	 * Returns the list of all modifiers casted ON the field position specified
+	 */
+	public List<IModifier> getModifiersOn(int ownerId, int pos) {
+		return game.getModifiersOn(ownerId, pos);
+		
+	}
+	
+	
+	/**
+	 * Returns the list of all modifiers casted ON the field position specified
+	 * Wrapper that takes in a card
+	 */
+	public List<IModifier> getModifiersOn(Card c) {
+		
+		int ownerId = game.getField().findCardOwner(c);
+		int pos = game.getField().findCardPosition(c);
+		
+		return game.getModifiersOn(ownerId, pos);
+		
+	}
+	
+	
+	/**
+	 *  Returns the list of all modifiers casted BY the field position specified
+	 */
+	public List<IModifier> getModifiersBy(int ownerId, int pos) {
+		return game.getModifiersBy(ownerId, pos);
+		
+	}
+	
+	/**
+	 * Returns the list of all modifiers casted BY the field position specified
+	 * Wrapper that takes in a card
+	 */
+	public List<IModifier> getModifiersBy(Card c) {
+		
+		int ownerId = game.getField().findCardOwner(c);
+		int pos = game.getField().findCardPosition(c);
+		
+		return game.getModifiersBy(ownerId, pos);
+		
+	}
+	/**
+	 * Adds a modifier to the list
+	 */
+	public void addModifier(IModifier mod) {
+		
+		game.addModifier(mod);
+		
+	}
+	
+	/**
+	 * Deletes the specified modifier
+	 */
+	public void deleteModifier(IModifier mod) {
+		
+		game.deleteModifier(mod);
+		
+	}
+	
+	/**
+	 * Deletes all modifiers casted ON the field position specified
+	 */
+	public void deleteModifiersOn(int ownerId, int pos) {
+		game.deleteModifiersOn(ownerId, pos);
+		
+	}
+	
+	/**
+	 * Deletes all modifiers casted BY the field position specified
+	 */
+	public void deleteModifiersBy(int ownerId, int pos) {
+		game.deleteModifiersBy(ownerId, pos);
 		
 	}
 	

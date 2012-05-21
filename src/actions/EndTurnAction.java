@@ -34,7 +34,7 @@ public class EndTurnAction implements IPlayerAction {
 	}
 	
 	
-	public void execute(GameVisor g) {
+	public void execute(GameVisor g) throws AssertionError {
 
 		if (doEndTurn) {
 			g.onEndTurn(diceRolls[0], diceRolls[1], diceRolls[2]);

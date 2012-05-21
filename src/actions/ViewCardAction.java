@@ -18,7 +18,7 @@ public class ViewCardAction implements IPlayerAction {
 	}
 	
 	
-	public void execute(GameVisor g) {
+	public void execute(GameVisor g) throws AssertionError {
 		game = g;
 		
 		if (selectedCard != null) {

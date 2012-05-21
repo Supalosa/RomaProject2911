@@ -53,26 +53,18 @@ public class CardEssedum extends Card {
 	 */
 	@Override
 	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
-		int enemyId = (ownerId + 1) % Game.MAX_PLAYERS;
+
 		Card c = f.getCard(ownerId, position);
 		
 		if (c == this) { // unapply all
-			// need this because you cannot iterate over modifier while removing
-			List<IModifier> modsToRemove = new ArrayList<IModifier>();
-			for (Card myCard : f.getSideAsList(enemyId)) {
-
-				if (myCard != this) {
-					for (IModifier modifier : myCard.getModifiers()) {
-						if (modifier.getCaster() == this) {
-							modsToRemove.add(modifier);
-						}
-					}
-				}
-			}
+			// Remove all modifiers casted by us
+			List<IModifier> modsToRemove = g.getModifiersBy(this);
 			
 			for (IModifier mod : modsToRemove) {
-				mod.getTarget().removeModifier(mod);
+				Card modTarget = f.getCard(mod.getTargetOwnerId(), mod.getTargetPos());
+				mod.unapply(modTarget);
 			}
+
 		}
 		
 		return super.onLeaveField(g, f, ownerId, position);
@@ -83,24 +75,13 @@ public class CardEssedum extends Card {
 	 */
 	@Override
 	public void onTurnEnd(GameVisor gv, int playerId) {
-		int enemyId = (playerId + 1) % Game.MAX_PLAYERS;
 
+		// Remove all modifiers casted by us
+		List<IModifier> modsToRemove = gv.getModifiersBy(this);
 		
-		// need this because you cannot iterate over modifier while removing
-		List<IModifier> modsToRemove = new ArrayList<IModifier>();
-		for (Card myCard : gv.getField().getSideAsList(enemyId)) {
-
-			if (myCard != this) {
-				for (IModifier modifier : myCard.getModifiers()) {
-					if (modifier.getCaster() == this) {
-						modsToRemove.add(modifier);
-					}
-				}
-			}
-		}
-
 		for (IModifier mod : modsToRemove) {
-			mod.getTarget().removeModifier(mod);
+			Card modTarget = gv.getField().getCard(mod.getTargetOwnerId(), mod.getTargetPos());
+			mod.unapply(modTarget);
 		}
 
 		super.onTurnEnd(gv, playerId);
@@ -119,7 +100,7 @@ public class CardEssedum extends Card {
 		for (Card myCard : g.getField().getSideAsList(enemySide)) {
 			if (myCard != this) {
 				IModifier essedumAura = new EssedumAura();
-				castModifier(myCard, essedumAura);
+				castModifier(g, myCard, essedumAura);
 			}
 		} 
 		return true;

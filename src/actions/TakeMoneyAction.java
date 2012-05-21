@@ -49,7 +49,7 @@ public class TakeMoneyAction implements IPlayerAction {
 	}
 
 	
-	public void execute(GameVisor g) {
+	public void execute(GameVisor g) throws AssertionError {
 		
 		game = g;
 		

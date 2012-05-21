@@ -2,13 +2,11 @@ package roma;
 
 import java.util.*;
 
-import modifiers.IModifiable;
-import modifiers.IModifier;
-import modifiers.ModifierTarget;
+import modifiers.*;
 
 import cards.*;
 
-public class Field implements Cloneable, IModifiable {
+public class Field implements Cloneable {
 	
 	//TODO: make FieldPosition a class
 	private Card[][] fieldData;
@@ -56,9 +54,8 @@ public class Field implements Cloneable, IModifiable {
 		
 		if (c != null) {
 			c.setOwnerId(player);
-			/* hook the event for all the other cards */
 			for (Card otherCards : getAllCards()) {
-				otherCards.onEnterField(this, player, position);
+				otherCards.onEnterField(game.getGameVisor(), this, player, position);
 			}
 		}
 
@@ -79,7 +76,7 @@ public class Field implements Cloneable, IModifiable {
 						c.setOwnerId(Player.NO_OWNER);
 						/* hook the event for all the other cards */
 						for (Card otherCards : getAllCards()) {
-							otherCards.onLeaveField(this.game.getGameVisor(), this, player, cardPos);
+							otherCards.onLeaveField(game.getGameVisor(), this, player, cardPos);
 						}
 					}
 					fieldData[player][cardPos] = null;
@@ -122,41 +119,7 @@ public class Field implements Cloneable, IModifiable {
 		return fieldData[player].clone();
 	}
 	
-	@Override
-	public void addModifier(IModifier mod) {
-		modifiers.add(mod);
-		mod.setTarget(this);
-		mod.apply();
-	}
 
-	@Override
-	public void removeModifier(IModifier mod) {
-		modifiers.remove(mod);
-		mod.unapply();
-	}
-
-	@Override
-	public List<IModifier> getModifiers() {
-		return modifiers;
-	}
-	
-	@Override
-	public ModifierTarget getModifiableType() {
-		return ModifierTarget.Field;
-	}
-	
-	public boolean hasModifier (String modName) {
-		boolean hasMod = false;
-		
-		for (IModifier mod : getModifiers()) {
-			if (mod.getName().equals(modName)) {
-				hasMod = true;
-			}
-		}
-		
-		return hasMod;
-	}
-	
 	/**
 	 * Sets the specified field position as unusable.
 	 */
@@ -197,6 +160,52 @@ public class Field implements Cloneable, IModifiable {
 		
 		return pos;
 		
+	}
+	
+	/**
+	 * Find the owner of the specified card.
+	 * @param c The card
+	 * @return Owner of the card. -1 if not found.
+	 */
+	public int findCardOwner(Card c) {
+		int owner = -1;
+		for (int j = 0; j < Game.MAX_PLAYERS; j++) {
+			for (int i = 0; i < Game.FIELD_SIZE; i++) {
+				if (fieldData[j][i] == c) {
+					owner = j;
+				}
+			}
+		}
+		
+		return owner;
+		
+	}
+	
+	/**
+	 * Provides the ability to clone this object.
+	 * This is a deep copy, so the Cards will be updated in whatever state they will be in this game.
+	 * The clone can be used as a deep clone;
+	 */
+	public Field clone() {
+		Field clonedField = null;
+		try {
+			clonedField = (Field) super.clone();
+			for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+				
+				for (int j = 0; j < Game.FIELD_SIZE; j++) {
+					
+					if (clonedField.fieldData[i][j] != null) {
+						clonedField.fieldData[i][j] = clonedField.fieldData[i][j].getCopy();
+					}
+					
+				}
+				
+			}
+		} catch (CloneNotSupportedException e) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
+		return clonedField;
 	}
 
 }
