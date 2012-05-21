@@ -61,7 +61,7 @@ public class CardCenturio extends Card {
 		// determine time paradox here
 		
 		if (enemyCard == null) {
-			// time paradox
+			// not a time paradox
 		} else {
 			// successfully killed the card?
 			performed = true;

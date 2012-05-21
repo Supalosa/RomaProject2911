@@ -54,15 +54,17 @@ public class CardSicarius extends Card {
 		int enemyPos = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		Card targetCard = g.getField().getCard(enemyPos, myParams.getTargetPos());
 		
+		// Sicarius always dies.
+		g.getField().setCard(g.whoseTurn(), pos-1, null);
+		g.discard(this);	
+		
 		// Sicarius attacks the enemy for 9999 (ties in the Kat)
 		if (targetCard != null && !targetCard.isBuilding()) {
 			targetCard.onAttacked(g, this, myParams.getTargetPos(), 9999);
-			performed = true;
-			g.getField().setCard(g.whoseTurn(), pos-1, null);
-			g.discard(this);			
+			performed = true;		
 			
 		} else {
-			
+			// not a time paradox
 		}
 		
 		return performed;
