@@ -38,6 +38,10 @@ public class HaruspexAdapterActivator extends GenericAdapterActivator implements
 	public void chooseCardFromPile(int indexOfCard) {
 
 		params.setPickedUpCard(indexOfCard);
+		// peek ahead to see what that card would have been
+		Card actualCard = getGame().getDeck().getIndex(indexOfCard);
+		params.setPickedUpCardName(actualCard.getID());
+		
 	}
 
 }

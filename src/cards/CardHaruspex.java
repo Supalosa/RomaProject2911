@@ -52,17 +52,29 @@ public class CardHaruspex extends Card {
 		return new HaruspexParams ();
 	}
 
-	
+
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		
 		HaruspexParams myParams = (HaruspexParams) a;
 		boolean performed = true;
 		
-		Card pickedCard = g.getDeck().getIndex(myParams.getPickedUpCard());
+		// Find the first instance of the requested card!
+		int index = g.getDeck().findCard(myParams.getPickedUpCardName());
 		
-		g.getDeck().removeCard(pickedCard);			
-		g.getCurrentPlayer().addCard(pickedCard);
-
+		if (index == -1) { // time paradox because the card doesn't exist
+			g.getController().showMessage("Oh dear! You caused a Time Paradox through Haruspex!");
+			g.getController().showMessage("You were supposed to get a " + myParams.getPickedUpCardName() + " that's no longer in the deck.");
+			
+			g.onTimeParadox();
+		} else {
+			
+			Card revivedCard = g.getDeck().getIndex(index);
+			g.getDeck().removeCard(revivedCard);			
+			g.getCurrentPlayer().addCard(revivedCard);
+			
+			g.getDeck().shuffle();
+		}
+		
 		
 		return performed;
 
