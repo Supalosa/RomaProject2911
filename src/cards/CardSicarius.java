@@ -55,7 +55,8 @@ public class CardSicarius extends Card {
 		Card targetCard = g.getField().getCard(enemyPos, myParams.getTargetPos());
 		
 		// Sicarius attacks the enemy for 9999 (ties in the Kat)
-		if (targetCard != null && !targetCard.isBuilding() && targetCard.onAttacked(g, this, myParams.getTargetPos(), 9999)) {
+		if (targetCard != null && !targetCard.isBuilding()) {
+			targetCard.onAttacked(g, this, myParams.getTargetPos(), 9999);
 			performed = true;
 			g.getField().setCard(g.whoseTurn(), pos-1, null);
 			g.discard(this);			
