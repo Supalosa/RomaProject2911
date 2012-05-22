@@ -117,6 +117,11 @@ public class ActivateCardAction implements IPlayerAction {
 	
 	}
 
+	/**
+	 * Executes the card based on the parameters and variables in this action.
+	 * @param g the game visor to operate on.
+	 * @param targetCard The card to activate
+	 */
 	public void execute(GameVisor g, Card targetCard) {
 
 		game = g;
