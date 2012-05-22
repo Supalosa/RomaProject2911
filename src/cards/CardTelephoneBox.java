@@ -61,7 +61,7 @@ public class CardTelephoneBox extends Card {
 				+ myParams.isGoForward() + ", " + myParams.getDiceToUse());*/
 
 		Card timeTravellingCard = g.getField().getCard(g.whoseTurn(),
-				myParams.getDiceToSend() - 1);
+				myParams.getPosToSend() - 1);
 
 		if (timeTravellingCard != null) {
 
@@ -69,13 +69,13 @@ public class CardTelephoneBox extends Card {
 
 				// Remove the card from the field
 				g.getField().setCard(g.whoseTurn(),
-						myParams.getDiceToSend() - 1, null);
+						myParams.getPosToSend() - 1, null);
 
 				// Make it pending
 				g.addPendingFutureCard(new TimeTravellingCard(
 						timeTravellingCard, g.getTurnNumber()
 								+ myParams.getDiceToUse(), myParams
-								.getDiceToSend() - 1, g.whoseTurn()));
+								.getPosToSend() - 1, g.whoseTurn()));
 
 				// Use the dice
 				g.useDice(myParams.getDiceToUse());
@@ -103,13 +103,13 @@ public class CardTelephoneBox extends Card {
 				}
 				Game updatedGame = g.getActionLogger().insertCardToGame(
 						gameSnapshot, toTurn, copyOfCard, g.whoseTurn(),
-						myParams.getDiceToSend() - 1);
+						myParams.getPosToSend() - 1);
 
 				// the only thing missing is the activation of THIS card.. so
 				// use dice
 				updatedGame.useDice(pos);
 				// use dice on time travell'd card
-				updatedGame.useDice(myParams.getDiceToSend());
+				updatedGame.useDice(myParams.getPosToSend());
 				/*System.out.println ("Dice: ");
 				for (int i = 0; i < Game.NUM_DIE; i++) {
 					

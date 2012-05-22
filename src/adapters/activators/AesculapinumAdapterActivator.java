@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
@@ -31,8 +30,8 @@ public class AesculapinumAdapterActivator extends GenericAdapterActivator implem
 	
 	/**
 	 * Set the dice disc to be activated.
-	 * In our adapter, we have to convert it because the output
-	 * skips building cards.
+	 * The index is used to determine the card name; and the first occurance of that card name is removed from
+	 * the deck. This behaviour is consistent with the acceptance tests but inconsistent with the game.
 	 */
 	@Override
 	public void chooseCardFromPile(int indexOfCard) {

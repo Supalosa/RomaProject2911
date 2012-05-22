@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cards.Card;
-import roma.Game;
 import roma.GameVisor;
 
 public class TelephoneBoxParams extends CardParams {
 
 
-	private int diceToSend; // which dice disc to send back in time
+	private int posToSend; // which dice disc to send back in time
 	private boolean goForward;
 	private int diceToUse; // which dice to use the value of (go forward or backwards)
 	
@@ -20,27 +19,65 @@ public class TelephoneBoxParams extends CardParams {
 		valid = true;
 	}
 	
-
-	public int getDiceToSend() {
-		return diceToSend;
+	/**
+	 * Gets the field position that is to be sent into the past or future.
+	 * 
+	 * Field position ranges from 0..Game.FIELD_SIZE
+	 * 
+	 * @return value of diceToSend
+	 */
+	public int getPosToSend() {
+		return posToSend;
 	}
 
-	public void setDiceToSend(int diceToSend) {
-		this.diceToSend = diceToSend;
+	/**
+	 * Sets the field position that is to be sent into the past or future.
+	 * 
+	 * Field position ranges from 0..Game.FIELD_SIZE
+	 * 
+	 * @param posToSend the field position of the card to time travel.
+	 */
+	public void setPosToSend(int posToSend) {
+		this.posToSend = posToSend;
 	}
 
+	/**
+	 * Returns whether the card should go forward or backward in time.
+	 * 
+	 * True indicates this card goes forward in time.
+	 * False indicates this card goes backward in time.
+	 * @return value of goForward
+	 */
 	public boolean isGoForward() {
 		return goForward;
 	}
 
+	
+	/**
+	 * Specifies whether the card should go forward or backward in time.
+	 * 
+	 * True indicates this card goes forward in time.
+	 * False indicates this card goes backward in time.
+	 * @return value of goForward
+	 */
 	public void setGoForward(boolean goForward) {
 		this.goForward = goForward;
 	}
-
+	
+	/**
+	 * Gets the dice value that will be used to determine how many turns forward/backward to go.
+	 * 
+	 * @return value of diceToSend
+	 */
 	public int getDiceToUse() {
 		return diceToUse;
 	}
-
+	
+	/**
+	 * Sets the dice value that will be used to determine how many turns forward/backward to go.
+	 * 
+	 * @param diceToUse Dice value of the dice to determine amplitude of TelephoneBox
+	 */
 	public void setDiceToUse(int diceToUse) {
 		this.diceToUse = diceToUse;
 	}
@@ -66,7 +103,7 @@ public class TelephoneBoxParams extends CardParams {
 		target = g.getController().getCard(characters, "Which card do you wish to travel in time?"); 
 		
 		if (target != null) {
-			setDiceToSend(g.getField().findCardPosition(target));
+			setPosToSend(g.getField().findCardPosition(target));
 			valid = true;
 
 			sendForward = g.getController().getBoolean("Do you wish to go forward (Y) or back (N) in time?");

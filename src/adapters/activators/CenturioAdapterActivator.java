@@ -1,13 +1,12 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
 import framework.interfaces.activators.*;
 
 /**
- * Adapter to activate the Aesculapinum.
+ * Adapter to activate the Centurio.
  * @author Supalosa
  *
  */

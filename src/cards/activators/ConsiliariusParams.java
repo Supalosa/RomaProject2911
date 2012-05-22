@@ -10,7 +10,7 @@ public class ConsiliariusParams extends CardParams {
 	/**
 	 * Map of old position->new position
 	 */
-	List<PositionMapping> cardPositions;
+	private List<PositionMapping> cardPositions;
 	
 	public ConsiliariusParams() {
 		
@@ -43,17 +43,23 @@ public class ConsiliariusParams extends CardParams {
 	}
 	
 	/**
-	 * Set field position 'old_pos' to be put in position 'new_pos' when action is performed.
-	 * @param old_pos the position of the card in the hand
-	 * @param new_pos new position of this card in terms of array indices [0-7]
+	 * Set field position 'old_pos' to be put in field position 'new_pos' when action is performed.
+	 * 
+	 * Field position ranges from 0..Game.FIELD_SIZE
+	 * @param old_pos the field position of the card in the hand
+	 * @param new_pos new field position of this card in terms of array indices [0-7]
 	 */
 	public void addPosition(int old_pos, int new_pos) {
 		cardPositions.add(new PositionMapping(old_pos, new_pos));
 	}
 	
 	/**
-	 * Returns an immutable list of the mappings.
-	 * @return
+	 * Returns the mutable list of PositionMappings in this parameter
+	 * 
+	 * <b>WARNING:</b> This is mutable, so modifying the list that is returned
+	 * is NOT advised. You <u>will</u> break time travel and replay ability;
+	 * 
+	 * @return value of cardPositions
 	 */
 	public List<PositionMapping> getMappings() {
 		

@@ -43,13 +43,27 @@ public class SicariusParams extends CardParams {
 	}
 	
 	/**
-	 * Returns the field position of the targeted card [0-6]
-	 * @return
+	 * Returns the field position of the targeted card to attack.
+	 * 
+	 * Field position ranges from 0..Game.FIELD_SIZE
+	 * 
+	 * @return value of targetPos
 	 */
 	public int getTargetPos() {
 		return targetPos;
 	}
-	
+
+	/**
+	 * Sets the target field position of Nero.
+	 * 
+	 * It is possible that this may erroneously point to a Character Card due to
+	 * time travel, but this is not a time paradox. The Nero still dies.
+	 * 
+	 * Field position ranges from 0..Game.FIELD_SIZE
+	 * 
+	 * @param pos
+	 *            The field position of the target
+	 */
 	public void setTargetPos(int pos) {
 		targetPos = pos;
 	}

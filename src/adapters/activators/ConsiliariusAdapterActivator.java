@@ -1,11 +1,10 @@
 package adapters.activators;
 
 
-import actions.*;
-import adapters.CardNameAdapter;
+import adapters.*;
 import roma.*;
-import cards.Card;
-import cards.activators.ConsiliariusParams;
+import cards.*;
+import cards.activators.*;
 import framework.interfaces.activators.*;
 
 /**
@@ -41,7 +40,14 @@ public class ConsiliariusAdapterActivator extends GenericAdapterActivator implem
 
 
 	/**
-	 * Get the card on the field named 'card', and declare its new position
+	 * Sets the first instance of 'card' in the field to be placed on position
+	 * diceDisc.
+	 * 
+	 * The actual movement of cards occurs only in PerformEffect.
+	 * 
+	 * There is no 'floating card' state, so if a test is added to test this,
+	 * this card will need to be changed.
+	 * 
 	 */
 	@Override
 	public void placeCard(framework.cards.Card card, int diceDisc) {

@@ -14,10 +14,22 @@ public class MercatorParams extends CardParams {
 		moneyToSpend = 0;
 	}
 	
+	/**
+	 * Gets the amount of Sestertii that will be spent on buying victory points from the opponent.
+	 * 
+	 * This should always be a multiple of two.
+	 * @return value of moneyToSpend
+	 */
 	public int getMoneyToSpend() {
 		return moneyToSpend;
 	}
 	
+	/**
+	 * Sets the amount of Sestertii that should be spent on buying victory points from the opponent.
+	 * 
+	 * This should always be a multiple of two.	
+	 * @param money
+	 */
 	public void setMoneyToSpend(int money) {
 		this.moneyToSpend = money;
 	}

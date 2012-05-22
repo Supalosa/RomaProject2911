@@ -31,7 +31,7 @@ public class TelephoneBoxAdapterActivator extends GenericAdapterActivator implem
 	
 	@Override
 	public void chooseDiceDisc(int diceDisc) {
-		params.setDiceToSend(diceDisc);
+		params.setPosToSend(diceDisc);
 	}
 
 	@Override

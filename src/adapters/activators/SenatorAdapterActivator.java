@@ -1,12 +1,10 @@
 package adapters.activators;
 
-import java.util.Vector;
-
-import actions.*;
-import adapters.CardNameAdapter;
+import java.util.*;
+import adapters.*;
 import roma.*;
-import cards.Card;
-import cards.activators.SenatorParams;
+import cards.*;
+import cards.activators.*;
 import framework.interfaces.activators.*;
 
 /**
@@ -19,6 +17,7 @@ public class SenatorAdapterActivator extends GenericAdapterActivator implements 
 	SenatorParams params;
 	Vector<Card> handCopy; // copy of the hand for mapping purposes
 	
+	@SuppressWarnings("unchecked")
 	public SenatorAdapterActivator(int fieldPosition, Game game, Card theCard) {
 		super(fieldPosition, game, theCard);
 		
@@ -35,7 +34,16 @@ public class SenatorAdapterActivator extends GenericAdapterActivator implements 
 		
 	}
 
-
+	/**
+	 * Sets the first instance of 'card' in the hand to be placed on position
+	 * diceDisc.
+	 * 
+	 * The actual movement of cards occurs only in PerformEffect.
+	 * 
+	 * There is no 'floating card' state, so if a test is added to test this,
+	 * this card will need to be changed.
+	 * 
+	 */
 	@Override
 	public void layCard(framework.cards.Card card, int diceDisc) {
 		boolean foundCard = false;

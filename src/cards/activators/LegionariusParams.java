@@ -13,10 +13,29 @@ public class LegionariusParams extends CardParams {
 		valid = true;
 	}
 	
+	/**
+	 * Returns the battle die that was specified to be used in the battle
+	 * calculation.
+	 * 
+	 * This value can is pre-modification by Centurio's extra battle dice
+	 * effect.
+	 * 
+	 * @return value of battleDie
+	 */
 	public int getBattleDie() {
 		return battleDie;
 	}
-	
+
+	/**
+	 * Sets the battle die to be used for battle calculation.
+	 * 
+	 * Defining it here and keeping it constant makes acceptance testing
+	 * possible (the result is kept constant) and also enables replays to have
+	 * the exact same outcome.
+	 * 
+	 * @param dieValue
+	 *            Dice value of the base battle value.
+	 */
 	public void setBattleDie(int dieValue) {
 		battleDie = dieValue;
 	}

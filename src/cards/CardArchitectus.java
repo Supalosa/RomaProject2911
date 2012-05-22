@@ -1,7 +1,5 @@
 package cards;
 
-import java.util.*;
-
 import cards.activators.*;
 import roma.*;
 import enums.*;
@@ -43,27 +41,22 @@ public class CardArchitectus extends Card {
 		Card laidOverCard;
 
 		
-		for (Map.Entry<Card, Integer> mappings : myParams.getPositions().entrySet()) {
-			Card theCard = mappings.getKey();
+		for (CardMapping mappings : myParams.getPositions()) {
+			Card theCard = g.getCurrentPlayer().getCard(mappings.getInitialCard());
 			// Remove card from their hand
-			g.getPlayer(g.whoseTurn()).removeCard(theCard);
+			g.getCurrentPlayer().removeCard(theCard);
 			
 			// Add the card to the field, discarding replaced card if necessary
-			if ((laidOverCard = g.getField().setCard(g.whoseTurn(), mappings.getValue()-1, theCard)) != null) {
+			if ((laidOverCard = g.getField().setCard(g.whoseTurn(), mappings.getFinalPos()-1, theCard)) != null) {
 				g.discard(laidOverCard);
 			}
 		}
-		
-		/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
-		
-			System.out.println (g.getField().getCard(g.whoseTurn(), i));
-		
-		}*/
 
 		
 		return performed;
 
 	}
+
 
 	@Override
 	public CardParams getParams() {

@@ -1,6 +1,7 @@
 package roma;
 
 import cards.Card;
+import enums.CardNames;
 
 public class Player {
 	
@@ -78,6 +79,27 @@ public class Player {
 		
 		money = n;
 		
+	}
+	
+	/**
+	 * Return the first occurrence of the specified initialCard in the deck.
+	 * @param initialCard
+	 * @return
+	 */
+	public Card getCard(CardNames initialCard) {
+		Card result = null;
+		
+		for (Card c : hand) {
+			
+			if (result == null && c.getID() == initialCard) {
+				
+				result = c;
+				
+			}
+			
+		}
+		
+		return result;
 	}
 	
 	

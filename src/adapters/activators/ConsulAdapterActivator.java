@@ -1,9 +1,8 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
-import cards.Card;
-import cards.activators.ConsulParams;
+import cards.*;
+import cards.activators.*;
 import framework.interfaces.activators.*;
 
 /**

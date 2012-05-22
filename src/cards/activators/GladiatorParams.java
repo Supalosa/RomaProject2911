@@ -16,14 +16,21 @@ public class GladiatorParams extends CardParams {
 		valid = true;
 	}
 	
-
+	/**
+	 * Gets the Field Position that should be attacked by this card.
+	 * 
+	 * Field position ranges from 0..Game.FIELD_SIZE
+	 * @return value of positionToAttack
+	 */
 	public int getPositionToAttack() {
 		return positionToAttack;
 	}
 	
 	/**
-	 * Sets the field position to attack (in terms of 0-6)
-	 * @param pos
+	 * Sets the field position to attack.
+	 * 
+	 * Field position ranges from 0..Game.FIELD_SIZE
+	 * @param pos the field position this Gladiator should attack
 	 */
 	public void setPositionToAttack(int pos) {
 		this.positionToAttack = pos;

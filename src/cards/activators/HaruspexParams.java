@@ -58,29 +58,37 @@ public class HaruspexParams extends CardParams {
 	
 	/**
 	 * Sets the card to be picked up.
+	 * 
 	 * @param pickedUp
 	 */
 	public void setPickedUpCard(int pickedUp) {
 		pickedUpCard = pickedUp;
 	}
-	
+
 	/**
-	 * Sets the card name that was picked up
+	 * Sets the CardName that was picked up. This is used to actually get the
+	 * card, to ensure the same card comes out every time this Action is
+	 * executed (i.e. Telephone Box having the card in a different index
 	 */
 	public void setPickedUpCardName(CardNames name) {
-		
+
 		pickedUpCardName = name;
-		
+
 	}
-	
+
 	/**
 	 * Gets the card to be picked up
 	 */
 	public int getPickedUpCard() {
 		return pickedUpCard;
 	}
-	
-	
+
+	/**
+	 * Gets the CardName entry that was picked up. This is the parameter that is
+	 * actually used in CardHaruspex to determine which card to pull out
+	 * 
+	 * @return
+	 */
 	public CardNames getPickedUpCardName() {
 		return pickedUpCardName;
 	}

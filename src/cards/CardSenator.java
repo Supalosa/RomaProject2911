@@ -1,7 +1,5 @@
 package cards;
 
-import java.util.*;
-
 import cards.activators.*;
 
 import roma.*;
@@ -45,28 +43,25 @@ public class CardSenator extends Card {
 		return 3;
 	}
 
+	/**
+	 * Performs the effect of this Senator using the passed-in Senator Parameters
+	 */
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
 		SenatorParams myParams = (SenatorParams)a;
 		boolean performed = true;
-
 		Card laidOverCard;
+
 		
-		for (Map.Entry<Card, Integer> mappings : myParams.getPositions().entrySet()) {
-			Card theCard = mappings.getKey();
+		for (CardMapping mappings : myParams.getPositions()) {
+			Card theCard = g.getCurrentPlayer().getCard(mappings.getInitialCard());
 			// Remove card from their hand
-			g.getPlayer(g.whoseTurn()).removeCard(theCard);
+			g.getCurrentPlayer().removeCard(theCard);
 			
 			// Add the card to the field, discarding replaced card if necessary
-			if ((laidOverCard = g.getField().setCard(g.whoseTurn(), mappings.getValue()-1, theCard)) != null) {
+			if ((laidOverCard = g.getField().setCard(g.whoseTurn(), mappings.getFinalPos()-1, theCard)) != null) {
 				g.discard(laidOverCard);
 			}
 		}
-		
-		/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
-		
-			System.out.println (g.getField().getCard(g.whoseTurn(), i));
-		
-		}*/
 
 		
 		return performed;

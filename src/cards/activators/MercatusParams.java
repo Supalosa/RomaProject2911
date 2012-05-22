@@ -4,7 +4,9 @@ import roma.*;
 
 public class MercatusParams extends CardParams {
 	
-	
+	/**
+	 * Mercatus has no parameters.
+	 */
 	@Override
 	public void query(GameVisor g, int pos) {
 
