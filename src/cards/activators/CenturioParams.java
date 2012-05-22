@@ -12,7 +12,9 @@ public class CenturioParams extends CardParams {
 	private boolean valid;
 
 	public CenturioParams() {
+		
 		valid = true;
+	
 	}
 
 	/**
@@ -25,7 +27,9 @@ public class CenturioParams extends CardParams {
 	 * @return value of battleDie
 	 */
 	public int getBattleDie() {
+	
 		return battleDie;
+	
 	}
 
 	/**
@@ -39,7 +43,9 @@ public class CenturioParams extends CardParams {
 	 *            Dice value of the base battle value.
 	 */
 	public void setBattleDie(int dieValue) {
+	
 		battleDie = dieValue;
+	
 	}
 
 	/**
@@ -48,7 +54,9 @@ public class CenturioParams extends CardParams {
 	 * @return value of useExtraDice
 	 */
 	public boolean isUseExtraDice() {
+		
 		return useExtraDice;
+	
 	}
 
 	/**
@@ -60,7 +68,9 @@ public class CenturioParams extends CardParams {
 	 *            Boolean representing whether the dice is to be used or not.
 	 */
 	public void setUseExtraDice(boolean useExtraDice) {
+	
 		this.useExtraDice = useExtraDice;
+	
 	}
 
 	/**
@@ -72,7 +82,9 @@ public class CenturioParams extends CardParams {
 	 * @return value of extraDieValue
 	 */
 	public int getExtraDieValue() {
+	
 		return extraDieValue;
+	
 	}
 
 	/**
@@ -83,7 +95,9 @@ public class CenturioParams extends CardParams {
 	 *            Face value of the dice to add
 	 */
 	public void setExtraDieValue(int extraDieValue) {
+	
 		this.extraDieValue = extraDieValue;
+	
 	}
 
 	@Override
@@ -93,7 +107,9 @@ public class CenturioParams extends CardParams {
 
 		int enemyPlayer = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		Card enemyCard = g.getField().getCard(enemyPlayer, pos - 1);
+		
 		if (enemyCard != null) {
+			
 			valid = true;
 			setBattleDie(g.rollDice());
 
@@ -102,31 +118,41 @@ public class CenturioParams extends CardParams {
 						"Do you wish to add the the value of the battle die?");
 
 				if (useExtraDice) {
+					
 					int diceValue = 0;
+					
 					while (diceValue == 0) {
+					
 						g.getController().showDiceRolls();
 						int add = g.getController().getInt(
 								"Which die do you want to use?");
 
 						if (g.hasDiceRoll(add)) {
+						
 							extraDieValue = add;
+						
 						}
+					
 					}
+					
 					setBattleDie(getBattleDie() + getExtraDieValue());
+				
 				}
 
 			}
-
 		} else {
 
 			setError("There is nothing to attack.");
 
 		}
+		
 	}
 
 	@Override
 	public boolean isValid() {
+		
 		return valid;
+	
 	}
 
 }

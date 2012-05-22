@@ -15,6 +15,7 @@ public class CenturioAdapterActivator extends GenericAdapterActivator implements
 	CenturioParams params;
 	
 	public CenturioAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (CenturioParams) theCard.getParams();
@@ -32,21 +33,27 @@ public class CenturioAdapterActivator extends GenericAdapterActivator implements
 
 	@Override
 	public void giveAttackDieRoll(int roll) {
+		
 		params.setBattleDie(roll);
+	
 	}
 
 
 
 	@Override
 	public void chooseActionDice(int actionDiceValue) {
+	
 		params.setExtraDieValue(actionDiceValue);
+	
 	}
 
 
 
 	@Override
 	public void chooseCenturioAddActionDie(boolean attackAgain) {
+	
 		params.setUseExtraDice(attackAgain);
+	
 	}
 
 }

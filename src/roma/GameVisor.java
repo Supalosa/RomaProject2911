@@ -7,10 +7,13 @@ import modifiers.IModifier;
 import cards.Card;
 
 public class GameVisor {
+	
 	private Game game;
 	
 	public GameVisor (Game g) {
+	
 		game = g;
+	
 	}
 	
 	public Field getField() {
@@ -44,19 +47,27 @@ public class GameVisor {
 	}
 	
 	public int getDiceRoll(int i) {
+	
 		return game.getDiceRoll(i);
+	
 	}
 	
 	public boolean hasDiceRoll (int roll) {
+	
 		return game.hasDiceRoll(roll);
+	
 	}
 	
 	public int getNumDiceRolls() {
+	
 		return game.getNumDiceRolls();
+	
 	}
 	
 	public void setDiceRoll(int oldValue, int newValue) {
+	
 		game.setDiceRoll(oldValue, newValue);
+	
 	}
 		
 	public IController getController() {
@@ -72,7 +83,9 @@ public class GameVisor {
 	}
 	
 	public void addCard(int targetPlayer, Card c) {
+	
 		game.getPlayer(targetPlayer).addCard(c);
+	
 	}
 	
 	public void giveCard(int currentPlayer, int targetPlayer, Card c) {
@@ -82,10 +95,12 @@ public class GameVisor {
 	}
 	
 	public void onEndTurn (int die1, int die2, int die3) {
+		
 		game.nextTurn(); // Increment current player
 		game.startTurn(die1, die2, die3); // Perform start of turn actions.
 		
 		game.takeSnapshot(); // take snapshot in case
+	
 	}
 	
 	public Player getPlayer (int player) {
@@ -110,6 +125,7 @@ public class GameVisor {
 	public Pile getDeck () {
 		
 		return game.getDeck();
+	
 	}
 	
 	public int rollDice() {
@@ -121,7 +137,9 @@ public class GameVisor {
 
 	// Used by: Aescilapinum
 	public boolean isDiscardPileEmpty() {
+	
 		return game.getDiscardPile().isEmpty();
+	
 	}
 	
 	public int getTurnNumber() {
@@ -157,18 +175,16 @@ public class GameVisor {
 	 */
 	public void copyStateFrom(ImmutableGameState gameState) {
 		
-		//System.out.println ("-- copyStateFromImmutable Start --");
 		// VP, Sestertii, 
 		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+			
 			game.getPlayer(i).setVP(gameState.getVP(i));
 			game.getPlayer(i).setMoney(gameState.getSestertii(i));
 			
-			
 			// load hands
-			//System.out.println("Mutable Hand: " + game.getPlayer(i).getHand());
 			game.getPlayer(i).getHand().clear();
 			game.getPlayer(i).getHand().addAll(gameState.getHands(i));
-			//System.out.println("Immutable Hand: " + game.getPlayer(i).getHand());
+
 		}
 		
 		// Action Dice
@@ -191,18 +207,16 @@ public class GameVisor {
 			game.getDeck().addCard(c.getCopy());
 			
 		}
-		
-		
-
 
 		game.getField().clearField();
 		// field
 		for (int i = 0; i < Game.MAX_PLAYERS; i++) {
 			
 			for (int j = 0; j < Game.FIELD_SIZE; j++) {
-				//Card onGame = game.getField().getCard(i, j);
+
 				Card onState = gameState.getField().getCard(i, j);
 				game.getField().setCard(i, j, onState);
+			
 			}
 			
 		}
@@ -218,26 +232,11 @@ public class GameVisor {
 		// snapshots
 		game.setGameSnapshots(gameState.getSnapshots());
 		
-		/*
-		 * 				if ((onGame == null) != (onState == null)) {
-					System.out.println("** Warning: copyStateFromImmutable: Fields at [" + i + "," + j + "] were not the same - empty/occupied mismatch");
-					System.out.println ("    Field [" + i + ", " + j + "] before: " + onGame + ", after: " + onState);
-
-					//System.exit(1);
-				} else if (onGame != null && onState != null && onGame.getID() != onState.getID()) {
-					System.out.println("** Warning: copyStateFromImmutable: Fields at [" + i + "," + j + "] were not the same - type mismatch");
-					System.out.println ("    Field [" + i + ", " + j + "] before: " + onGame + ", after: " + onState);
-
-					//System.exit(1);
-				}
-				
-		 */
 		// Turn Number
 		game.setTurnNumber(gameState.getTurnNumber());
 		
 		// Whose turn
 		game.setWhoseTurn(gameState.getPlayer());
-		
 		
 		// game overrrr
 		boolean paradoxed = gameState.isTimeParadox();
@@ -254,8 +253,7 @@ public class GameVisor {
 			game.onTimeParadox();
 			
 		} else {
-			//System.out.println ("-- copyStateFromImmutable End --");
-		
+			
 			// testing
 			try {
 				
@@ -263,6 +261,7 @@ public class GameVisor {
 				assert (game.getDiscardPile().getSize() == gameState.getDiscardPile().getSize());
 				
 				for (int i = 0; i < Game.MAX_PLAYERS; i++) {
+				
 					assert (game.getPlayer(i).getVP() == gameState.getVP(i));
 					assert (game.getPlayer(i).getMoney() == gameState.getSestertii(i));
 					
@@ -276,8 +275,11 @@ public class GameVisor {
 				ex.printStackTrace();
 				System.exit(1);
 				
+		
 			}
+		
 		}
+	
 	}
 	
 	
@@ -303,6 +305,7 @@ public class GameVisor {
 	 * Returns the list of all modifiers casted ON the field position specified
 	 */
 	public List<IModifier> getModifiersOn(int ownerId, int pos) {
+		
 		return game.getModifiersOn(ownerId, pos);
 		
 	}
@@ -326,6 +329,7 @@ public class GameVisor {
 	 *  Returns the list of all modifiers casted BY the field position specified
 	 */
 	public List<IModifier> getModifiersBy(int ownerId, int pos) {
+		
 		return game.getModifiersBy(ownerId, pos);
 		
 	}
@@ -364,6 +368,7 @@ public class GameVisor {
 	 * Deletes all modifiers casted ON the field position specified
 	 */
 	public void deleteModifiersOn(int ownerId, int pos) {
+		
 		game.deleteModifiersOn(ownerId, pos);
 		
 	}
@@ -372,6 +377,7 @@ public class GameVisor {
 	 * Deletes all modifiers casted BY the field position specified
 	 */
 	public void deleteModifiersBy(int ownerId, int pos) {
+		
 		game.deleteModifiersBy(ownerId, pos);
 		
 	}

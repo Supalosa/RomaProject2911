@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
@@ -16,6 +15,7 @@ public class VelitesAdapterActivator extends GenericAdapterActivator implements 
 	VelitesParams params;
 	
 	public VelitesAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (VelitesParams) theCard.getParams();
@@ -34,14 +34,18 @@ public class VelitesAdapterActivator extends GenericAdapterActivator implements 
 
 	@Override
 	public void giveAttackDieRoll(int roll) {
+		
 		params.setBattleDie(roll);
+	
 	}
 
 
 
 	@Override
 	public void chooseDiceDisc(int diceDisc) {
+	
 		params.setPositionToAttack(diceDisc-1);
 		
 	}
+	
 }

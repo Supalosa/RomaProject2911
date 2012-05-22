@@ -1,17 +1,16 @@
 package roma;
+
 import java.util.*;
 
 import cards.*;
 import enums.*;
 
-
-
 public class CardTypes {
-	
-	
+
 	private Map<CardNames, String> cardMap;
-	
-	public CardTypes () {
+
+	public CardTypes() {
+
 		cardMap = new HashMap<CardNames, String>();
 		cardMap.put(CardNames.Sicarius, "cards.CardSicarius");
 		cardMap.put(CardNames.Architectus, "cards.CardArchitectus");
@@ -41,14 +40,11 @@ public class CardTypes {
 		cardMap.put(CardNames.Kat, "cards.CardKat");
 		cardMap.put(CardNames.GrimReaper, "cards.CardGrimReaper");
 		cardMap.put(CardNames.TelephoneBox, "cards.CardTelephoneBox");
-		
 
 	}
-	
+
 	public void InitialiseCards(Pile d) {
-		
-		//addCards (d, CardNames.Aesculapinum, 100);
-		
+
 		// Sicarius x1
 		addCards(d, CardNames.Sicarius, 1);
 		// Architectus x2
@@ -83,69 +79,94 @@ public class CardTypes {
 		addCards(d, CardNames.Tribunus_Plebis, 2);
 		// Centurio x2
 		addCards(d, CardNames.Centurio, 2);
-		//Aesculapinum x2
+		// Aesculapinum x2
 		addCards(d, CardNames.Aesculapinum, 2);
-		//Basilica x2
+		// Basilica x2
 		addCards(d, CardNames.Basilica, 2);
-		//Forum x6
+		// Forum x6
 		addCards(d, CardNames.Forum, 6);
-		//Machina x2
+		// Machina x2
 		addCards(d, CardNames.Machina, 2);
-		//Mercatus x2
+		// Mercatus x2
 		addCards(d, CardNames.Mercatus, 2);
-		//Onager x2
+		// Onager x2
 		addCards(d, CardNames.Onager, 2);
-		//Templum x2
+		// Templum x2
 		addCards(d, CardNames.Templum, 2);
-		//Turris x2
+		// Turris x2
 		addCards(d, CardNames.Turris, 2);
-		
+		// Kat x2
+		addCards(d, CardNames.Kat, 2);
+		// Grim Reaper x1
+		addCards(d, CardNames.GrimReaper, 1);
+		// Telephone Box x1
+		addCards(d, CardNames.TelephoneBox, 1);
+
 	}
-	
+
 	private void addCards(Pile d, CardNames t, int count) {
-		for(int i = 0; i < count; i++) {
+
+		for (int i = 0; i < count; i++) {
+
 			Card c = getCard(t);
 			d.addCard(c); // potential issue because of hooked events
+
 		}
+
 	}
-	
+
 	public Card getCard(CardNames c) {
+
 		String cardClassName = cardMap.get(c);
 		Card cardInstance = null;
+
 		try {
-			cardInstance = (Card)Class.forName(cardClassName).newInstance();
+			cardInstance = (Card) Class.forName(cardClassName).newInstance();
 		} catch (NullPointerException e) {
-			System.err.println ("CardTypes: No class with name " + cardClassName + " (recieved " + c + ")");
+			System.err.println("CardTypes: No class with name " + cardClassName
+					+ " (recieved " + c + ")");
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			System.err.println ("CardTypes: Could not instantiate class " + cardClassName);
+			System.err.println("CardTypes: Could not instantiate class "
+					+ cardClassName);
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			System.err.println ("CardTypes: Illegal Access Exception creating " + cardClassName);
+			System.err.println("CardTypes: Illegal Access Exception creating "
+					+ cardClassName);
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			System.err.println ("CardTypes: Could not find class " + cardClassName);
+			System.err.println("CardTypes: Could not find class "
+					+ cardClassName);
 			e.printStackTrace();
 		}
 
 		return cardInstance;
-		
+
 	}
-	
+
 	public Card getCardFromString(String cardName) {
-		CardNames c = null;
-		for (CardNames card : CardNames.values()) {
-			if (card.toString().compareTo(cardName) == 0) {
-				c = card;
-			}
-		}
 		
-		if (c == null) {
-			System.err.println ("CardNames::getCardFromString: no card " + cardName);
+		CardNames c = null;
+		
+		for (CardNames card : CardNames.values()) {
+		
+			if (card.toString().compareTo(cardName) == 0) {
+			
+				c = card;
+			
+			}
+		
 		}
 
-		return getCard (c);
+		if (c == null) {
 		
+			System.err.println("CardNames::getCardFromString: no card "
+					+ cardName);
+		
+		}
+
+		return getCard(c);
+
 	}
-	
+
 }

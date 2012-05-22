@@ -13,7 +13,9 @@ public class GladiatorParams extends CardParams {
 	private boolean valid;
 	
 	public GladiatorParams() {
+		
 		valid = true;
+	
 	}
 	
 	/**
@@ -23,7 +25,9 @@ public class GladiatorParams extends CardParams {
 	 * @return value of positionToAttack
 	 */
 	public int getPositionToAttack() {
+	
 		return positionToAttack;
+	
 	}
 	
 	/**
@@ -33,7 +37,9 @@ public class GladiatorParams extends CardParams {
 	 * @param pos the field position this Gladiator should attack
 	 */
 	public void setPositionToAttack(int pos) {
+	
 		this.positionToAttack = pos;
+	
 	}
 	
 	@Override
@@ -62,17 +68,19 @@ public class GladiatorParams extends CardParams {
 		target = g.getController().getCard(characters, "Which opposing character card do you wish to attack?"); 
 		
 		if (target != null) {
+		
 			setPositionToAttack(g.getField().findCardPosition(target));
 			valid = true;
+		
 		}
-
 		
 	}
 
 	@Override
 	public boolean isValid() {
+	
 		return valid;
+	
 	}
-
-
+	
 }

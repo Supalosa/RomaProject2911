@@ -30,4 +30,5 @@ public enum CardNames {
 	Kat,
 	TelephoneBox,
 	GrimReaper
+
 }

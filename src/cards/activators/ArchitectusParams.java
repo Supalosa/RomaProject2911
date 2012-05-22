@@ -25,8 +25,11 @@ public class ArchitectusParams extends CardParams {
 	public void query(GameVisor g, int pos) {
 
 		int dicePosition;
+		
 		for (Card c : g.getCurrentPlayer().getHand()) {
+		
 			if (c.isBuilding()) {
+			
 				do {
 					dicePosition = g.getController().getInt(
 							"Select a position to lay " + c.getName()
@@ -34,15 +37,20 @@ public class ArchitectusParams extends CardParams {
 				} while (dicePosition < 0 || dicePosition > Game.FIELD_SIZE);
 
 				if (dicePosition != 0) {
+				
 					addPosition(c, dicePosition);
+				
 				}
+			
 			}
-
 		}
 
 		if (cardPositions.size() == 0) {
+			
 			setError("No cards played.");
+		
 		}
+	
 	}
 
 	/**
@@ -69,10 +77,13 @@ public class ArchitectusParams extends CardParams {
 	 */
 	public List<CardMapping> getPositions() {
 		return cardPositions;
+	
 	}
 
 	public boolean isValid() {
+	
 		return cardPositions.size() > 0;
+
 	}
 
 }

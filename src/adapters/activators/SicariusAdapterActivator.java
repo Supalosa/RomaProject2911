@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.SicariusParams;
@@ -16,6 +15,7 @@ public class SicariusAdapterActivator extends GenericAdapterActivator implements
 	SicariusParams params;
 	
 	public SicariusAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (SicariusParams)theCard.getParams();
@@ -32,8 +32,9 @@ public class SicariusAdapterActivator extends GenericAdapterActivator implements
 	
 	@Override
     public void chooseDiceDisc(int diceDisc) {
+	
 		params.setTargetPos(diceDisc-1);
-    }
     
+	}
 
 }

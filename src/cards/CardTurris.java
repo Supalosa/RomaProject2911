@@ -10,32 +10,46 @@ import roma.*;
 public class CardTurris extends Card {
 	
 	public CardNames getID() {
+	
 		return CardNames.Turris;
+	
 	}
 
 	public int getCostToPlay() {
+	
 		return 6;
+	
 	}
 
 	public int getDiceToActivate() {
+	
 		return 0;
+	
 	}
 
 	public boolean isBuilding() {
+	
 		return true;
+	
 	}
 
 	public String getName() {
+	
 		return "Turris";
+	
 	}
 
 	public String getDescription() {
+	
 		return "As long as the Turris is face-up, the defence value of " +
 				"all the player's other face-up cards increases by 1.";
+	
 	}
 
 	public int getDefense() {
+	
 		return 6;
+	
 	}
 	
 	/**
@@ -44,10 +58,11 @@ public class CardTurris extends Card {
 	 */
 	@Override
 	public void onEnterField(GameVisor g, Field f, int ownerId, int position) {
+		
 		Card c = f.getCard(ownerId, position);
 
 		if (c == this) { // apply to all the cards on our side of the field, retroactively
-			//System.out.println("Turris entered the field, applying to cards...");
+			
 			for (Card myCard : f.getSideAsList(ownerId)) {
 				if (myCard != this) {
 					// do NOT apply if it already has this modifier FROM US!

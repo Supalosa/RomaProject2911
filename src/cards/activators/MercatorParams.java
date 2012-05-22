@@ -9,9 +9,10 @@ public class MercatorParams extends CardParams {
 	 */
 	private int moneyToSpend;
 	
-	
 	public MercatorParams() {
+	
 		moneyToSpend = 0;
+	
 	}
 	
 	/**
@@ -21,7 +22,9 @@ public class MercatorParams extends CardParams {
 	 * @return value of moneyToSpend
 	 */
 	public int getMoneyToSpend() {
+	
 		return moneyToSpend;
+	
 	}
 	
 	/**
@@ -31,7 +34,9 @@ public class MercatorParams extends CardParams {
 	 * @param money
 	 */
 	public void setMoneyToSpend(int money) {
+	
 		this.moneyToSpend = money;
+	
 	}
 	
 	@Override
@@ -68,9 +73,9 @@ public class MercatorParams extends CardParams {
 	}
 	
 	public boolean isValid() {
-		return (moneyToSpend > 0);
-	}
-
 	
+		return (moneyToSpend > 0);
+	
+	}
 	
 }

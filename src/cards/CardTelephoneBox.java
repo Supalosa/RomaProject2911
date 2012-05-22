@@ -1,8 +1,5 @@
 package cards;
 
-import java.security.spec.MGF1ParameterSpec;
-import java.util.*;
-
 import cards.activators.CardParams;
 import cards.activators.TelephoneBoxParams;
 
@@ -12,49 +9,67 @@ import enums.*;
 public class CardTelephoneBox extends Card {
 
 	public CardNames getID() {
+
 		return CardNames.TelephoneBox;
+
 	}
 
 	public int getCostToPlay() {
+
 		return 5;
+
 	}
 
 	public int getDiceToActivate() {
+
 		return 1;
+
 	}
 
 	public boolean isBuilding() {
+
 		return true;
+
 	}
 
 	public String getName() {
+
 		return "Telephone Box";
+
 	}
 
 	public String getDescription() {
+
 		return "When activated by an action die the telephone Box card sends "
 				+ "one of the owner's cards already on the board forwards or "
 				+ "backwards in time.  The sent card is called the time-traveling card.";
+
 	}
 
 	public int getDefense() {
+
 		return 2;
+
 	}
 
 	public boolean performEffect(GameVisor g, int pos) {
 
 		g.getController().showMessage("Telephone Box activated");
+
 		return true;
 
 	}
 
 	@Override
 	public CardParams getParams() {
+
 		return new TelephoneBoxParams();
+
 	}
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		
 		TelephoneBoxParams myParams = (TelephoneBoxParams) a;
 
 		/*System.out.println("TelephoneBox: " + myParams.getDiceToSend() + ", "
@@ -63,11 +78,13 @@ public class CardTelephoneBox extends Card {
 		Card timeTravellingCard = g.getField().getCard(g.whoseTurn(),
 				myParams.getPosToSend() - 1);
 
+
 		if (timeTravellingCard != null) {
 
 			if (myParams.isGoForward()) { // easy to go forward
 
 				// Remove the card from the field
+
 				g.getField().setCard(g.whoseTurn(),
 						myParams.getPosToSend() - 1, null);
 
@@ -76,6 +93,7 @@ public class CardTelephoneBox extends Card {
 						timeTravellingCard, g.getTurnNumber()
 								+ myParams.getDiceToUse(), myParams
 								.getPosToSend() - 1, g.whoseTurn()));
+
 
 				// Use the dice
 				g.useDice(myParams.getDiceToUse());
@@ -86,13 +104,11 @@ public class CardTelephoneBox extends Card {
 				
 				// If going too far back, go to the start of the game.
 				if (toTurn < 0) {
+
 					toTurn = 0;
+				
 				}
-				/*System.out.println("Telephone Box activated at turn "
-						+ g.getTurnNumber() + " and going back "
-						+ myParams.getDiceToUse() + " turns");*/
-				
-				
+
 				Card copyOfCard = timeTravellingCard.getCopy();
 				ImmutableGameState gameSnapshot = g.getGameStateForTurn(toTurn);
 				
@@ -100,7 +116,9 @@ public class CardTelephoneBox extends Card {
 					
 					System.err.println ("Error: gameSnapshot for turn " + toTurn + " doesn't exit!");
 					System.exit(1);
+				
 				}
+
 				Game updatedGame = g.getActionLogger().insertCardToGame(
 						gameSnapshot, toTurn, copyOfCard, g.whoseTurn(),
 						myParams.getPosToSend() - 1);
@@ -109,6 +127,7 @@ public class CardTelephoneBox extends Card {
 				// use dice
 				updatedGame.useDice(pos);
 				// use dice on time travell'd card
+
 				updatedGame.useDice(myParams.getPosToSend());
 				/*System.out.println ("Dice: ");
 				for (int i = 0; i < Game.NUM_DIE; i++) {
@@ -123,6 +142,7 @@ public class CardTelephoneBox extends Card {
 				ImmutableGameState interimState = new ImmutableGameState(updatedGame, updatedGame.getTurnNumber());
 				
 				g.copyStateFrom(interimState);
+			
 			}
 
 		} else {
@@ -132,6 +152,6 @@ public class CardTelephoneBox extends Card {
 		}
 
 		return true; // never used
+	
 	}
-
 }

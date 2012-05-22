@@ -13,7 +13,9 @@ public class ScaenicusParams extends CardParams {
 	private CardParams copiedParams;
 
 	public ScaenicusParams() {
+		
 		valid = true;
+	
 	}
 
 	/**
@@ -24,7 +26,9 @@ public class ScaenicusParams extends CardParams {
 	 * @return value of positionToCopy
 	 */
 	public int getPositionToCopy() {
+	
 		return positionToCopy;
+	
 	}
 
 	/**
@@ -38,17 +42,25 @@ public class ScaenicusParams extends CardParams {
 	 * @param pos
 	 */
 	public void setPositionToCopy(int pos) {
+	
 		this.positionToCopy = pos;
+	
 	}
 
 	@Override
 	public void query(GameVisor g, int pos) {
+	
 		valid = false;
 		List<Card> characters = new ArrayList<Card>();
+		
 		for (Card c : g.getField().getSideAsList(g.whoseTurn())) {
+		
 			if (!c.isBuilding()) {
+			
 				characters.add(c);
+			
 			}
+		
 		}
 
 		Card selectedCard = null;
@@ -64,13 +76,16 @@ public class ScaenicusParams extends CardParams {
 			// get the parameters for the copied card
 			CardParams params = selectedCard.getParams();
 			params.query(g, pos);
+		
 		}
 
 	}
 
 	@Override
 	public boolean isValid() {
+		
 		return valid;
+	
 	}
 
 	/**
@@ -81,7 +96,9 @@ public class ScaenicusParams extends CardParams {
 	 * @return value of copiedCard
 	 */
 	public CardNames getCopiedCard() {
+	
 		return copiedCard;
+	
 	}
 	
 	/**
@@ -92,7 +109,9 @@ public class ScaenicusParams extends CardParams {
 	 * @param copiedCard ID of the card to be copied.
 	 */
 	public void setCopiedCard(CardNames copiedCard) {
+	
 		this.copiedCard = copiedCard;
+	
 	}
 
 	/**
@@ -103,7 +122,9 @@ public class ScaenicusParams extends CardParams {
 	 * @return value of copiedParams
 	 */
 	public CardParams getCopiedParams() {
+	
 		return copiedParams;
+	
 	}
 
 	/**
@@ -114,7 +135,9 @@ public class ScaenicusParams extends CardParams {
 	 * @return value of copiedParams
 	 */
 	public void setCopiedParams(CardParams copiedActivator) {
+	
 		this.copiedParams = copiedActivator;
+	
 	}
 
 }

@@ -12,12 +12,14 @@ public class KatParams extends CardParams {
 	public void query(GameVisor g, int pos) {
 
 		// no params
+	
 	}
 	
 	@Override
 	public boolean isValid() {
+		
 		return true;
-	}
 	
+	}
 	
 }

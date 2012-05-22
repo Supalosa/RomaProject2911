@@ -1,8 +1,5 @@
 package cards;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import cards.activators.CardParams;
 import cards.activators.SicariusParams;
 
@@ -13,42 +10,59 @@ import enums.*;
 public class CardSicarius extends Card {
 
 	public CardNames getID() {
+		
 		return CardNames.Sicarius;
+	
 	}
 
 	public String getName() {
+	
 		return "Sicarius";
+	
 	}
 	
 	public int getCostToPlay() {
+	
 		return 9;
+	
 	}
 
 	public int getDiceToActivate() {
+	
 		return 1;
+	
 	}
 
 	public boolean isBuilding() {
+	
 		return false;
+	
 	}
 
 
 	public String getDescription() {
+	
 		return "Eliminates an opposing, face-up character card. " +
 				"The opposing card and the Sicarius are both discarded";
+	
 	}
 
 	public int getDefense() {
+	
 		return 2;
+	
 	}
 
 	@Override
 	public CardParams getParams() {
+	
 		return new SicariusParams();
+	
 	}
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+		
 		boolean performed = false;
 		SicariusParams myParams = (SicariusParams) a;
 		int enemyPos = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
@@ -60,14 +74,18 @@ public class CardSicarius extends Card {
 		
 		// Sicarius attacks the enemy for 9999 (ties in the Kat)
 		if (targetCard != null && !targetCard.isBuilding()) {
+		
 			targetCard.onAttacked(g, this, myParams.getTargetPos(), 9999);
 			performed = true;		
 			
 		} else {
+			
 			// not a time paradox
+		
 		}
 		
 		return performed;
+	
 	}
 
 }

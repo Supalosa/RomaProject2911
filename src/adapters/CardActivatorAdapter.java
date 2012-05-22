@@ -4,7 +4,6 @@ import cards.*;
 import roma.*;
 import adapters.activators.*;
 import enums.*;
-import framework.interfaces.activators.*;
 
 public class CardActivatorAdapter {
 
@@ -18,6 +17,7 @@ public class CardActivatorAdapter {
 	 * @return The Activator Adapter.
 	 */
 	public static GenericAdapterActivator getActivator(CardNames card, int disc, Game game, Card activatedCard) {
+		
 		GenericAdapterActivator activator = null;
 		
 		if (card == CardNames.Tribunus_Plebis) {
@@ -115,5 +115,7 @@ public class CardActivatorAdapter {
 		}
 		
 		return activator;
+	
 	}
+	
 }

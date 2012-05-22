@@ -9,6 +9,7 @@ package cards.activators;
  *
  */
 public class PositionMapping {
+	
 	private final int initial_pos;
 	private final int final_pos;
 	
@@ -20,12 +21,15 @@ public class PositionMapping {
 	}
 	
 	public int getInitialPos() {
+	
 		return initial_pos;
+	
 	}
 	
 	public int getFinalPos() {
-		return final_pos;
-	}
 	
+		return final_pos;
+	
+	}
 	
 }

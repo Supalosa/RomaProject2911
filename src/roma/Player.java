@@ -20,11 +20,14 @@ public class Player {
 	}
 
 	public int getPlayerId () {
+		
 		return playerId;
+	
 	}
 	
 	// Add a card to our hand
 	public void addCard(Card c) {
+		
 		c.onEnterHand(this);
 		c.setOwnerId(playerId);
 		hand.add(c);
@@ -32,9 +35,11 @@ public class Player {
 	}
 	
 	public void removeCard(Card c) {
+		
 		c.onLeaveHand(this);
 		c.setOwnerId(NO_OWNER);
 		hand.remove(c);
+	
 	}
 
 	// Get n'th card from my hand

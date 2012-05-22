@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.NeroParams;
@@ -16,6 +15,7 @@ public class NeroAdapterActivator extends GenericAdapterActivator implements Ner
 	NeroParams params;
 	
 	public NeroAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (NeroParams)theCard.getParams();
@@ -32,8 +32,10 @@ public class NeroAdapterActivator extends GenericAdapterActivator implements Ner
 	
 	@Override
     public void chooseDiceDisc(int diceDisc) {
+	
 		params.setTargetPos(diceDisc-1);
-    }
+    
+	}
     
 
 }

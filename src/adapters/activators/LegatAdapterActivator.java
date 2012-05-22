@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import framework.interfaces.activators.*;
@@ -15,9 +14,11 @@ public class LegatAdapterActivator extends GenericAdapterActivator implements Le
 	LegatParams params;
 	
 	public LegatAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = new LegatParams();
+	
 	}
 	
 	

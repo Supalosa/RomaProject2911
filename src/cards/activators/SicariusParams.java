@@ -10,7 +10,9 @@ public class SicariusParams extends CardParams {
 	int targetPos;
 	
 	public SicariusParams() {
+		
 		targetPos = -1;
+	
 	}
 	
 	@Override
@@ -36,10 +38,12 @@ public class SicariusParams extends CardParams {
 
 		destroy = g.getController().getCard(characters, "Which opposing character card do you wish to eliminate?"); 
 		
-	
 		if (destroy != null) {
+		
 			setTargetPos(g.getField().findCardPosition(destroy));
+		
 		}
+	
 	}
 	
 	/**
@@ -50,7 +54,9 @@ public class SicariusParams extends CardParams {
 	 * @return value of targetPos
 	 */
 	public int getTargetPos() {
+	
 		return targetPos;
+	
 	}
 
 	/**
@@ -65,13 +71,16 @@ public class SicariusParams extends CardParams {
 	 *            The field position of the target
 	 */
 	public void setTargetPos(int pos) {
+	
 		targetPos = pos;
+	
 	}
 
 	@Override
 	public boolean isValid() {
-		return targetPos != -1;
-	}
 	
+		return targetPos != -1;
+	
+	}
 	
 }

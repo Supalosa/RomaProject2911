@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
@@ -17,6 +16,7 @@ public class PraetorianusAdapterActivator extends GenericAdapterActivator implem
 	PraetorianusParams params;
 	
 	public PraetorianusAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (PraetorianusParams) theCard.getParams();
@@ -34,7 +34,9 @@ public class PraetorianusAdapterActivator extends GenericAdapterActivator implem
 
 	@Override
 	public void chooseDiceDisc(int diceDisc) {
+		
 		params.setPositionToAttack(diceDisc-1);
 		
 	}
+	
 }

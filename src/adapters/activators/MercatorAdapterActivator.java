@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.MercatorParams;
@@ -17,6 +16,7 @@ public class MercatorAdapterActivator extends GenericAdapterActivator implements
 	MercatorParams params;
 	
 	public MercatorAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 
 		this.params = (MercatorParams) theCard.getParams();
@@ -37,10 +37,9 @@ public class MercatorAdapterActivator extends GenericAdapterActivator implements
 
 	@Override
 	public void chooseMercatorBuyNum(int VPToBuy) {
+		
 		params.setMoneyToSpend(VPToBuy*2);
+	
 	}
-
-
-
 
 }

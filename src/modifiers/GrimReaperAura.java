@@ -13,12 +13,16 @@ public class GrimReaperAura extends IModifier {
 	
 	@Override
 	public String getName() {
+	
 		return NAME;
+	
 	}
 	
 	@Override
 	public String getDescription() {
+	
 		return "Returns to hand when killed. Applies until Grim Reaper leaves the field.";
+	
 	}
 	
 	/**
@@ -26,7 +30,7 @@ public class GrimReaperAura extends IModifier {
 	 */
 	@Override
 	public void apply(Card c) {
-		//targetCard.setRealDefense(targetCard.getRealDefense() + 1);
+	
 	}
 
 	/**
@@ -34,7 +38,7 @@ public class GrimReaperAura extends IModifier {
 	 */
 	@Override
 	public void unapply(Card c) {
-	//	targetCard.setRealDefense(targetCard.getRealDefense() - 1);
+
 	}
 
 

@@ -24,7 +24,9 @@ public class AesculapinumParams extends CardParams {
 	 * Constructs a Parameter set for the Aesculapinum.
 	 */
 	public AesculapinumParams() {
+
 		pickedUpCard = -1;
+
 	}
 
 	/**
@@ -33,6 +35,7 @@ public class AesculapinumParams extends CardParams {
 	 */
 	@Override
 	public void query(GameVisor g, int pos) {
+
 		List<Card> characters = new ArrayList<Card>();
 
 		for (Card c : g.getDiscardPile().asList()) {
@@ -51,20 +54,28 @@ public class AesculapinumParams extends CardParams {
 					"Pick the card you wish to add to your hand");
 			// Get the position of this card in the discard pile.
 			if (selected != null) {
+
 				int discardPosition = 0;
+
 				for (Card c : g.getDiscardPile().asList()) {
+
 					if (c == selected) {
+
 						setPickedUpCard(discardPosition);
 						setPickedUpCardName(c.getID());
+
 					}
 					discardPosition++;
 				}
+
 			}
+
 		} else {
 
 			setError("There are no Character cards on the discard pile!");
 
 		}
+
 	}
 
 	/**
@@ -73,7 +84,9 @@ public class AesculapinumParams extends CardParams {
 	 * @param pickedUp
 	 */
 	public void setPickedUpCard(int pickedUp) {
+
 		pickedUpCard = pickedUp;
+
 	}
 
 	/**
@@ -91,7 +104,9 @@ public class AesculapinumParams extends CardParams {
 	 * Gets the card to be picked up
 	 */
 	public int getPickedUpCard() {
+
 		return pickedUpCard;
+
 	}
 
 	/**
@@ -101,14 +116,18 @@ public class AesculapinumParams extends CardParams {
 	 * @return
 	 */
 	public CardNames getPickedUpCardName() {
+
 		return pickedUpCardName;
+
 	}
 
 	/**
 	 * This parameter is invalid if no card has been selected.
 	 */
 	public boolean isValid() {
+
 		return (pickedUpCard != -1);
+
 	}
 
 }

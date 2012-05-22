@@ -19,5 +19,7 @@ public class Roma {
 		Game g = new Game(controller);
 		controller.setGame(g);
 		controller.runGame();
+	
 	}
+
 }

@@ -1,10 +1,6 @@
 package cards;
 
-import java.util.*;
-
 import actions.ActivateCardAction;
-
-import modifiers.IModifier;
 
 import cards.activators.CardParams;
 import cards.activators.KatParams;
@@ -26,45 +22,64 @@ public class CardKat extends Card {
 		lives = 9;
 		
 	}
+	
 	public CardNames getID() {
+	
 		return CardNames.Kat;
+	
 	}
 
 	public int getCostToPlay() {
+	
 		return 5;
+	
 	}
 
 	public int getDiceToActivate() {
+	
 		return 1;
+	
 	}
 
 	public boolean isBuilding() {
+	
 		return false;
+	
 	}
 
 	public String getName() {
+	
 		return "Kat";
+	
 	}
 
 	public String getDescription() {
+	
 		return "Mysterious and revered animal.  Its haunting cry lifts the" + 
 				"heart of all who hear it.  Has nine lives.";
+	
 	}
 
 	public int getDefense() {
+	
 		return 1;
+	
 	}
 
 
 	@Override
 	public CardParams getParams() {
+	
 		return new KatParams();
+	
 	}
 
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
+	
 		g.getController().showMessage("Miaow");
 		return false;
+	
 	}
 	
 	/**
@@ -76,8 +91,6 @@ public class CardKat extends Card {
 		KatParams params = new KatParams();
 		ActivateCardAction action = new ActivateCardAction(params);
 		action.setDiceDisc(gv.getField().findCardPosition(this) + 2);
-		//System.out.println ("KAT executed at start of turn " + gv.getTurnNumber());
-
 		
 		// kinda protects against Kat being on bribe dice,
 		// because bribe logic is ignored if not on bribe disc
@@ -96,13 +109,8 @@ public class CardKat extends Card {
 	@Override
 	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
 		
-		Card enteredCard = f.getCard(ownerId, position);
-		if (enteredCard == this) {
-		//	System.out.println ("Reset life of kat");
-			//lives = 9;
-		}
-		
 		return super.onLeaveField(g, f, ownerId, position);
+	
 	}
 
 
@@ -113,16 +121,22 @@ public class CardKat extends Card {
 	 * @return Whether the card dies or not.
 	 */
 	public boolean onAttacked(GameVisor g, Card c, int pos, int battleDie) {
+		
 		if (battleDie >= getRealDefense()) {
-			//System.out.println ("Kat [" + this.hashCode() + "] was attacked with " + lives + " lives left");
+
 			lives--;
+		
 		}
 		
 		if (lives <= 0) {
+		
 			lives = 9;
 			return super.onAttacked(g, c, pos, battleDie);
+		
 		} else {
+		
 			return false;
+		
 		}
 
 	}
@@ -145,11 +159,13 @@ public class CardKat extends Card {
 	 */
 	@Override
 	public Card getCopy() {
+		
 		CardKat copy = (CardKat) super.getCopy();
 		
 		copy.setLives(lives);
-		//System.out.println ("Kat copy [" + copy.hashCode() + "] has " + copy.getLives() + " lives");
+
 		return copy;
+	
 	}
 
 }

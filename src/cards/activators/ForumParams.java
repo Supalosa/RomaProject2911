@@ -16,9 +16,11 @@ public class ForumParams extends CardParams {
 	private boolean useTemplum;
 
 	public ForumParams() {
+
 		forumDie = 0;
 
 		useTemplum = false;
+
 	}
 
 	/**
@@ -28,7 +30,9 @@ public class ForumParams extends CardParams {
 	 * @return value of forumDie
 	 */
 	public int getForumDie() {
+
 		return forumDie;
+
 	}
 
 	/**
@@ -39,7 +43,9 @@ public class ForumParams extends CardParams {
 	 *            face value of dice to use
 	 */
 	public void setForumDie(int forumDie) {
+
 		this.forumDie = forumDie;
+
 	}
 
 	/**
@@ -48,7 +54,9 @@ public class ForumParams extends CardParams {
 	 * @return value of useTemplum
 	 */
 	public boolean isUseTemplum() {
+
 		return useTemplum;
+
 	}
 
 	/**
@@ -59,7 +67,9 @@ public class ForumParams extends CardParams {
 	 * @param useTemplum
 	 */
 	public void setUseTemplum(boolean useTemplum) {
+
 		this.useTemplum = useTemplum;
+
 	}
 
 	@Override
@@ -70,18 +80,26 @@ public class ForumParams extends CardParams {
 			// dice rolls that exclude the one that activated this card.
 			List<Integer> diceRolls = new ArrayList<Integer>();
 			boolean removedActivator = false;
+
 			for (int i = 0; i < g.getNumDiceRolls(); i++) {
+
 				if (g.getDiceRoll(i) != pos || removedActivator == true) {
+
 					diceRolls.add(g.getDiceRoll(i));
+
 				} else {
+
 					removedActivator = true;
+
 				}
+
 			}
 
 			g.getController().showMessage(
 					"Available dice: " + diceRolls.toString());
 
 			int diceRoll;
+
 			diceRoll = g
 					.getController()
 					.getInt("Enter of the value of the dice roll "
@@ -118,9 +136,11 @@ public class ForumParams extends CardParams {
 			setError("You don't have enough dice to activate this card");
 
 		}
+
 	}
 
 	public boolean isValid() {
+
 		return (forumDie != 0);
 	}
 
