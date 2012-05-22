@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
@@ -16,6 +15,7 @@ public class HaruspexAdapterActivator extends GenericAdapterActivator implements
 	HaruspexParams params;
 	
 	public HaruspexAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (HaruspexParams) theCard.getParams();

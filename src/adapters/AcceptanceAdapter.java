@@ -11,14 +11,18 @@ public class AcceptanceAdapter implements AcceptanceInterface {
 	
 	@Override
 	public MoveMaker getMover(GameState state) {
+	
 		mover = new MoveMakerAdapter(game, game.getController());
 		return mover;
+	
 	}
 
 	@Override
 	public GameState getInitialState() {
+	
 		game = new GameAdapter();
 		return game;
+	
 	}
 
 }

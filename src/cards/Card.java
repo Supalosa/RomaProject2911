@@ -14,18 +14,9 @@ public abstract class Card implements Cloneable {
 	private boolean isInPlay; // possibly redundant
 	private boolean isFaceUp;
 	private int realDefense; // defense after modifiers, etc
-		
-/*	private CardNames id;
-	private int costToPlay;
-	private int diceToActivate;
-	private boolean isBuilding;
-	private String name;
-	private String description;
-	private int defense;
-	private EffectTrigger effectTrigger;*/
-	
 	
 	public Card() {
+		
 		ownerId = -1;
 		isInPlay = false;
 		isFaceUp = false;
@@ -36,32 +27,46 @@ public abstract class Card implements Cloneable {
 	
 	/* Card Definition boilerplates */
 	public String toString() {
+		
 		return getName();
+	
 	}
 	
 	public int getOwnerID () {
+	
 		return ownerId;
+	
 	}
 	
 	public void setOwnerId (int playerId) {
+	
 		ownerId = playerId;
+	
 	}
 	
 	public boolean isInPlay () {
+	
 		return isInPlay;
+	
 	}
 	
 	public boolean isFaceUp () {
+	
 		return isFaceUp;
+	
 	}
 	
 	/* Game Functions */
 	public int getRealDefense() {
+	
 		return realDefense;
+	
 	}
 	
 	public void setRealDefense(int defense) {
+	
 		realDefense = defense;
+	
 	}
 	/* Events */
 	
@@ -78,6 +83,7 @@ public abstract class Card implements Cloneable {
 	 * @param g TODO
 	 */
 	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
+		
 		if (f.getCard(ownerId, position) == this) { // if this card is the one that left
 			
 			// remove all modifiers on this card
@@ -86,6 +92,7 @@ public abstract class Card implements Cloneable {
 			for (IModifier mod : modsToRemove) {
 				mod.unapply(this);
 			}
+		
 		}
 		
 		return true;
@@ -126,9 +133,11 @@ public abstract class Card implements Cloneable {
 	 * @return whether the card should actually go there or not.
 	 */
 	public boolean onEnterDiscard() {
+		
 		boolean remove = true;
 
 		return remove;
+	
 	}
 	
 	// onLeaveDiscard: 
@@ -155,36 +164,28 @@ public abstract class Card implements Cloneable {
 	 * @return Whether the card dies or not
 	 */
 	public boolean onAttacked(GameVisor g, Card c, int pos, int battleDie) {
+		
 		boolean killed = false;
 		int ownerId = getOwnerID();
 		boolean hasGrimReaperAura = hasModifier(g, GrimReaperAura.NAME);
+		
 		if (battleDie >= getRealDefense()) {
 			
-			/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
-				
-				System.out.println (g.getField().getCard(ownerId, i));
-				
-			}
-			System.out.println (getName() + " [" + getOwnerID() + "] at " + (pos) + " died: " + battleDie + " > " + getRealDefense());
-			*/
 			g.getField().setCard(getOwnerID(), pos, null);
 
 			// grim reaper check
 			if (hasGrimReaperAura) {
-				//System.out.println ("Saved by Grim Reaper");
+
 				g.getPlayer(ownerId).addCard(this);
+			
 			} else {
-				//System.out.println ("Killed...");
 
 				g.discard(this);
+
 			}
+			
 			killed = true;
 			
-			/*for (int i = 0; i < Game.FIELD_SIZE; i++) {
-				
-				System.out.println (g.getField().getCard(ownerId, i));
-				
-			}*/
 		}
 		
 		return killed;
@@ -208,21 +209,26 @@ public abstract class Card implements Cloneable {
 	 * @return
 	 */
 	public Card getCopy() {
+		
 		Card copy = null;
+		
 		try {
+		
 			copy = (Card) this.clone();
 			
 			// Cards can only get realDefense from auras, which is recalculated...
 			// So need to reset def when cloned
-			copy.setRealDefense(copy.getDefense());
-			
+			copy.setRealDefense(copy.getDefense());	
 			
 		} catch (CloneNotSupportedException e) {
+			
 			System.err.println("Error: " + e.getMessage());
 			e.printStackTrace();
+		
 		}
 		
 		return copy;
+	
 	}
 	
 	/**
@@ -248,6 +254,7 @@ public abstract class Card implements Cloneable {
 		g.addModifier(modifier);
 		
 		modifier.apply(c);
+	
 	}
 
 	/**
@@ -257,6 +264,7 @@ public abstract class Card implements Cloneable {
 	 * @return
 	 */
 	public boolean hasModifier(GameVisor g, String modifierName) {
+		
 		boolean result = false;
 		
 		List<IModifier> mods = g.getModifiersOn(this);
@@ -264,12 +272,15 @@ public abstract class Card implements Cloneable {
 		for (IModifier mod : mods) {
 			
 			if (mod.getName().equals(modifierName)) {
+			
 				result = true;
+			
 			}
 			
 		}
 		
 		return result;
+	
 	}
 	
 }

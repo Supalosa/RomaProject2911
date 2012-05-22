@@ -19,9 +19,9 @@ public class EssedumParams extends CardParams {
 	
 	
 	public boolean isValid() {
+		
 		return true;
-	}
-
 	
+	}
 	
 }

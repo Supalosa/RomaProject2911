@@ -4,7 +4,6 @@ import java.util.*;
 
 import modifiers.GrimReaperAura;
 import modifiers.IModifier;
-import modifiers.TurrisAura;
 
 import cards.activators.CardParams;
 
@@ -14,34 +13,48 @@ import enums.*;
 public class CardGrimReaper extends Card {
 
 	public CardNames getID() {
+		
 		return CardNames.GrimReaper;
+	
 	}
 
 	public int getCostToPlay() {
+	
 		return 6;
+	
 	}
 
 	public int getDiceToActivate() {
+	
 		return 1;
+	
 	}
 
 	public boolean isBuilding() {
+	
 		return false;
+	
 	}
 
 	public String getName() {
+	
 		return "Grim Reaper";
+	
 	}
 
 	public String getDescription() {
+	
 		return "Once placed on a disc this card provides a chance to cheat death." +
 				"The player's other character cards are returned to the player's hand" +
 				"rather than to the discard pile whenever they are successfully attacked" +
 				"and defeated by the opponent.";
+	
 	}
 
 	public int getDefense() {
+	
 		return 3;
+	
 	}
 
 	
@@ -51,23 +64,32 @@ public class CardGrimReaper extends Card {
 	 */
 	@Override
 	public void onEnterField(GameVisor g, Field f, int ownerId, int position) {
+		
 		Card c = f.getCard(ownerId, position);
 
 		// Note: Characters only
 		if (c == this) { // apply to all the cards on our side of the field, retroactively
+			
 			for (Card myCard : f.getSideAsList(ownerId)) {
+			
 				if (myCard != this && !myCard.isBuilding()) {
+				
 					IModifier grimReaperAura = new GrimReaperAura();
 					castModifier(g, myCard, grimReaperAura);
+				
 				}
+			
 			}
+		
 		} else if (ownerId == this.getOwnerID() && !c.isBuilding()) { // else a friendly card came in
 
 			IModifier grimReaperAura = new GrimReaperAura();
 			castModifier(g, c, grimReaperAura);
 			
 		}
+		
 		super.onEnterField(g, f, ownerId, position);
+	
 	}
 	
 	/**
@@ -77,6 +99,7 @@ public class CardGrimReaper extends Card {
 	 */
 	@Override
 	public boolean onLeaveField(GameVisor g, Field f, int ownerId, int position) {
+		
 		boolean allowLeave = true;
 		Card c = f.getCard(ownerId, position);
 		
@@ -85,16 +108,16 @@ public class CardGrimReaper extends Card {
 			List<IModifier> modsToRemove = g.getModifiersBy(this);
 			
 			for (IModifier mod : modsToRemove) {
+		
 				Card modTarget = f.getCard(mod.getTargetOwnerId(), mod.getTargetPos());
 				mod.unapply(modTarget);
-			}
 			
-		} else if (ownerId == getOwnerID()) {
-			//System.out.println ("Grim Reaper: a friendly " + c + " left the field!");
+			}
 			
 		}
 		
 		return (allowLeave && super.onLeaveField(g, f, ownerId, position));
+	
 	}
 
 	/**
@@ -102,8 +125,9 @@ public class CardGrimReaper extends Card {
 	 */
 	@Override
 	public CardParams getParams() {
-		// TODO Auto-generated method stub
+
 		return null;
+	
 	}
 
 	/**
@@ -111,8 +135,9 @@ public class CardGrimReaper extends Card {
 	 */
 	@Override
 	public boolean performEffect(GameVisor g, int pos, CardParams a) {
-		// TODO Auto-generated method stub
+
 		return false;
+	
 	}
 
 }

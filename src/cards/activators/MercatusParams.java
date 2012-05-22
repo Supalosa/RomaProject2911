@@ -13,8 +13,9 @@ public class MercatusParams extends CardParams {
 	
 	@Override
 	public boolean isValid() {
+		
 		return true;
-	}
 	
+	}
 	
 }

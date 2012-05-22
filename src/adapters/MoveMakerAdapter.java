@@ -1,7 +1,5 @@
 package adapters;
 
-import java.util.*;
-
 import roma.*;
 
 import actions.*;
@@ -20,16 +18,11 @@ import framework.interfaces.activators.CardActivator;
  */
 public class MoveMakerAdapter implements MoveMaker {
 
-	private boolean endTurn;
-	private MockController mockController;
 	private Game game;
-	private GameAdapter adapter;
 	private boolean isFirstActionMade; // hacky
 
 	public MoveMakerAdapter(GameAdapter ga, IController mockController) {
-		endTurn = false;
-		this.mockController = (MockController) mockController;
-		this.adapter = ga;
+		
 		this.game = ga.getGame();
 
 		/**
@@ -52,6 +45,7 @@ public class MoveMakerAdapter implements MoveMaker {
 		 * 
 		 */
 		isFirstActionMade = false;
+	
 	}
 
 	private void checkFirstMove() {
@@ -61,9 +55,7 @@ public class MoveMakerAdapter implements MoveMaker {
 
 			isFirstActionMade = true;
 			game.onGameStarted();
-			game.takeSnapshot();
-			//System.out.println("Game started - logged!");
-			
+			game.takeSnapshot();			
 
 		}
 
@@ -86,11 +78,14 @@ public class MoveMakerAdapter implements MoveMaker {
 				disc - 1);
 
 		if (activatedCard != null) {
+			
 			activator = CardActivatorAdapter.getActivator(
 					activatedCard.getID(), disc, game, activatedCard);
+		
 		}
 
 		return activator;
+	
 	}
 
 	@Override
@@ -122,7 +117,6 @@ public class MoveMakerAdapter implements MoveMaker {
 		checkFirstMove();
 
 		TakeMoneyAction action = new TakeMoneyAction();
-		// mockController.insertInput(Integer.toString(diceToUse));
 		action.setDiceToUse(diceToUse);
 		action.execute(game.getGameVisor());
 
@@ -140,16 +134,16 @@ public class MoveMakerAdapter implements MoveMaker {
 				Game.BRIBE_DISC - 1);
 
 		if (activatedCard != null) {
-			activator = (GenericAdapterActivator) CardActivatorAdapter
-					.getActivator(activatedCard.getID(), Game.BRIBE_DISC, game,
-							activatedCard);
-			/*System.out
-					.println("MoveMakerAdapter:activateBribeDisc: Using bribe "
-							+ diceToUse + " for " + activatedCard);*/
+			
+			activator = (GenericAdapterActivator) CardActivatorAdapter.getActivator(
+						activatedCard.getID(), Game.BRIBE_DISC, game, activatedCard);
+
 			activator.setBribe(diceToUse);
+		
 		}
 
 		return activator;
+	
 	}
 
 	/**
@@ -157,6 +151,7 @@ public class MoveMakerAdapter implements MoveMaker {
 	 */
 	@Override
 	public void endTurn() throws UnsupportedOperationException {
+		
 		EndTurnAction action = new EndTurnAction();
 
 		// Check if it is the first move - if so, save the game state.
@@ -186,17 +181,21 @@ public class MoveMakerAdapter implements MoveMaker {
 		// Have to determine which card corresponds to toPlace
 		int handIndex = -1;
 		int tempIndex = 0;
+		
 		for (cards.Card c : game.getPlayer(game.whoseTurn()).getHand()) {
-			CardNameAdapter romaAdapter = CardNameAdapter
-					.getAcceptanceAdapter(c.getName());
+		
+			CardNameAdapter romaAdapter = CardNameAdapter.getAcceptanceAdapter(c.getName());
+			
 			if (romaAdapter.getAcceptanceName() == toPlace.toString()) {
+			
 				handIndex = tempIndex;
+			
 			}
 
 			tempIndex++;
+		
 		}
-		// mockController.insertInput(Integer.toString(handIndex));
-		// mockController.insertInput(Integer.toString(discToPlaceOn));
+
 		action.setTargetHandCard(handIndex);
 		action.setTargetDisc(discToPlaceOn);
 		action.execute(game.getGameVisor());

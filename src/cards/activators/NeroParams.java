@@ -10,7 +10,9 @@ public class NeroParams extends CardParams {
 	int targetPos;
 	
 	public NeroParams() {
+	
 		targetPos = -1;
+	
 	}
 	
 	@Override
@@ -35,11 +37,13 @@ public class NeroParams extends CardParams {
 		Card destroy = null;
 
 		destroy = g.getController().getCard(buildings, "Which opposing building card do you wish to eliminate?"); 
-		
 	
 		if (destroy != null) {
+			
 			setTargetPos(g.getField().findCardPosition(destroy));
+			
 		}
+		
 	}
 	
 	/**
@@ -47,17 +51,22 @@ public class NeroParams extends CardParams {
 	 * @return
 	 */
 	public int getTargetPos() {
+		
 		return targetPos;
+	
 	}
 	
 	public void setTargetPos(int pos) {
+	
 		targetPos = pos;
+	
 	}
 
 	@Override
 	public boolean isValid() {
-		return targetPos != -1;
-	}
 	
+		return targetPos != -1;
+	
+	}
 	
 }

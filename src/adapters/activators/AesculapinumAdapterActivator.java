@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
@@ -16,6 +15,7 @@ public class AesculapinumAdapterActivator extends GenericAdapterActivator implem
 	AesculapinumParams params;
 	
 	public AesculapinumAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (AesculapinumParams) theCard.getParams();
@@ -41,7 +41,6 @@ public class AesculapinumAdapterActivator extends GenericAdapterActivator implem
 		// peek ahead to see what that card would have been
 		Card actualCard = getGame().getDiscardPile().getIndex(indexOfCard);
 		params.setPickedUpCardName(actualCard.getID());
-		
 		
 	}
 

@@ -14,23 +14,33 @@ public class OnagerParams extends CardParams {
 	private boolean valid;
 	
 	public OnagerParams() {
+		
 		valid = true;
+	
 	}
 	
 	public int getBattleDie() {
+	
 		return battleDie;
+	
 	}
 	
 	public void setBattleDie(int dieValue) {
+	
 		battleDie = dieValue;
+	
 	}
 
 	public int getPositionToAttack() {
+	
 		return positionToAttack;
+	
 	}
 	
 	public void setPositionToAttack(int pos) {
+	
 		this.positionToAttack = pos;
+	
 	}
 	
 	@Override
@@ -59,19 +69,22 @@ public class OnagerParams extends CardParams {
 		target = g.getController().getCard(buildings, "Which opposing building card do you wish to attack?"); 
 		
 		if (target != null) {
+			
 			setPositionToAttack(g.getField().findCardPosition(target));
 			int diceRoll = g.rollDice();
 			
 			setBattleDie(diceRoll);
 			valid = true;
+		
 		}
 		
 	}
 
 	@Override
 	public boolean isValid() {
+		
 		return valid;
+	
 	}
-
 
 }

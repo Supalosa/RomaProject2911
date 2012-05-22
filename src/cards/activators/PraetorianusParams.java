@@ -1,10 +1,5 @@
 package cards.activators;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import cards.Card;
-import roma.Game;
 import roma.GameVisor;
 
 public class PraetorianusParams extends CardParams {
@@ -13,12 +8,16 @@ public class PraetorianusParams extends CardParams {
 	private boolean valid;
 	
 	public PraetorianusParams() {
+		
 		valid = true;
+	
 	}
 	
 
 	public int getPositionToAttack() {
+		
 		return positionToAttack;
+	
 	}
 	
 	/**
@@ -26,7 +25,9 @@ public class PraetorianusParams extends CardParams {
 	 * @param pos
 	 */
 	public void setPositionToAttack(int pos) {
+		
 		this.positionToAttack = pos;
+	
 	}
 	
 	@Override
@@ -39,21 +40,23 @@ public class PraetorianusParams extends CardParams {
 		int diceDisc = g.getController().getInt("Which dice disc do you wish to block?");
 		
 		if (diceDisc < 1 || diceDisc > 7) {
+		
 			setError("Invalid dice disc. Which dice disc do you wish to block?");
+		
 		} else {
+		
 			valid = true;
 			setPositionToAttack(diceDisc-1);
+		
 		}
-		
-		
-
 		
 	}
 
 	@Override
 	public boolean isValid() {
+		
 		return valid;
+	
 	}
-
 
 }

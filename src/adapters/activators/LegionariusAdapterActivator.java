@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
@@ -16,6 +15,7 @@ public class LegionariusAdapterActivator extends GenericAdapterActivator impleme
 	LegionariusParams params;
 	
 	public LegionariusAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (LegionariusParams) theCard.getParams();
@@ -36,6 +36,9 @@ public class LegionariusAdapterActivator extends GenericAdapterActivator impleme
 
 	@Override
 	public void giveAttackDieRoll(int roll) {
+		
 		params.setBattleDie(roll);
+	
 	}
+
 }

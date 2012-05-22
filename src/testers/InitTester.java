@@ -1,7 +1,7 @@
 package testers;
 
 import roma.*;
-import actions.*;
+
 public class InitTester implements ITestSuite {
 
 	@Override

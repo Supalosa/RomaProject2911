@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
@@ -17,6 +16,7 @@ public class EssedumAdapterActivator extends GenericAdapterActivator implements 
 	EssedumParams params;
 	
 	public EssedumAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (EssedumParams) theCard.getParams();

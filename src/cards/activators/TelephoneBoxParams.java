@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cards.Card;
-import roma.Game;
 import roma.GameVisor;
 
 public class TelephoneBoxParams extends CardParams {
@@ -17,32 +16,46 @@ public class TelephoneBoxParams extends CardParams {
 	private boolean valid;
 	
 	public TelephoneBoxParams() {
+		
 		valid = true;
+	
 	}
 	
 
 	public int getDiceToSend() {
+	
 		return diceToSend;
+	
 	}
 
 	public void setDiceToSend(int diceToSend) {
+	
 		this.diceToSend = diceToSend;
+	
 	}
 
 	public boolean isGoForward() {
+	
 		return goForward;
+	
 	}
 
 	public void setGoForward(boolean goForward) {
+	
 		this.goForward = goForward;
+	
 	}
 
 	public int getDiceToUse() {
+	
 		return diceToUse;
+	
 	}
 
 	public void setDiceToUse(int diceToUse) {
+	
 		this.diceToUse = diceToUse;
+	
 	}
 	
 
@@ -58,7 +71,9 @@ public class TelephoneBoxParams extends CardParams {
 		List<Card> characters = new ArrayList<Card>();
 		
 		for (Card c : myField) {
+			
 			characters.add(c);
+		
 		}
 		
 		Card target = null;
@@ -66,6 +81,7 @@ public class TelephoneBoxParams extends CardParams {
 		target = g.getController().getCard(characters, "Which card do you wish to travel in time?"); 
 		
 		if (target != null) {
+			
 			setDiceToSend(g.getField().findCardPosition(target));
 			valid = true;
 
@@ -76,7 +92,9 @@ public class TelephoneBoxParams extends CardParams {
 			int add = g.getController().getInt("Which die do you want to use?");
 
 			if (g.hasDiceRoll(add)) {
+			
 				setDiceToUse(add);
+			
 			}
 			
 		}
@@ -86,7 +104,9 @@ public class TelephoneBoxParams extends CardParams {
 
 	@Override
 	public boolean isValid() {
+		
 		return valid;
+	
 	}
 
 }

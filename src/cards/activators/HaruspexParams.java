@@ -23,14 +23,18 @@ public class HaruspexParams extends CardParams {
 	
 	
 	public HaruspexParams() {
+		
 		pickedUpCard = -1;
+	
 	}
 	
 	@Override
 	public void query(GameVisor g, int pos) {
+		
 		List<Card> cardsInDeck = new ArrayList<Card>();
 		
 		for (Card c : g.getDeck().asList()) {
+		
 			cardsInDeck.add(c);
 
 		}
@@ -40,20 +44,30 @@ public class HaruspexParams extends CardParams {
 			Card selected = g.getController().getCard(cardsInDeck, "Pick the card you wish to add to your hand");
 			// Get the position of this card in the discard pile.
 			if (selected != null) {
+				
 				int deckPosition = 0;
+				
 				for (Card c : g.getDeck().asList()) {
+				
 					if (c == selected) {
+					
 						setPickedUpCard(deckPosition);
 						setPickedUpCardName(c.getID());
+					
 					}
+					
 					deckPosition ++;
+				
 				}
+			
 			}
+			
 		} else {
 			
 			setError("There are no cards in the deck!");
 			
 		}
+	
 	}
 	
 	/**
@@ -61,7 +75,9 @@ public class HaruspexParams extends CardParams {
 	 * @param pickedUp
 	 */
 	public void setPickedUpCard(int pickedUp) {
+	
 		pickedUpCard = pickedUp;
+	
 	}
 	
 	/**
@@ -77,18 +93,22 @@ public class HaruspexParams extends CardParams {
 	 * Gets the card to be picked up
 	 */
 	public int getPickedUpCard() {
+		
 		return pickedUpCard;
+	
 	}
 	
 	
 	public CardNames getPickedUpCardName() {
+	
 		return pickedUpCardName;
+	
 	}
 
 	public boolean isValid() {
-		return (pickedUpCard != -1);
-	}
-
 	
+		return (pickedUpCard != -1);
+	
+	}
 	
 }

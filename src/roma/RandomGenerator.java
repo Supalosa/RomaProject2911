@@ -13,7 +13,9 @@ public class RandomGenerator {
 	}
 	
 	public int randomInt (int low, int high) {
+		
 		return low + generator.nextInt(high - low + 1);
+	
 	}
 	
 }

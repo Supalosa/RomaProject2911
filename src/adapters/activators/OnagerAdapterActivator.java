@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.*;
@@ -16,6 +15,7 @@ public class OnagerAdapterActivator extends GenericAdapterActivator implements O
 	OnagerParams params;
 	
 	public OnagerAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (OnagerParams) theCard.getParams();
@@ -34,14 +34,18 @@ public class OnagerAdapterActivator extends GenericAdapterActivator implements O
 
 	@Override
 	public void giveAttackDieRoll(int roll) {
+		
 		params.setBattleDie(roll);
+	
 	}
 
 
 
 	@Override
 	public void chooseDiceDisc(int diceDisc) {
+	
 		params.setPositionToAttack(diceDisc-1);
 		
 	}
+	
 }

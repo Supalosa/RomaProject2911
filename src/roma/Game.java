@@ -1,6 +1,5 @@
 package roma;
 
-import java.text.*;
 import java.util.*;
 
 import cards.*;
@@ -72,8 +71,11 @@ public class Game {
 		cardTypes = new CardTypes();
 
 		players = new Player[MAX_PLAYERS];
+
 		for (int i = 0; i < MAX_PLAYERS; i++) {
+
 			players[i] = new Player(i);
+
 		}
 
 		deck = new Deck();
@@ -94,6 +96,7 @@ public class Game {
 		gameSnapshots = new ArrayList<ImmutableGameState>();
 
 		activeModifiers = new ArrayList<IModifier>();
+
 	}
 
 	/**
@@ -101,14 +104,6 @@ public class Game {
 	 * testing.
 	 */
 	public void run() {
-		// small change 2
-		/*
-		 * this is f-ing annoying plr1 = getBirthday(1); plr2 = getBirthday(2);
-		 * 
-		 * if (plr1.compareTo(plr2) > 0) { // player 1 is younger
-		 * System.out.println("Player 1 is younger."); currentPlayer = 0; } else
-		 * { System.out.println("Player 2 is younger."); currentPlayer = 1; }
-		 */
 
 		// Prepare the game - draw cards and ask for swapped cards.
 		prepare();
@@ -118,7 +113,6 @@ public class Game {
 
 		// Take a snapshot of Turn 0
 		takeSnapshot();
-		// logger.setInitialState(this);
 
 		// While the game is still running, keep query current player for
 		// action.
@@ -136,7 +130,6 @@ public class Game {
 
 	public void takeSnapshot() {
 
-		// System.out.println ("Take Snapshot Start: " + gameSnapshots.size());
 		// Take a snapshot
 		ImmutableGameState snapshot = new ImmutableGameState(this, turnNumber);
 
@@ -146,12 +139,13 @@ public class Game {
 		// the reason we may not be sure it is final is because acceptance
 		// testing does not set the dice until a seperate function call
 		List<ImmutableGameState> toDelete = new ArrayList<ImmutableGameState>();
+
 		for (ImmutableGameState state : gameSnapshots) {
 
 			if (state.getTurnNumber() == turnNumber) {
-				// System.out.println ("Found dupe gamestate turn " + turnNumber
-				// + ", deleting");
+
 				toDelete.add(state);
+
 			}
 
 		}
@@ -166,14 +160,6 @@ public class Game {
 		// add this one
 		gameSnapshots.add(snapshot);
 
-		// Load this snapshot (DEBUG) - if anything
-		// goes wrong with acceptance with this line uncommented
-		// then there is something very wrong with ImmutableGameStates
-
-		// ACTUALLY Nvm - ImmutableGameStates is bugged wrt dice rollls
-		// see if this fixes it?
-		// getGameVisor().copyStateFrom(snapshot);
-
 	}
 
 	/**
@@ -181,9 +167,11 @@ public class Game {
 	 * dice. Call all cards Start Turn event
 	 */
 	public void startTurn(int die1, int die2, int die3) {
+
 		Player player = players[currentPlayer];
 		int deduct = 0;
 		int i = 0;
+
 		for (i = 0; i < FIELD_SIZE; i++) {
 
 			if (field.getCard(currentPlayer, i) == null) {
@@ -193,15 +181,8 @@ public class Game {
 			}
 
 		}
-		player.setVP(player.getVP() - deduct);
 
-		/*
-		 * for (i = 0; i < NUM_DIE; i++) {
-		 * 
-		 * diceRolls[i] = rollDice();
-		 * 
-		 * }
-		 */
+		player.setVP(player.getVP() - deduct);
 
 		// Set the die
 		diceRolls[0] = die1;
@@ -209,7 +190,9 @@ public class Game {
 		diceRolls[2] = die3;
 
 		for (Card c : field.getAllCards()) {
+
 			c.onTurnStart(visor, currentPlayer);
+
 		}
 
 		// Bring cards from the past into the future.
@@ -219,15 +202,18 @@ public class Game {
 
 			removePendingFutureCard(tc);
 
-			// REmove the card currently in that position
+			// Remove the card currently in that position
 			Card existingCard = getField().getCard(tc.getOwnerId(),
 					tc.getPosition());
+			
 			if (existingCard != null) {
+			
 				System.out.println("Card " + existingCard
 						+ " was overriden by " + tc.getTheCard().getName()
 						+ " from time travel!");
 				getField().setCard(tc.getOwnerId(), tc.getPosition(), null);
 				this.discard(existingCard); // ignores grim reaper
+			
 			}
 
 			// Add the card in that position
@@ -241,19 +227,29 @@ public class Game {
 			System.err.println("Incongruous snapshots, something was missed. "
 					+ getNumSnapshots() + " snapshots but in turn "
 					+ turnNumber);
+			
 			for (ImmutableGameState g : gameSnapshots) {
+			
 				System.err.print(g.getTurnNumber() + ", ");
+			
 			}
 
 			System.err.println();
+			
 			try {
+			
 				throw new Exception("Incongruous Snapshot Count");
+			
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+			
 				e.printStackTrace();
+			
 			}
+			
 			System.exit(1);
+		
 		}
+	
 	}
 
 	/**
@@ -261,11 +257,16 @@ public class Game {
 	 * number, and swap the current player.
 	 */
 	public void nextTurn() {
+		
 		for (Card c : field.getAllCards()) {
+		
 			c.onTurnEnd(visor, currentPlayer);
+		
 		}
+		
 		currentPlayer = (currentPlayer + 1) % players.length;
 		turnNumber++;
+	
 	}
 
 	public void setTurnNumber(int turn) {
@@ -275,7 +276,9 @@ public class Game {
 	}
 
 	public int getTurnNumber() {
+		
 		return turnNumber;
+	
 	}
 
 	/**
@@ -295,7 +298,9 @@ public class Game {
 
 		// take a snapshot lah THIS NOT WORK
 		if (nextAction.getDescription().equals(EndTurnAction.DESCRIPTION)) {
+			
 			takeSnapshot();
+		
 		}
 
 		nextAction.execute(visor);
@@ -321,61 +326,72 @@ public class Game {
 		}
 
 		currentPlayer = 0;
-		
-		controller.showMessage("Both players have been given FOUR (4) cards.");
-		
+
+		controller.showMessage("Both players have been given FIVE (5) cards.");
+
 		controller.showMessage("They will now swap two cards each from their hands.");
 
 		controller.showMessage("");
-		
+
 		// For all players, query them for the cards they want to swap.
 		for (int player = 0; player < MAX_PLAYERS; player++) {
+			
 			currentPlayer = player;
 
 			swappedCards[player] = new ArrayList<Card>();
+			
 			while (swappedCards[player].size() < NUM_SWAP_CARDS) {
+			
 				Card swapped;
-				while ((swapped = controller
-						.getCard(
-								players[currentPlayer].getHand(),
-								"Player "
-										+ (player + 1)
+				
+				while ((swapped = controller.getCard(players[currentPlayer].getHand(),
+										"Player " + (player + 1)
 										+ ": Please select a card to pass to your opponent ("
-										+ swappedCards[player].size() + "/"
+										+ swappedCards[player].size() + "/" 
 										+ NUM_SWAP_CARDS + ")")) == null) {
+				
 					controller.showMessage("Invalid card.");
+				
 				}
 
 				addSwappedCard(player, swapped);
 
 			}
+		
 		}
 
 		// Perform the actual swap.
 		swapAllCards();
-		
+
 		controller.showMessage("");
-		
+
 		controller.showMessage("Both will now decide where to allocate their four cards.");
-		
+
 		controller.showMessage("");
-		
+
 		// For all players, query them for where to lay their initial cards.
 		currentPlayer = 0;
 		Player p;
 		IPlayerAction layCard = new LayCardAction();
+		
 		for (currentPlayer = 0; currentPlayer < MAX_PLAYERS; currentPlayer++) {
+		
 			p = players[currentPlayer];
+			
 			while (p.getHandSize() != 0) {
+			
 				controller.showField();
 				layCard.query(getGameVisor());
 				layCard.execute(visor);
+			
 			}
+		
 		}
 
 		controller.showMessage("");
-		
+
 		currentPlayer = 0;
+	
 	}
 
 	/**
@@ -383,7 +399,9 @@ public class Game {
 	 */
 
 	public GameVisor getGameVisor() {
+		
 		return visor;
+	
 	}
 
 	/**
@@ -396,14 +414,17 @@ public class Game {
 	 *            card to swap
 	 */
 	public void addSwappedCard(int player, Card c) {
+	
 		swappedCards[player].add(c);
 		players[currentPlayer].getHand().remove(c);
+	
 	}
 
 	/**
 	 * Swap all the cards in the list of swapped cards.
 	 */
 	public void swapAllCards() {
+		
 		for (int player = 0; player < MAX_PLAYERS; player++) {
 
 			int otherPlayer = (player + 1) % MAX_PLAYERS;
@@ -412,57 +433,41 @@ public class Game {
 					+ swappedCards[player]);
 
 			for (Card swappedCard : swappedCards[player]) {
+			
 				giveCard(player, otherPlayer, swappedCard);
+			
 			}
 
 		}
+	
 	}
 
 	public boolean isGameOver() {
+	
 		return gameOver;
+	
 	}
 
 	/**
 	 * Test if the game is over, and store the result in gameOver
 	 */
 	public boolean testGameOver() {
+	
 		boolean gg;
+		
 		if (isTimeParadox || getVictoryStockpile() <= 0
 				|| (players[0].getVP() <= 0 || players[1].getVP() <= 0)) {
+		
 			gg = true;
+		
 		} else {
+		
 			gg = false;
+		
 		}
+		
 		return gg;
-	}
-
-	public Date getBirthday(int playerNum) {
-
-		String birthday;
-		boolean isValid = false;
-		Date playerBirthday = null;
-		while (!isValid) {
-			birthday = controller.getString("Please specify Player "
-					+ playerNum + "'s birthday (dd/mm/yyyy): ");
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			try {
-				playerBirthday = sdf.parse(birthday);
-
-				isValid = true;
-
-			} catch (ParseException e) {
-
-			}
-
-			if (!isValid) {
-				System.out.println("Invalid input.");
-			}
-		}
-
-		System.out.println("Your birthday is on " + playerBirthday.toString());
-
-		return playerBirthday;
-
+	
 	}
 
 	public int rollDice() {
@@ -489,12 +494,10 @@ public class Game {
 
 	public void addDiscardToDeck() {
 
-		/*
-		 * for (int i = topCards.size() - 1; i >= 0; i--) {
-		 * deck.addCardToFront(topCards.get(i)); }
-		 */
 		for (Card c : discardPile.asList()) {
+
 			deck.addCard(c);
+		
 		}
 
 		discardPile.emptyPile();
@@ -506,6 +509,7 @@ public class Game {
 	public Pile getDeck() {
 
 		return deck;
+	
 	}
 
 	public Field getField() {
@@ -548,48 +552,78 @@ public class Game {
 		lastEndTurnAction = logger.getLastEndTurnAction();
 
 		if (lastEndTurnAction != null) {
+			
 			lastEndTurnAction.setDiceRolls(rolls);
+		
 		}
+	
 	}
 
 	public int getDiceRoll(int i) {
+	
 		int result = 0;
+		
 		if (i >= 0 && i < diceRolls.length) {
+		
 			return diceRolls[i];
+		
 		}
 
 		return result;
+	
 	}
 
 	public boolean hasDiceRoll(int roll) {
+	
 		boolean result = false;
+		
 		for (int i = 0; i < diceRolls.length; i++) {
+		
 			if (diceRolls[i] == roll) {
+			
 				result = true;
+			
 			}
+		
 		}
 
 		return result;
+	
 	}
 
 	public int getNumDiceRolls() {
+	
 		int numDice = 0;
+		
 		for (int i = 0; i < diceRolls.length; i++) {
+		
 			if (diceRolls[i] != 0) {
+			
 				numDice++;
+			
 			}
+		
 		}
+		
 		return numDice;
+	
 	}
 
 	public void setDiceRoll(int oldValue, int newValue) {
+	
 		boolean handled = false;
+		
 		for (int i = 0; i < Game.NUM_DIE && handled == false; i++) {
+		
 			if (diceRolls[i] == oldValue) {
+			
 				handled = true;
 				diceRolls[i] = newValue;
+			
 			}
+		
 		}
+	
 	}
 
 	public void useDice(int value) {
@@ -623,13 +657,16 @@ public class Game {
 	}
 
 	public void giveCard(int currentPlayer, int targetPlayer, Card c) {
+		
 		players[targetPlayer].addCard(c);
 		players[currentPlayer].getHand().removeElement(c);
 
 	}
 
 	public Player getPlayer(int player) {
+		
 		return players[player];
+	
 	}
 
 	public Pile getDiscardPile() {
@@ -640,15 +677,22 @@ public class Game {
 
 	// the stockpile is equal to 36 - total number of consumed VPs
 	public int getVictoryStockpile() {
+		
 		int vp = INITIAL_VP;
+		
 		for (int i = 0; i < players.length; i++) {
+		
 			vp -= players[i].getVP();
+		
 		}
+		
 		return vp;
+	
 	}
 
 	/* Generate a list of possible actions for a player */
 	public List<IPlayerAction> generateActions(Player p) {
+	
 		List<IPlayerAction> potentialActions = new ArrayList<IPlayerAction>();
 		List<IPlayerAction> actions = new ArrayList<IPlayerAction>();
 		GameVisor g = new GameVisor(this);
@@ -661,12 +705,17 @@ public class Game {
 		potentialActions.add(new EndTurnAction());
 
 		for (IPlayerAction action : potentialActions) {
+			
 			if (action.isVisible(g)) {
+			
 				actions.add(action);
+			
 			}
+		
 		}
 
 		return actions;
+	
 	}
 
 	/**
@@ -676,17 +725,21 @@ public class Game {
 	 * @return
 	 */
 	public List<TimeTravellingCard> getPendingFutureCards(int turn) {
+		
 		List<TimeTravellingCard> result = new ArrayList<TimeTravellingCard>();
 
 		for (TimeTravellingCard tc : pendingFutureCards) {
 
 			if (tc.getTurnNumber() == turn) {
+		
 				result.add(tc);
+			
 			}
 
 		}
 
 		return result;
+	
 	}
 
 	/**
@@ -734,13 +787,14 @@ public class Game {
 	 */
 	public void onTimeParadox() {
 
-		//System.out.println("!!!! Time Paradox !!!!");
+		// System.out.println("!!!! Time Paradox !!!!");
 		this.isTimeParadox = true;
 		// VP-causer loses his VP
 		players[currentPlayer].setVP(0);
 
 		field.clearField();
 		testGameOver();
+	
 	}
 
 	/**
@@ -757,19 +811,26 @@ public class Game {
 	 * Returns the list of modifiers active
 	 */
 	public List<IModifier> getModifiers() {
+	
 		return this.activeModifiers;
+	
 	}
 
 	/**
 	 * Returns the list of all modifiers casted ON the field position specified
 	 */
 	public List<IModifier> getModifiersOn(int ownerId, int pos) {
+		
 		List<IModifier> results = new ArrayList<IModifier>();
 
 		for (IModifier mod : activeModifiers) {
+		
 			if (mod.getTargetOwnerId() == ownerId && mod.getTargetPos() == pos) {
+			
 				results.add(mod);
+			
 			}
+		
 		}
 
 		return results;
@@ -780,12 +841,17 @@ public class Game {
 	 * Returns the list of all modifiers casted BY the field position specified
 	 */
 	public List<IModifier> getModifiersBy(int ownerId, int pos) {
+		
 		List<IModifier> results = new ArrayList<IModifier>();
 
 		for (IModifier mod : activeModifiers) {
+		
 			if (mod.getCasterOwnerId() == ownerId && mod.getCasterPos() == pos) {
+			
 				results.add(mod);
+			
 			}
+		
 		}
 
 		return results;
@@ -823,12 +889,17 @@ public class Game {
 	 * Deletes all modifiers casted ON the field position specified
 	 */
 	public void deleteModifiersOn(int ownerId, int pos) {
+		
 		List<IModifier> toRemove = new ArrayList<IModifier>();
 
 		for (IModifier mod : activeModifiers) {
+			
 			if (mod.getTargetOwnerId() == ownerId && mod.getTargetPos() == pos) {
+			
 				toRemove.add(mod);
+			
 			}
+		
 		}
 
 		for (IModifier mod : toRemove) {
@@ -843,12 +914,17 @@ public class Game {
 	 * Deletes all modifiers casted BY the field position specified
 	 */
 	public void deleteModifiersBy(int ownerId, int pos) {
+		
 		List<IModifier> toRemove = new ArrayList<IModifier>();
 
 		for (IModifier mod : activeModifiers) {
+		
 			if (mod.getCasterOwnerId() == ownerId && mod.getCasterPos() == pos) {
+			
 				toRemove.add(mod);
+			
 			}
+		
 		}
 
 		for (IModifier mod : toRemove) {
@@ -870,6 +946,7 @@ public class Game {
 	 *         not exist (turn in the future, etc)
 	 */
 	public ImmutableGameState getGameStateForTurn(int turn) {
+		
 		ImmutableGameState state = null;
 
 		for (ImmutableGameState iterator : gameSnapshots) {
@@ -883,6 +960,7 @@ public class Game {
 		}
 
 		return state;
+	
 	}
 
 	/**
@@ -892,8 +970,9 @@ public class Game {
 	 * @param snapshots
 	 */
 	public void setGameSnapshots(List<ImmutableGameState> snapshots) {
-		// gameSnapshots.addAll(snapshots);
+
 		gameSnapshots = new ArrayList<ImmutableGameState>(snapshots);
+	
 	}
 
 	/**
@@ -937,6 +1016,7 @@ public class Game {
 	public int getNumSnapshots() {
 
 		return gameSnapshots.size();
+	
 	}
 
 	/**

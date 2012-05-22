@@ -19,20 +19,27 @@ public class TimeTravellingCard {
 	}
 	
 	public int getTurnNumber() {
+		
 		return turnNumber;
+	
 	}
 
 	public int getPosition() {
+	
 		return position;
+	
 	}
 
 	public int getOwnerId() {
+	
 		return ownerId;
+	
 	}
 
 	public Card getTheCard() {
-		return theCard;
-	}
 	
+		return theCard;
+	
+	}
 	
 }

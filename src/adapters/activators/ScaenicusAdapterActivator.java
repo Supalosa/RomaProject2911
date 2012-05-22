@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import adapters.CardActivatorAdapter;
 import roma.*;
 import cards.Card;
@@ -17,6 +16,7 @@ public class ScaenicusAdapterActivator extends GenericAdapterActivator implement
 	private ScaenicusParams params;
 	
 	public ScaenicusAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = (ScaenicusParams) theCard.getParams();
@@ -43,6 +43,7 @@ public class ScaenicusAdapterActivator extends GenericAdapterActivator implement
 	 */
 	@Override
 	public CardActivator getScaenicusMimicTarget(int diceDisc) {
+		
 		Card cardInPosition = getGame().getField().getCard(getGame().whoseTurn(), diceDisc-1);
 		
 		
@@ -61,11 +62,9 @@ public class ScaenicusAdapterActivator extends GenericAdapterActivator implement
 		copiedActivator.setCopier(this);
 		/*
 		 * Store it in Scaenicus's param object
-		 */
-		//params.setCopiedParams(copiedActivator);
+		 */		
 		
-		
-		//System.out.println ("Created a " + copiedActivator.getClass().getName() + " activator");
 		return copiedActivator;
 	}
+	
 }

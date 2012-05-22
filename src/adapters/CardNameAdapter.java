@@ -9,6 +9,7 @@ import framework.cards.*;
  *
  */
 public enum CardNameAdapter {
+	
 	Sicarius 		("Sicarius", 		CardNames.Sicarius, Card.SICARIUS),
 	Architectus 	("Architectus", 	CardNames.Architectus, Card.ARCHITECTUS),
 	Consiliarius 	("Consiliarius", 	CardNames.Consiliarius, Card.CONSILIARIUS),
@@ -50,81 +51,117 @@ public enum CardNameAdapter {
 
 	// Mapping
 	private CardNameAdapter (String romaName, CardNames romaEnum, Card acceptanceName) {
+		
 		this.romaName = romaName;
 		this.romaEnum = romaEnum;
 		this.acceptanceName = acceptanceName;
+	
 	}
 	
 	// Constructor when there is no difference
 	private CardNameAdapter (String name, CardNames romaEnum) {
+		
 		this.romaName = name;
 		this.romaEnum = romaEnum;
 		this.acceptanceName = Card.valueOf(name.toUpperCase());
+	
 	}
 
 
 	public String getAcceptanceName() {
+	
 		return this.acceptanceName.toString();
+	
 	}
 	
 	public Card getAcceptanceCard() {
+	
 		return this.acceptanceName;
+	
 	}
 	
 	public String getRomaName() {
+	
 		return this.romaName;
+	
 	}
 	
 	public CardNames getRomaEnum() {
+	
 		return this.romaEnum;
+
 	}
 	
 	public static CardNameAdapter getRomaAdapter (String acceptanceName) {
+		
 		CardNameAdapter adapter = null;
-		//System.out.println ("CardNameAdapter::getRomaAdapter (" + acceptanceName + ")");
+		
 		for (CardNameAdapter tempAdapter : CardNameAdapter.values()) {
+		
 			if (tempAdapter.getAcceptanceName().equals(acceptanceName)) {
+			
 				adapter = tempAdapter;
+			
 			}
+		
 		}
 		
 		if (adapter == null) {
+		
 			System.err.println ("CardNameAdapter::getRomaAdapter: Could not find acceptance card " + acceptanceName);
+		
 		}
+		
 		return adapter;
+	
 	}
 	
 	public static CardNameAdapter getRomaAdapter (Card acceptanceCard) {
+	
 		return getRomaAdapter(acceptanceCard.toString());
+	
 	}
 	
 	public static CardNameAdapter getAcceptanceAdapter (String romaName) {
+	
 		CardNameAdapter adapter = null;
+		
 		for (CardNameAdapter tempAdapter : CardNameAdapter.values()) {
+		
 			if (tempAdapter.getRomaName().equals(romaName)) {
+			
 				adapter = tempAdapter;
+			
 			}
+		
 		}
 		
 		if (adapter == null) {
+		
 			System.err.println ("CardNameAdapter::getAcceptanceAdapter: Could not find roma card " + romaName);
+		
 		}
+		
 		return adapter;
+	
 	}
 	
 	public static String getRomaName(String acceptanceName) {
+	
 		return getRomaAdapter(acceptanceName).getRomaName();
+	
 	}
 	
 	public static String getAcceptanceName(String romaName) {
+	
 		return getAcceptanceAdapter(romaName).getAcceptanceName();
+	
 	}
 	
 	public static Card getAcceptanceCard(String romaName) {
+	
 		return getAcceptanceAdapter(romaName).getAcceptanceCard();
+	
 	}
-	
-	
-	
 		
 }

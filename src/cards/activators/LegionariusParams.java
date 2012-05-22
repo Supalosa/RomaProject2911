@@ -10,15 +10,21 @@ public class LegionariusParams extends CardParams {
 	private boolean valid;
 	
 	public LegionariusParams() {
+		
 		valid = true;
+	
 	}
 	
 	public int getBattleDie() {
+	
 		return battleDie;
+	
 	}
 	
 	public void setBattleDie(int dieValue) {
+	
 		battleDie = dieValue;
+	
 	}
 
 	@Override
@@ -28,7 +34,9 @@ public class LegionariusParams extends CardParams {
 		
 		int enemyPlayer = (g.whoseTurn() + 1) % Game.MAX_PLAYERS;
 		Card enemyCard = g.getField().getCard(enemyPlayer, pos - 1);
+		
 		if (enemyCard != null) {
+		
 			valid = true;
 			setBattleDie(g.rollDice());			
 			
@@ -37,11 +45,14 @@ public class LegionariusParams extends CardParams {
 			setError("There is nothing to attack.");
 			
 		}
+		
 	}
 
 	@Override
 	public boolean isValid() {
+		
 		return valid;
+	
 	}
 
 }

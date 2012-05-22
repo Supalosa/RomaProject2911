@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.MercatusParams;
@@ -16,8 +15,10 @@ public class MercatusAdapterActivator extends GenericAdapterActivator implements
 	MercatusParams params;
 	
 	public MercatusAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		params = (MercatusParams)theCard.getParams();
+	
 	}
 	
 	

@@ -14,23 +14,33 @@ public class VelitesParams extends CardParams {
 	private boolean valid;
 	
 	public VelitesParams() {
+		
 		valid = true;
+	
 	}
 	
 	public int getBattleDie() {
+	
 		return battleDie;
+	
 	}
 	
 	public void setBattleDie(int dieValue) {
+	
 		battleDie = dieValue;
+	
 	}
 
 	public int getPositionToAttack() {
+	
 		return positionToAttack;
+	
 	}
 	
 	public void setPositionToAttack(int pos) {
+	
 		this.positionToAttack = pos;
+	
 	}
 	
 	@Override
@@ -59,19 +69,22 @@ public class VelitesParams extends CardParams {
 		target = g.getController().getCard(characters, "Which opposing character card do you wish to attack?"); 
 		
 		if (target != null) {
+	
 			setPositionToAttack(g.getField().findCardPosition(target));
 			int diceRoll = g.rollDice();
 			
 			setBattleDie(diceRoll);
 			valid = true;
+		
 		}
 		
 	}
 
 	@Override
 	public boolean isValid() {
+	
 		return valid;
+	
 	}
-
-
+	
 }

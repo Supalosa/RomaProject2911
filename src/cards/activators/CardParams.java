@@ -11,11 +11,15 @@ public abstract class CardParams {
 	
 	
 	public String getError() {
+		
 		return error;
+	
 	}
 	
 	public void setError(String s) {
+	
 		error = s;
+	
 	}
 	
 }

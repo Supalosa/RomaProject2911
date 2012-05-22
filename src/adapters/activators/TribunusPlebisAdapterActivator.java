@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.TribunusPlebisParams;
@@ -16,6 +15,7 @@ public class TribunusPlebisAdapterActivator extends GenericAdapterActivator impl
 	TribunusPlebisParams params;
 	
 	public TribunusPlebisAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		this.params = (TribunusPlebisParams)theCard.getParams();
 

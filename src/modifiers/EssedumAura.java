@@ -3,21 +3,21 @@ package modifiers;
 import cards.*;
 
 public class EssedumAura extends IModifier {
-
-	//Card targetCard;
-	//IModifiable caster;
-
 	
 	public static final String NAME = "Essedum Trample";
 	
 	@Override
 	public String getName() {
+	
 		return NAME;
+	
 	}
 	
 	@Override
 	public String getDescription() {
+	
 		return "-2 defense. Applies until end of turn, or Essedum removed from field.";
+	
 	}
 	
 	/**
@@ -25,7 +25,9 @@ public class EssedumAura extends IModifier {
 	 */
 	@Override
 	public void apply(Card c) {
+	
 		c.setRealDefense(c.getRealDefense() - 2);
+	
 	}
 
 	/**
@@ -33,7 +35,9 @@ public class EssedumAura extends IModifier {
 	 */
 	@Override
 	public void unapply(Card c) {
+	
 		c.setRealDefense(c.getRealDefense() + 2);
+	
 	}
 
 }

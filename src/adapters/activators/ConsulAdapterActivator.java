@@ -1,6 +1,5 @@
 package adapters.activators;
 
-import actions.*;
 import roma.*;
 import cards.Card;
 import cards.activators.ConsulParams;
@@ -17,6 +16,7 @@ public class ConsulAdapterActivator extends GenericAdapterActivator implements C
 	ConsulParams params;
 	
 	public ConsulAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = new ConsulParams();
@@ -36,18 +36,26 @@ public class ConsulAdapterActivator extends GenericAdapterActivator implements C
 	 */
 	@Override
 	public void chooseConsulChangeAmount(int amount) {
+		
 		if (amount > 0) {
+		
 			params.setIncreaseDice(true);
+		
 		} else {
+		
 			params.setIncreaseDice(false);
+		
 		}
+	
 	}
 
 
 	
 	@Override
 	public void chooseWhichDiceChanges(int originalRoll) {
+	
 		params.setDiceValue(originalRoll);
+	
 	}
 
 }

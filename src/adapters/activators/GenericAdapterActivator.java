@@ -34,11 +34,15 @@ public abstract class GenericAdapterActivator implements CardActivator {
 	}
 	
 	public GenericAdapterActivator getCopier() {
+		
 		return copier;
+	
 	}
 
 	public void setCopier(GenericAdapterActivator copier) {
+	
 		this.copier = copier;
+	
 	}
 
 	@Override
@@ -59,23 +63,28 @@ public abstract class GenericAdapterActivator implements CardActivator {
 		if (isCopy == false) {
 			
 			ActivateCardAction action = new ActivateCardAction(params);
-			action.setDiceDisc(fieldPosition+1);
-			//System.out.println ("GenericAdapterActivator:execute: execuitng at " + fieldPosition + " (" + bribeDice + ")");
-		
+			action.setDiceDisc(fieldPosition+1);		
 			
 			if (fieldPosition == Game.BRIBE_DISC) {
+				
 				action.setBribeDice(bribeDice);
 				action.setUseBribe(true);
+			
 			} else {
+			
 				action.setUseBribe(false);
+			
 			}
 			
 			action.setActionExecutor(game.whoseTurn());
 			
 			// don't execute if blocked
 			if (!game.getField().isBlocked(game.whoseTurn(), fieldPosition-1)) {
+				
 				action.execute(game.getGameVisor(), theCard);
+			
 			}
+			
 		} else { // this is a copy - apply to the scaenicus
 			
 			ScaenicusAdapterActivator scaenicusActivator = (ScaenicusAdapterActivator)getCopier();
@@ -84,6 +93,7 @@ public abstract class GenericAdapterActivator implements CardActivator {
 			scaenicusActivator.getParams().setCopiedCard(theCard.getID());
 			
 		}
+		
 	}
 	
 	public void setBribe(int dice) {
@@ -91,45 +101,61 @@ public abstract class GenericAdapterActivator implements CardActivator {
 		this.bribeDice = dice;
 		
 	}
+	
 	public int getFieldPosition() {
+	
 		return fieldPosition;
+	
 	}
 
 
 	public void setFieldPosition(int fieldPosition) {
+		
 		this.fieldPosition = fieldPosition;
+	
 	}
 
 
 	public Game getGame() {
+	
 		return game;
+	
 	}
 
 
 	public void setGame(Game game) {
+	
 		this.game = game;
 		this.controller = (MockController)game.getController();
+	
 	}
 
 
 	public MockController getController() {
+	
 		return controller;
+	
 	}
 
 
 	public void setController(MockController controller) {
+	
 		this.controller = controller;
+	
 	}
 	
 
 	public Card getTheCard() {
+	
 		return theCard;
+	
 	}
 
 
 	public void setTheCard(Card theCard) {
+	
 		this.theCard = theCard;
+	
 	}
 
-	
 }

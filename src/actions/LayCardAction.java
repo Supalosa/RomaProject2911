@@ -1,7 +1,5 @@
 package actions;
 
-import java.util.List;
-
 import roma.*;
 import cards.*;
 
@@ -19,10 +17,11 @@ public class LayCardAction implements IPlayerAction {
 		int i = diceDisc; // DUMMY VALUES
 		
 		if (i < 1 || i > Game.FIELD_SIZE) {
+			
 			isValid = false;
 			game.getController().showMessage("Cannot lay that card, that disc value is not possible");
-		}
 		
+		}
 		
 		return isValid;
 		
@@ -30,7 +29,9 @@ public class LayCardAction implements IPlayerAction {
 	
 	@Override
 	public String describeParameters() {
+		
 		return "N/A";
+	
 	}
 	
 	@Override
@@ -41,9 +42,13 @@ public class LayCardAction implements IPlayerAction {
 		if (isValid(g)) {
 
 			g.getCurrentPlayer().getHand().removeElement(targetCard);
+			
 			if (g.getField().getCard(g.whoseTurn(), diceDisc - 1) != null) {
+			
 				g.discard(g.getField().getCard(g.whoseTurn(), diceDisc - 1));				
+			
 			}
+			
 			g.getField().setCard(g.whoseTurn(), diceDisc - 1, targetCard);
 
 		}
@@ -54,7 +59,9 @@ public class LayCardAction implements IPlayerAction {
 
 	@Override
 	public String getDescription() {
+		
 		return "Lay Card";
+	
 	}
 	
 	public void query(GameVisor g) {
@@ -69,7 +76,9 @@ public class LayCardAction implements IPlayerAction {
 
 	@Override
 	public boolean isVisible(GameVisor g) {
+	
 		return false;
+	
 	}
 	
 }

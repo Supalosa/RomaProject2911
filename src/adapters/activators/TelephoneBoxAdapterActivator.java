@@ -15,10 +15,10 @@ public class TelephoneBoxAdapterActivator extends GenericAdapterActivator implem
 	TelephoneBoxParams params;
 
 	public TelephoneBoxAdapterActivator(int fieldPosition, Game game, Card theCard) {
+		
 		super(fieldPosition, game, theCard);
 		
 		this.params = new TelephoneBoxParams();
-
 		
 	}
 	
@@ -31,18 +31,23 @@ public class TelephoneBoxAdapterActivator extends GenericAdapterActivator implem
 	
 	@Override
 	public void chooseDiceDisc(int diceDisc) {
+
 		params.setDiceToSend(diceDisc);
+	
 	}
 
 	@Override
 	public void shouldMoveForwardInTime(boolean isForward) {
+	
 		params.setGoForward(isForward);
+	
 	}
 
 	@Override
 	public void setSecondDiceUsed(int diceValue) {
+	
 		params.setDiceToUse(diceValue);
+	
 	}
-
 
 }

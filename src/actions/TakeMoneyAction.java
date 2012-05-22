@@ -10,7 +10,9 @@ public class TakeMoneyAction implements IPlayerAction {
 	
 	@Override
 	public String describeParameters() {
+	
 		return "diceRoll: " + diceRoll;
+	
 	}
 	
 	
@@ -72,12 +74,13 @@ public class TakeMoneyAction implements IPlayerAction {
 	}
 	
 	public String getDescription() {
+		
 		return "Take Money";
+	
 	}
 	
 	public void setDiceToUse(int diceRoll) {
 		
-	
 		this.diceRoll = diceRoll;
 		
 	}
@@ -93,14 +96,21 @@ public class TakeMoneyAction implements IPlayerAction {
 
 	// only visible if we have dice
 	public boolean isVisible(GameVisor g) {
+		
 		boolean hasDice = false;
 		
 		for (int i = 0; i < g.getDiceRolls().length; i++) {
+			
 			if (g.getDiceRolls()[i] != 0) {
+			
 				hasDice = true;
+			
 			}
+		
 		}
+		
 		return hasDice;
+	
 	}
 
 }

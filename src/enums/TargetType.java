@@ -7,6 +7,7 @@ package enums;
  *
  */
 public enum TargetType {
+	
 	CardFieldAny, // Expects any card on the field
 	CardFieldEnemy, // Expects enemy card
 	CardFieldMine, // Expects my card

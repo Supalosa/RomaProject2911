@@ -17,8 +17,10 @@ public abstract class IModifier {
 	public abstract void unapply (Card c); // Unapply the effect
 	
 	public void setCaster(int ownerId, int pos) {
+		
 		this.casterOwnerId = ownerId;
 		this.casterPos = pos;
+	
 	}
 
 	/**
@@ -32,21 +34,27 @@ public abstract class IModifier {
 	}
 	
 	public int getCasterOwnerId() {
+		
 		return casterOwnerId;
+	
 	}
 	
 	public int getCasterPos() {
+	
 		return casterPos;
+	
 	}
 	
 	public int getTargetOwnerId() {
+	
 		return targetOwnerId;
+	
 	}
 	
 	public int getTargetPos() {
-		return targetPos;
-	}
 	
-
+		return targetPos;
+	
+	}
 	
 }
